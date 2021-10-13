@@ -3,9 +3,9 @@
     "version": "2.2.6",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -344.59999999999985,
-    "scrollLeft": -246.19999999999996,
-    "zoomLevel": 0.8,
+    "scrollTop": -590.3999999999997,
+    "scrollLeft": -681.4000000000008,
+    "zoomLevel": 0.3,
     "show": {
       "tableComment": true,
       "columnComment": true,
@@ -19,7 +19,7 @@
     },
     "database": "MySQL",
     "databaseName": "",
-    "canvasType": "@vuerd/builtin-sql-ddl",
+    "canvasType": "ERD",
     "language": "GraphQL",
     "tableCase": "pascalCase",
     "columnCase": "camelCase",
@@ -319,8 +319,8 @@
         "ui": {
           "active": false,
           "left": 140.3054,
-          "top": 23.6945,
-          "zIndex": 2,
+          "top": 26.6945,
+          "zIndex": 13,
           "widthName": 61.97900390625,
           "widthComment": 60,
           "color": "#E91E63"
@@ -449,10 +449,10 @@
           }
         ],
         "ui": {
-          "active": true,
+          "active": false,
           "left": 729.6387,
-          "top": 751.9161,
-          "zIndex": 11,
+          "top": 728.9161,
+          "zIndex": 15,
           "widthName": 60,
           "widthComment": 60,
           "color": "#4CAF50"
@@ -832,9 +832,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 1232.9999,
-          "top": 37.4723,
-          "zIndex": 3,
+          "left": 1233.9999,
+          "top": 49.4723,
+          "zIndex": 14,
           "widthName": 64.8671875,
           "widthComment": 60,
           "color": "#FF5722"
@@ -1049,9 +1049,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 92.3614,
-          "top": 281.5274,
-          "zIndex": 10,
+          "left": 93.3614,
+          "top": 300.5274,
+          "zIndex": 12,
           "widthName": 70.64990234375,
           "widthComment": 60
         },
@@ -1168,7 +1168,7 @@
             "fab694f9-42cb-4633-8480-d7683c9343ee"
           ],
           "x": 923.046658984375,
-          "y": 751.9161,
+          "y": 728.9161,
           "direction": "top"
         },
         "end": {
@@ -1220,7 +1220,7 @@
             "fab694f9-42cb-4633-8480-d7683c9343ee"
           ],
           "x": 1116.45461796875,
-          "y": 880.5411,
+          "y": 857.5411,
           "direction": "right"
         },
         "end": {
@@ -1272,7 +1272,7 @@
             "fab694f9-42cb-4633-8480-d7683c9343ee"
           ],
           "x": 729.6387,
-          "y": 794.7911,
+          "y": 771.7911,
           "direction": "left"
         },
         "end": {
@@ -1306,8 +1306,8 @@
           "columnIds": [
             "84fd1af2-6329-4753-a6d7-349066ed4f43"
           ],
-          "x": 1232.9999,
-          "y": 70.09729999999999,
+          "x": 1233.9999,
+          "y": 82.09729999999999,
           "direction": "left"
         },
         "constraintName": "fk_users_to_friendships",
@@ -1332,8 +1332,8 @@
           "columnIds": [
             "99256e5b-6c98-45a6-8ce2-b31ce9181ca4"
           ],
-          "x": 1232.9999,
-          "y": 135.3473,
+          "x": 1233.9999,
+          "y": 147.3473,
           "direction": "left"
         },
         "constraintName": "fk_users_to_friendships",
@@ -1376,7 +1376,7 @@
             "fab694f9-42cb-4633-8480-d7683c9343ee"
           ],
           "x": 1116.45461796875,
-          "y": 794.7911,
+          "y": 771.7911,
           "direction": "right"
         },
         "end": {
@@ -1411,7 +1411,7 @@
             "d933db07-799a-4c62-811d-85cd68ea58f5"
           ],
           "x": 527.13401328125,
-          "y": 129.9445,
+          "y": 132.9445,
           "direction": "right"
         },
         "constraintName": "fk_users_to_addresses",
@@ -1436,8 +1436,8 @@
           "columnIds": [
             "bf322728-bda7-402d-b423-6af90ba0372f"
           ],
-          "x": 467.08015,
-          "y": 346.7774,
+          "x": 468.08015,
+          "y": 365.7774,
           "direction": "right"
         },
         "constraintName": "fk_users_to_preferences",
@@ -1463,7 +1463,7 @@
             "bf44d501-2bd8-4e0e-89b7-a51892fa94ce"
           ],
           "x": 729.6387,
-          "y": 880.5411,
+          "y": 857.5411,
           "direction": "left"
         },
         "constraintName": "fk_game_genres_to_games",
@@ -1488,8 +1488,8 @@
           "columnIds": [
             "1f790662-e6e5-47f7-8eb2-b6711a3b76b2"
           ],
-          "x": 279.720775,
-          "y": 412.0274,
+          "x": 280.720775,
+          "y": 431.0274,
           "direction": "bottom"
         },
         "constraintName": "fk_game_genres_to_preferences",
