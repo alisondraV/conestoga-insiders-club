@@ -3,9 +3,9 @@
     "version": "2.2.6",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -131,
-    "scrollLeft": -271,
-    "zoomLevel": 0.9,
+    "scrollTop": -344.59999999999985,
+    "scrollLeft": -246.19999999999996,
+    "zoomLevel": 0.8,
     "show": {
       "tableComment": true,
       "columnComment": true,
@@ -19,7 +19,7 @@
     },
     "database": "MySQL",
     "databaseName": "",
-    "canvasType": "ERD",
+    "canvasType": "@vuerd/builtin-sql-ddl",
     "language": "GraphQL",
     "tableCase": "pascalCase",
     "columnCase": "camelCase",
@@ -142,7 +142,7 @@
           "active": false,
           "left": 730.3055,
           "top": 60.361,
-          "zIndex": 4,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F44336"
@@ -320,7 +320,7 @@
           "active": false,
           "left": 140.3054,
           "top": 23.6945,
-          "zIndex": 5,
+          "zIndex": 2,
           "widthName": 61.97900390625,
           "widthComment": 60,
           "color": "#E91E63"
@@ -404,13 +404,13 @@
           {
             "name": "price",
             "comment": "",
-            "dataType": "DOUBLE",
+            "dataType": "FLOAT",
             "default": "",
             "option": {
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": false
+              "notNull": true
             },
             "ui": {
               "active": false,
@@ -449,10 +449,10 @@
           }
         ],
         "ui": {
-          "active": false,
+          "active": true,
           "left": 729.6387,
           "top": 751.9161,
-          "zIndex": 20,
+          "zIndex": 11,
           "widthName": 60,
           "widthComment": 60,
           "color": "#4CAF50"
@@ -515,7 +515,7 @@
           "active": false,
           "left": 284.8605,
           "top": 510.36,
-          "zIndex": 9,
+          "zIndex": 5,
           "widthName": 80.75537109375,
           "widthComment": 60
         },
@@ -600,7 +600,7 @@
           "active": false,
           "left": 733.1944,
           "top": 297.6666,
-          "zIndex": 13,
+          "zIndex": 8,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FFFF00"
@@ -686,7 +686,7 @@
           "active": false,
           "left": 749.0553,
           "top": 528.1107,
-          "zIndex": 11,
+          "zIndex": 7,
           "widthName": 70.63720703125,
           "widthComment": 60,
           "color": "#FFEB3B"
@@ -749,7 +749,7 @@
           "active": false,
           "left": 1269.2221,
           "top": 282.7777,
-          "zIndex": 10,
+          "zIndex": 6,
           "widthName": 61.9599609375,
           "widthComment": 60
         },
@@ -834,7 +834,7 @@
           "active": false,
           "left": 1232.9999,
           "top": 37.4723,
-          "zIndex": 6,
+          "zIndex": 3,
           "widthName": 64.8671875,
           "widthComment": 60,
           "color": "#FF5722"
@@ -966,7 +966,7 @@
           "active": false,
           "left": 1270.6661,
           "top": 553.1667,
-          "zIndex": 17,
+          "zIndex": 9,
           "widthName": 60,
           "widthComment": 60
         },
@@ -1003,13 +1003,13 @@
           {
             "name": "platform",
             "comment": "",
-            "dataType": "",
+            "dataType": "VARCHAR(50)",
             "default": "",
             "option": {
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": false
+              "notNull": true
             },
             "ui": {
               "active": false,
@@ -1018,7 +1018,7 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 87.71875,
               "widthDefault": 60
             },
             "id": "addebc0b-119a-428e-ab44-0c1d875cb6c7"
@@ -1051,7 +1051,7 @@
           "active": false,
           "left": 92.3614,
           "top": 281.5274,
-          "zIndex": 2,
+          "zIndex": 10,
           "widthName": 70.64990234375,
           "widthComment": 60
         },
@@ -1090,7 +1090,7 @@
           "active": false,
           "left": 95.972,
           "top": 794.444,
-          "zIndex": 8,
+          "zIndex": 4,
           "widthName": 81.498046875,
           "widthComment": 60,
           "color": "#4CAF50"
