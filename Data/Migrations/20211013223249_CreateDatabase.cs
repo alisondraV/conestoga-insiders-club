@@ -25,7 +25,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     first_name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     last_name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true)
@@ -60,7 +60,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "addresses",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     address1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     address2 = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: true),
                     city = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
@@ -83,8 +83,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "friendships",
                 columns: table => new
                 {
-                    nickname1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    nickname2 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname1 = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
+                    nickname2 = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     created_at = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
@@ -109,7 +109,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 columns: table => new
                 {
                     order_id = table.Column<int>(type: "int", nullable: false),
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
@@ -127,7 +127,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "preferences",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     platform = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     genre = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
                 },
@@ -152,7 +152,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "cart_items",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     game_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -176,7 +176,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "reviews",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     game_id = table.Column<int>(type: "int", nullable: false),
                     rating = table.Column<byte>(type: "tinyint", nullable: false),
                     description = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: true),
@@ -203,7 +203,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "wished_items",
                 columns: table => new
                 {
-                    nickname = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    nickname = table.Column<string>(type: "nvarchar(450)", unicode: false, maxLength: 450, nullable: false),
                     game_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -12,9 +12,9 @@ namespace ConestogaInsidersClub.Data.Models
     public partial class Preference
     {
         [Key]
-        [Column("nickname")]
+        [Column("user_id")]
         [StringLength(50)]
-        public string Nickname { get; set; }
+        public string UserId { get; set; }
         [Required]
         [Column("platform")]
         [StringLength(50)]
@@ -27,8 +27,8 @@ namespace ConestogaInsidersClub.Data.Models
         [ForeignKey(nameof(Genre))]
         [InverseProperty(nameof(GameGenre.Preferences))]
         public virtual GameGenre GenreNavigation { get; set; }
-        [ForeignKey(nameof(Nickname))]
-        [InverseProperty(nameof(User.Preference))]
-        public virtual User NicknameNavigation { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty(nameof(ApplicationUser.Preference))]
+        public virtual ApplicationUser UserIdNavigation { get; set; }
     }
 }

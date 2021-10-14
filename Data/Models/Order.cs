@@ -20,15 +20,15 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("order_id")]
         public int OrderId { get; set; }
         [Required]
-        [Column("nickname")]
+        [Column("user_id")]
         [StringLength(50)]
-        public string Nickname { get; set; }
+        public string UserId { get; set; }
         [Column("created_at", TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
 
-        [ForeignKey(nameof(Nickname))]
-        [InverseProperty(nameof(User.Orders))]
-        public virtual User NicknameNavigation { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty(nameof(ApplicationUser.Orders))]
+        public virtual ApplicationUser UserIdNavigation { get; set; }
         [InverseProperty(nameof(OrderItem.Order))]
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }

@@ -12,9 +12,9 @@ namespace ConestogaInsidersClub.Data.Models
     public partial class WishedItem
     {
         [Key]
-        [Column("nickname")]
+        [Column("user_id")]
         [StringLength(50)]
-        public string Nickname { get; set; }
+        public string UserId { get; set; }
         [Key]
         [Column("game_id")]
         public int GameId { get; set; }
@@ -22,8 +22,8 @@ namespace ConestogaInsidersClub.Data.Models
         [ForeignKey(nameof(GameId))]
         [InverseProperty("WishedItems")]
         public virtual Game Game { get; set; }
-        [ForeignKey(nameof(Nickname))]
-        [InverseProperty(nameof(User.WishedItems))]
-        public virtual User NicknameNavigation { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty(nameof(ApplicationUser.WishedItems))]
+        public virtual ApplicationUser UserIdNavigation { get; set; }
     }
 }

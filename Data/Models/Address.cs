@@ -12,9 +12,9 @@ namespace ConestogaInsidersClub.Data.Models
     public partial class Address
     {
         [Key]
-        [Column("nickname")]
+        [Column("user_id")]
         [StringLength(50)]
-        public string Nickname { get; set; }
+        public string UserId { get; set; }
         [Column("address1")]
         [StringLength(50)]
         public string Address1 { get; set; }
@@ -34,8 +34,8 @@ namespace ConestogaInsidersClub.Data.Models
         [StringLength(10)]
         public string PostalCode { get; set; }
 
-        [ForeignKey(nameof(Nickname))]
-        [InverseProperty(nameof(User.Address))]
-        public virtual User NicknameNavigation { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty(nameof(ApplicationUser.Address))]
+        public virtual ApplicationUser UserIdNavigation { get; set; }
     }
 }

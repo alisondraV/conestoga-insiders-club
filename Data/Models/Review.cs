@@ -12,9 +12,9 @@ namespace ConestogaInsidersClub.Data.Models
     public partial class Review
     {
         [Key]
-        [Column("nickname")]
+        [Column("user_id")]
         [StringLength(50)]
-        public string Nickname { get; set; }
+        public string UserId { get; set; }
         [Key]
         [Column("game_id")]
         public int GameId { get; set; }
@@ -29,8 +29,8 @@ namespace ConestogaInsidersClub.Data.Models
         [ForeignKey(nameof(GameId))]
         [InverseProperty("Reviews")]
         public virtual Game Game { get; set; }
-        [ForeignKey(nameof(Nickname))]
-        [InverseProperty(nameof(User.Reviews))]
-        public virtual User NicknameNavigation { get; set; }
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty(nameof(ApplicationUser.Reviews))]
+        public virtual ApplicationUser UserIdNavigation { get; set; }
     }
 }
