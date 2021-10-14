@@ -4,14 +4,16 @@ using ConestogaInsidersClub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConestogaInsidersClub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211013225850_AddCustomUser")]
+    partial class AddCustomUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,11 +24,11 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.Property<string>("Address1")
                         .HasMaxLength(50)
@@ -64,7 +66,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("varchar(2)")
                         .HasColumnName("province");
 
-                    b.HasKey("UserId")
+                    b.HasKey("Nickname")
                         .HasName("PK__addresse__5CF1C59A90B364F3");
 
                     b.ToTable("addresses");
@@ -147,17 +149,17 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.CartItem", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int")
                         .HasColumnName("game_id");
 
-                    b.HasKey("UserId", "GameId")
+                    b.HasKey("Nickname", "GameId")
                         .HasName("PK__cart_ite__B30FD466E5616F1B");
 
                     b.HasIndex("GameId");
@@ -167,26 +169,26 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
                 {
-                    b.Property<string>("UserId1")
+                    b.Property<string>("Nickname1")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id1");
+                        .HasColumnName("nickname1");
 
-                    b.Property<string>("UserId2")
+                    b.Property<string>("Nickname2")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id2");
+                        .HasColumnName("nickname2");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("date")
                         .HasColumnName("created_at");
 
-                    b.HasKey("UserId1", "UserId2")
+                    b.HasKey("Nickname1", "Nickname2")
                         .HasName("PK__friendsh__2EA53AFBF202847F");
 
-                    b.HasIndex("UserId2");
+                    b.HasIndex("Nickname2");
 
                     b.ToTable("friendships");
                 });
@@ -253,16 +255,16 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Nickname");
 
                     b.ToTable("orders");
                 });
@@ -293,11 +295,11 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Preference", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.Property<string>("Genre")
                         .IsRequired()
@@ -313,7 +315,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("platform");
 
-                    b.HasKey("UserId")
+                    b.HasKey("Nickname")
                         .HasName("PK__preferen__5CF1C59A3E97A739");
 
                     b.HasIndex("Genre");
@@ -323,11 +325,11 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Review", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int")
@@ -347,7 +349,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("tinyint")
                         .HasColumnName("rating");
 
-                    b.HasKey("UserId", "GameId")
+                    b.HasKey("Nickname", "GameId")
                         .HasName("PK__reviews__B30FD466087C2256");
 
                     b.HasIndex("GameId");
@@ -357,17 +359,17 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.WishedItem", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Nickname")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("user_id");
+                        .HasColumnName("nickname");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int")
                         .HasColumnName("game_id");
 
-                    b.HasKey("UserId", "GameId")
+                    b.HasKey("Nickname", "GameId")
                         .HasName("PK__wished_i__B30FD466E0DD1830");
 
                     b.HasIndex("GameId");
@@ -512,13 +514,13 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
                 {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithOne("Address")
-                        .HasForeignKey("ConestogaInsidersClub.Data.Models.Address", "UserId")
+                        .HasForeignKey("ConestogaInsidersClub.Data.Models.Address", "Nickname")
                         .HasConstraintName("FK_users_TO_addresses")
                         .IsRequired();
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.CartItem", b =>
@@ -529,34 +531,34 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasConstraintName("FK_games_TO_cart_items")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithMany("CartItems")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Nickname")
                         .HasConstraintName("FK_users_TO_cart_items")
                         .IsRequired();
 
                     b.Navigation("Game");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
                 {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserId1Navigation")
-                        .WithMany("FriendshipUserId1Navigations")
-                        .HasForeignKey("UserId1")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "Nickname1Navigation")
+                        .WithMany("FriendshipNickname1Navigations")
+                        .HasForeignKey("Nickname1")
                         .HasConstraintName("FK_users_TO_friendships")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserId2Navigation")
-                        .WithMany("FriendshipUserId2Navigations")
-                        .HasForeignKey("UserId2")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "Nickname2Navigation")
+                        .WithMany("FriendshipNickname2Navigations")
+                        .HasForeignKey("Nickname2")
                         .HasConstraintName("FK_users_TO_friendships1")
                         .IsRequired();
 
-                    b.Navigation("UserId1Navigation");
+                    b.Navigation("Nickname1Navigation");
 
-                    b.Navigation("UserId2Navigation");
+                    b.Navigation("Nickname2Navigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Game", b =>
@@ -572,13 +574,13 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Order", b =>
                 {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Nickname")
                         .HasConstraintName("FK_users_TO_orders")
                         .IsRequired();
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.OrderItem", b =>
@@ -608,15 +610,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasConstraintName("FK_game_genres_TO_preferences")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithOne("Preference")
-                        .HasForeignKey("ConestogaInsidersClub.Data.Models.Preference", "UserId")
+                        .HasForeignKey("ConestogaInsidersClub.Data.Models.Preference", "Nickname")
                         .HasConstraintName("FK_users_TO_preferences")
                         .IsRequired();
 
                     b.Navigation("GenreNavigation");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Review", b =>
@@ -627,15 +629,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasConstraintName("FK_games_TO_reviews")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Nickname")
                         .HasConstraintName("FK_users_TO_reviews")
                         .IsRequired();
 
                     b.Navigation("Game");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.WishedItem", b =>
@@ -646,15 +648,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasConstraintName("FK_games_TO_wished_items")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "NicknameNavigation")
                         .WithMany("WishedItems")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Nickname")
                         .HasConstraintName("FK_users_TO_wished_items")
                         .IsRequired();
 
                     b.Navigation("Game");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("NicknameNavigation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -714,9 +716,9 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Navigation("CartItems");
 
-                    b.Navigation("FriendshipUserId1Navigations");
+                    b.Navigation("FriendshipNickname1Navigations");
 
-                    b.Navigation("FriendshipUserId2Navigations");
+                    b.Navigation("FriendshipNickname2Navigations");
 
                     b.Navigation("Orders");
 
