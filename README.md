@@ -10,3 +10,16 @@ A website that manages membership in the club and provides features that will at
 * Admin dashboard & moderation tools
 * Report generating system
 
+## - Development -
+
+### Entity Framework Core
+
+Apply migrations
+`dotnet ef database update`
+
+Drop database
+`dotnet ef database drop`
+
+Add migration
+`dotnet ef migrations add <NameOfMigration>`
+
