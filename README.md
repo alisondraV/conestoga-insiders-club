@@ -23,3 +23,12 @@ Drop database
 Add migration
 `dotnet ef migrations add <NameOfMigration>`
 
+
+### Tests
+
+For running tests run the project locally through the terminal using the command:
+`dotnet run`
+Then, run the needed tests through the Test Explorer window.
+
+Before running the tests make sure to enable ssl (trust the localhost) with this command:
+`dotnet dev-certs https --trust`

@@ -5,7 +5,7 @@
 
 @if (authenticationState != null)
 {
-    <h4>Name: </h4><span>@authenticationState.User.Identity.Name</span>
+    <h4>Name: </h4><span id="UserName">@authenticationState.User.Identity.Name</span>
 }
 
 @code {
