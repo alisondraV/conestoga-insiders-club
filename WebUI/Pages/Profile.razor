@@ -5,7 +5,16 @@
 
 @if (authenticationState != null)
 {
-    <h4>Name: </h4><span id="UserName">@authenticationState.User.Identity.Name</span>
+    <table>
+        <tr>
+            <td width="100px"><b>Username:</b></td>
+            <td><span id="UserName">@authenticationState.User.Identity.Name</span></td>
+        </tr>
+        <tr>
+            <td width="100px"><b>Full Name:</b></td>
+            <td><span id="UserName">@authenticationState.User.Identity.Name</span></td>
+        </tr>
+    </table>
 }
 
 @code {
