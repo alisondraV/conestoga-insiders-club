@@ -1,5 +1,6 @@
 using ConestogaInsidersClub.Areas.Identity;
 using ConestogaInsidersClub.Data;
+using ConestogaInsidersClub.Data.DataAccess;
 using ConestogaInsidersClub.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -41,6 +42,7 @@ namespace ConestogaInsidersClub
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

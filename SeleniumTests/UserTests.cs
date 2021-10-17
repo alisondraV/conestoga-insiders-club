@@ -11,18 +11,22 @@ namespace SeleniumTests
     {
         IWebDriver driver;
         WebDriverWait wait;
-        private Dictionary<string, string> testUser = new Dictionary<string, string>();
+        private Dictionary<string, string> testUserFixture = new Dictionary<string, string>();
+
+        [OneTimeSetUp]
+        public void SetUpTheFixture()
+        {
+            testUserFixture.Add("UserName", "testUser");
+            testUserFixture.Add("FirstName", "John");
+            testUserFixture.Add("LastName", "Doe");
+            testUserFixture.Add("Email", "j_doe@test.com");
+            testUserFixture.Add("Password", "aA1234*");
+            testUserFixture.Add("ConfirmPassword", "aA1234*");
+        }
 
         [SetUp]
         public void Setup()
         {
-            testUser.Add("UserName", "testUser");
-            testUser.Add("FirstName", "John");
-            testUser.Add("LastName", "Doe");
-            testUser.Add("Email", "j_doe@test.com");
-            testUser.Add("Password", "aA1234*");
-            testUser.Add("ConfirmPassword", "aA1234*");
-
             driver = new ChromeDriver();
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             driver.Navigate().GoToUrl("https://localhost:5001");
@@ -41,15 +45,15 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Register")).Click();
 
             string testUserParamValue;
-            foreach(string key in testUser.Keys)
+            foreach(string key in testUserFixture.Keys)
             {
-                if (testUser.TryGetValue(key, out testUserParamValue))
+                if (testUserFixture.TryGetValue(key, out testUserParamValue))
                 {
                     driver.FindElement(By.Id($"Input_{key}")).SendKeys(testUserParamValue);
                 }
             }
             driver.FindElement(By.Id("Register_Button")).Click();
-
+            
             driver.FindElement(By.LinkText("Click here to confirm your account")).Click();
             LogInAsATestUser();
 
@@ -64,6 +68,8 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Profile")).Click();
 
             wait.Until(webDriver => webDriver.FindElement(By.Id("UserName")).Displayed);
+            driver.FindElement(By.Id("Full_Name"));
+            driver.FindElement(By.Id("Email"));
         }
 
         [TearDown]
@@ -74,10 +80,10 @@ namespace SeleniumTests
 
         private void LogInAsATestUser()
         {
-            testUser.TryGetValue("UserName", out string testUserUserName);
-            testUser.TryGetValue("Password", out string testUserPassword);
+            testUserFixture.TryGetValue("UserName", out string testUserUserName);
+            testUserFixture.TryGetValue("Password", out string testUserPassword);
 
-            driver.FindElement(By.LinkText("Log in")).Click();
+            driver.FindElement(By.LinkText("Login")).Click();
             driver.FindElement(By.Id("Input_UserName")).SendKeys(testUserUserName);
             driver.FindElement(By.Id("Input_Password")).SendKeys(testUserPassword);
             driver.FindElement(By.Id("Log_In_Button")).Click();
