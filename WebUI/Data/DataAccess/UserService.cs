@@ -1,6 +1,8 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
@@ -13,14 +15,14 @@ namespace ConestogaInsidersClub.Data.DataAccess
             this.context = context;
         }
 
-        public List<ApplicationUser> GetUsers()
+        public Task<List<ApplicationUser>> GetUsers()
         {
-            return context.Users.ToList<ApplicationUser>();
+            return context.Users.ToListAsync<ApplicationUser>();
         }
 
-        public ApplicationUser GetUser(string userName)
+        public Task<ApplicationUser> GetUser(string userName)
         {
-            return context.Users.Where(u => u.UserName == userName).First();
+            return context.Users.Where(u => u.UserName == userName).SingleAsync();
         }
     }
 }
