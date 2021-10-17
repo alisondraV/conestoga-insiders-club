@@ -64,6 +64,8 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Profile")).Click();
 
             wait.Until(webDriver => webDriver.FindElement(By.Id("UserName")).Displayed);
+            driver.FindElement(By.Id("Full_Name"));
+            driver.FindElement(By.Id("Email"));
         }
 
         [TearDown]
