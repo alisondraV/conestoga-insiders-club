@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,29 +9,44 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     public class GameService : IGameService
     {
-        public Task deleteGame(int gameId)
+        private readonly ApplicationDbContext context;
+
+        public GameService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
         }
 
-        public Task<Game> getGame(int gameId)
+        public Task<List<Game>> GetGames()
         {
-            throw new NotImplementedException();
+            return context.Games.ToListAsync();
         }
 
-        public Task<List<Game>> getGames()
+        public Task<Game> GetGame(int gameId)
         {
-            throw new NotImplementedException();
+            return context.Games.FindAsync(gameId).AsTask();
         }
 
-        public Task<List<Game>> searchGames(string name)
+        public Task<List<Game>> SearchGames(string name)
         {
-            throw new NotImplementedException();
+            return context.Games.Where(g => g.Name == name).ToListAsync();
         }
 
-        public Task<Game> updateGame(int gameId, Game newGame)
+        public async Task AddGame(Game newGame)
         {
-            throw new NotImplementedException();
+            await context.Games.AddAsync(newGame);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateGame(int gameId, Game newGame)
+        {
+            context.Games.Update(newGame);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteGame(Game game)
+        {
+            context.Games.Remove(game);
+            await context.SaveChangesAsync();
         }
     }
 }
