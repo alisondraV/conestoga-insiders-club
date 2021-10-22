@@ -8,5 +8,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
     {
         Task<ApplicationUser> GetUser(string userName);
         Task<List<ApplicationUser>> GetUsers();
+        Task UpdateUser(ApplicationUser user);
     }
 }
