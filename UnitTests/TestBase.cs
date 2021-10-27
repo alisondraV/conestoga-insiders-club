@@ -14,7 +14,10 @@ namespace ServiceTests
 
         public TestBase()
         {
-            ContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "testing").Options;
+            ContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "testing")
+                .EnableSensitiveDataLogging()
+                .Options;
             Seed();
         }
 
