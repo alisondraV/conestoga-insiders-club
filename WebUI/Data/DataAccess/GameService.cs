@@ -28,7 +28,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<List<Game>> SearchGames(string name)
         {
-            return context.Games.Where(g => g.Name.Contains(name)).ToListAsync();
+            return context.Games.Where(g => g.Name.ToLower().Contains(name.ToLower())).ToListAsync();
         }
 
         public async Task AddGame(Game newGame)
@@ -37,9 +37,9 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateGame(int gameId, Game newGame)
+        public async Task UpdateGame(Game game)
         {
-            context.Games.Update(newGame);
+            context.Games.Update(game);
             await context.SaveChangesAsync();
         }
 

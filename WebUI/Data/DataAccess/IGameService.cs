@@ -10,7 +10,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task<Game> GetGame(int gameId);
         Task<List<Game>> SearchGames(string name);
         Task AddGame(Game game);
-        Task UpdateGame(int gameId, Game newGame);
+        Task UpdateGame(Game game);
         Task DeleteGame(Game game);
     }
 }

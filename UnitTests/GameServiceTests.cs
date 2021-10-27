@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServiceTests
@@ -49,7 +50,7 @@ namespace ServiceTests
             await context.SaveChangesAsync();
         }
 
-        [Test]
+        [Test, Order(1)]
         public async Task GetGames_ShouldListAllGames()
         {
             // Arrange
@@ -64,7 +65,7 @@ namespace ServiceTests
             Assert.That(actualGames, Has.Count.EqualTo(expectedGames.Count));
         }
 
-        [Test]
+        [Test, Order(2)]
         public async Task GetGame_ShouldGetAGameById()
         {
             // Arrange
@@ -82,13 +83,13 @@ namespace ServiceTests
             Assert.AreNotEqual(actualGame.Name, otherGame.Name);
         }
 
-        [Test]
-        public async Task SearchGame_ShouldListGamesContainingTheQuery()
+        [Test, Order(3)]
+        public async Task SearchGame_ShouldListGamesContainingTheQueryRegardlessOfTheCase()
         {
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new GameService(context);
-            var query = "Foo";
+            var query = "foo";
 
             // Act
             var searchResults = await service.SearchGames(query);
@@ -97,8 +98,71 @@ namespace ServiceTests
             Assert.That(searchResults, Has.Count.EqualTo(1));
             foreach (var result in searchResults)
             {
-                Assert.That(result.Name, Contains.Substring(query));
+                Assert.That(result.Name.ToLower(), Contains.Substring(query));
             }
+        }
+
+        [Test, Order(4)]
+        public async Task AddGame_AddsANewGame()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var newGame = new Game
+            {
+                Name = "qwer",
+                Description = "Some description",
+                Genre = genre.Name
+            };
+
+            // Act
+            await service.AddGame(newGame);
+            var allGames = await context.Games.ToListAsync();
+
+            // Assert
+            Assert.That(allGames, Has.Count.EqualTo(3));
+        }
+
+        [Test, Order(5)]
+        public async Task UpdateGame_UpdatesAnExistingGame()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var targetGameId = 1;
+            var newGame = new Game
+            {
+                GameId = targetGameId,
+                Name = "qwer",
+                Description = "Some description",
+                Genre = genre.Name
+            };
+
+            // Act
+            await service.UpdateGame(newGame);
+            var targetGame = await context.Games.FindAsync(targetGameId);
+
+            // Assert
+            Assert.AreEqual(newGame.Name, targetGame.Name);
+        }
+
+        [Test, Order(6)]
+        public async Task DeleteGame_DeletesAGame()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var targetGameId = 1;
+            var targetGame = await context.Games.FindAsync(targetGameId);
+
+            // Act
+            await service.DeleteGame(targetGame);
+            var allGames = await context.Games.ToListAsync();
+
+            // Assert
+            Assert.That(allGames, Has.Count.EqualTo(2));
+            var ids = allGames.Select(g => g.GameId);
+            Assert.That(ids, Has.No.Member(targetGameId));
         }
     }
 }
