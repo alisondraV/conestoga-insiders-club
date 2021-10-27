@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConestogaInsidersClub", "We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumTests", "SeleniumTests\SeleniumTests.csproj", "{7B24CE67-E4F7-449D-B0A3-BC46AE201E93}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTests", "UnitTests\ServiceTests.csproj", "{4C24224F-6DE0-40A5-9BE4-4E37F824C5C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7B24CE67-E4F7-449D-B0A3-BC46AE201E93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B24CE67-E4F7-449D-B0A3-BC46AE201E93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B24CE67-E4F7-449D-B0A3-BC46AE201E93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C24224F-6DE0-40A5-9BE4-4E37F824C5C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C24224F-6DE0-40A5-9BE4-4E37F824C5C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C24224F-6DE0-40A5-9BE4-4E37F824C5C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C24224F-6DE0-40A5-9BE4-4E37F824C5C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
