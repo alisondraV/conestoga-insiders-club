@@ -28,7 +28,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<List<Game>> SearchGames(string name)
         {
-            return context.Games.Where(g => g.Name == name).ToListAsync();
+            return context.Games.Where(g => g.Name.Contains(name)).ToListAsync();
         }
 
         public async Task AddGame(Game newGame)

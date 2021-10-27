@@ -81,5 +81,24 @@ namespace ServiceTests
             Assert.AreEqual(actualGame.Name, expectedGame.Name);
             Assert.AreNotEqual(actualGame.Name, otherGame.Name);
         }
+
+        [Test]
+        public async Task SearchGame_ShouldListGamesContainingTheQuery()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var query = "Foo";
+
+            // Act
+            var searchResults = await service.SearchGames(query);
+
+            // Assert
+            Assert.That(searchResults, Has.Count.EqualTo(1));
+            foreach (var result in searchResults)
+            {
+                Assert.That(result.Name, Contains.Substring(query));
+            }
+        }
     }
 }
