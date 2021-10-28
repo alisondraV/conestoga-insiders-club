@@ -45,7 +45,7 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Register")).Click();
 
             string testUserParamValue;
-            foreach(string key in testUserFixture.Keys)
+            foreach (string key in testUserFixture.Keys)
             {
                 if (testUserFixture.TryGetValue(key, out testUserParamValue))
                 {
@@ -53,7 +53,7 @@ namespace SeleniumTests
                 }
             }
             driver.FindElement(By.Id("Register_Button")).Click();
-            
+
             driver.FindElement(By.LinkText("Click here to confirm your account")).Click();
             LogInAsATestUser();
 
