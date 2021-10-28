@@ -28,6 +28,10 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("last_name")]
         [StringLength(50)]
         public string LastName { get; set; }
+        [Column("receive_promotional_emails")]
+        public bool ReceivePromotionalEmails { get; set; }
+        [Column("birthday")]
+        public DateTime BirthDay { get; set; }
 
         [InverseProperty("UserIdNavigation")]
         public virtual Address Address { get; set; }
