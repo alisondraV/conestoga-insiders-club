@@ -18,11 +18,7 @@ namespace ServiceTests
                 .UseInMemoryDatabase(databaseName: "testing")
                 .EnableSensitiveDataLogging()
                 .Options;
-            Seed();
-        }
 
-        private void Seed()
-        {
             using var context = new ApplicationDbContext(ContextOptions);
 
             context.Database.EnsureDeleted();
