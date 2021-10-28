@@ -14,6 +14,12 @@ A website that manages membership in the club and provides features that will at
 
 ### Entity Framework Core
 
+#### Installation
+
+`dotnet tool install -g dotnet-ef`
+
+#### Commands
+
 Apply migrations
 `dotnet ef database update`
 
@@ -22,6 +28,18 @@ Drop database
 
 Add migration
 `dotnet ef migrations add <NameOfMigration>`
+
+### Formatting
+
+#### Installation
+
+`dotnet tool install -g dotnet-format`
+
+#### Commands
+
+Run linter
+
+`dotnet format`
 
 
 ### Tests
