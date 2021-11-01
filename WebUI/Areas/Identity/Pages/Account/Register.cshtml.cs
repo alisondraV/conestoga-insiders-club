@@ -89,11 +89,12 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     Email = Input.Email,
                     UserName = Input.UserName,
-                    FirstName = Input.FirstName, 
-                    LastName = Input.LastName 
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
