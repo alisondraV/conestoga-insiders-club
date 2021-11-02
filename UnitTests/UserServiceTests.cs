@@ -111,6 +111,23 @@ namespace ServiceTests
         }
 
         [Test, Order(5)]
+        public async Task GetFriends_ListsAllUsersThatAreFriendsWithTheUserInQuestion()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
+
+            // Act
+            var actualFriends = await service.GetFriends(firstUser);
+
+            // Assert
+            Assert.That(actualFriends, Has.Count.EqualTo(1));
+            Assert.AreEqual(secondUser.UserName, actualFriends.First().UserName);
+        }
+
+        [Test, Order(6)]
         public async Task DeleteFriendship_RemovesAnExistingFriendship()
         {
             // Arrange
