@@ -235,6 +235,24 @@ namespace ConestogaInsidersClub.Data
                     .HasConstraintName("FK_users_TO_wished_items");
             });
 
+            var genre = new GameGenre
+            {
+                Name = "Indie"
+            };
+            modelBuilder.Entity<GameGenre>().HasData(
+                genre  
+            );
+
+            modelBuilder.Entity<Game>().HasData(
+                new Game
+                {
+                    Name = "Portal",
+                    Description = "Teleporting game",
+                    Price = 12.5,
+                    Genre = genre.Name
+                }
+            );
+
             base.OnModelCreating(modelBuilder);
         }
     }
