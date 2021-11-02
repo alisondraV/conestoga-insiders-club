@@ -107,6 +107,7 @@ namespace ServiceTests
             var friendship = friendships.First();
             Assert.AreEqual(friendship.UserId1, firstUser.Id);
             Assert.AreEqual(friendship.UserId2, secondUser.Id);
+            Assert.NotNull(friendship.CreatedAt);
         }
 
         [Test, Order(5)]

@@ -31,9 +31,15 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public Task CreateFriendship(string userId1, string userId2)
+        public async Task CreateFriendship(string userId1, string userId2)
         {
-            throw new System.NotImplementedException();
+            await context.Friendships.AddAsync(new Friendship
+            {
+                UserId1 = userId1,
+                UserId2 = userId2,
+                CreatedAt = System.DateTime.Now
+            });
+            await context.SaveChangesAsync();
         }
 
         public Task DeleteFriendship(string userId1, string userId2)
