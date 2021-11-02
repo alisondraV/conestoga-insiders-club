@@ -116,16 +116,15 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new UserService(context);
-            var targetUser = expectedUsers.First();
-            var newUserName = "Zoo";
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
 
             // Act
-            targetUser.UserName = newUserName;
-            await service.UpdateUser(targetUser);
-            var updatedUser = await context.Users.FindAsync(targetUser.Id);
+            await service.DeleteFriendship(firstUser.Id, secondUser.Id);
 
             // Assert
-            Assert.AreEqual(newUserName, updatedUser.UserName);
+            var friendships = await context.Friendships.ToListAsync();
+            Assert.IsEmpty(friendships);
         }
     }
 }

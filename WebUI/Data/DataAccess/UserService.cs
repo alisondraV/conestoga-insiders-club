@@ -42,9 +42,11 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public Task DeleteFriendship(string userId1, string userId2)
+        public async Task DeleteFriendship(string userId1, string userId2)
         {
-            throw new System.NotImplementedException();
+            var friendship = await context.Friendships.FirstOrDefaultAsync(f => f.UserId1 == userId1 && f.UserId2 == userId2);
+            context.Friendships.Remove(friendship);
+            await context.SaveChangesAsync();
         }
     }
 }
