@@ -15,14 +15,19 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("user_id")]
         [StringLength(50)]
         public string UserId { get; set; }
+
         [Required]
         [Column("platform")]
         [StringLength(50)]
         public string Platform { get; set; }
+
         [Required]
         [Column("genre")]
         [StringLength(25)]
         public string Genre { get; set; }
+
+        [Column("receive_promotional_emails")]
+        public bool ReceivePromotionalEmails { get; set; }
 
         [ForeignKey(nameof(Genre))]
         [InverseProperty(nameof(GameGenre.Preferences))]
