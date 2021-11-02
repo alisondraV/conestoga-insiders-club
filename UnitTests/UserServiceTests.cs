@@ -88,5 +88,43 @@ namespace ServiceTests
             // Assert
             Assert.AreEqual(newUserName, updatedUser.UserName);
         }
+
+        [Test, Order(4)]
+        public async Task CreateFriendship_CreatesAFriendshipBetween2Users()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
+
+            // Act
+            await service.CreateFriendship(firstUser.Id, secondUser.Id);
+
+            // Assert
+            var friendships = await context.Friendships.ToListAsync();
+            Assert.That(friendships, Has.Count.EqualTo(1));
+            var friendship = friendships.First();
+            Assert.AreEqual(friendship.UserId1, firstUser.Id);
+            Assert.AreEqual(friendship.UserId2, secondUser.Id);
+        }
+
+        [Test, Order(5)]
+        public async Task DeleteFriendship_RemovesAnExistingFriendship()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+            var newUserName = "Zoo";
+
+            // Act
+            targetUser.UserName = newUserName;
+            await service.UpdateUser(targetUser);
+            var updatedUser = await context.Users.FindAsync(targetUser.Id);
+
+            // Assert
+            Assert.AreEqual(newUserName, updatedUser.UserName);
+        }
     }
 }

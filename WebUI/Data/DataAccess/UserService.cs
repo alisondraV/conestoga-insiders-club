@@ -30,5 +30,15 @@ namespace ConestogaInsidersClub.Data.DataAccess
             context.Users.Update(user);
             await context.SaveChangesAsync();
         }
+
+        public Task CreateFriendship(string userId1, string userId2)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task DeleteFriendship(string userId1, string userId2)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
