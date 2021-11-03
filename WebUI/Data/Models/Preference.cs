@@ -29,6 +29,9 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("receive_promotional_emails")]
         public bool ReceivePromotionalEmails { get; set; }
 
+        [Column("favourite_game_id")]
+        public Game FavouriteGame { get; set; }
+
         [ForeignKey(nameof(Genre))]
         [InverseProperty(nameof(GameGenre.Preferences))]
         public virtual GameGenre GenreNavigation { get; set; }
