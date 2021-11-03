@@ -8,19 +8,29 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     public class ReviewService : IReviewService
     {
-        public Task AddReview(Review review)
+        private readonly ApplicationDbContext context;
+
+        public ReviewService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
+        }
+        public async Task AddReview(Review review)
+        {
+            await context.Reviews.AddAsync(review);
+            await context.SaveChangesAsync();
         }
 
-        public Task ApproveReview(Review review)
+        public async Task ApproveReview(Review review)
         {
-            throw new NotImplementedException();
+            review.Approved = true;
+            context.Reviews.Update(review);
+            await context.SaveChangesAsync();
         }
 
-        public Task DeleteReview(Review review)
+        public async Task DeleteReview(Review review)
         {
-            throw new NotImplementedException();
+            context.Reviews.Remove(review);
+            await context.SaveChangesAsync();
         }
 
         public Task<List<Review>> GetApprovedGameReviews(int gameId)
@@ -43,9 +53,11 @@ namespace ConestogaInsidersClub.Data.DataAccess
             throw new NotImplementedException();
         }
 
-        public Task RejectReview(Review review)
+        public async Task RejectReview(Review review)
         {
-            throw new NotImplementedException();
+            review.Approved = false;
+            context.Reviews.Update(review);
+            await context.SaveChangesAsync();
         }
     }
 }
