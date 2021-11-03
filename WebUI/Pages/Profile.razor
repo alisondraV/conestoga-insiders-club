@@ -27,8 +27,8 @@ else if (editMode != true)
             <td><span id="Email">@user.Email</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Birth Day:</b></td>
-            <td><span id="Email">@user.BirthDay.ToShortTimeString()</span></td>
+            <td width="100px"><b>BirthDay:</b></td>
+            <td><span id="Email">@user.BirthDay.ToLongDateString()</span></td>
         </tr>
         <tr>
             <td width="100px"><b>Phone Number:</b></td>
@@ -91,6 +91,7 @@ else
                 <InputText id="Address" @bind-Value="userViewModel.Address.Address1" />
             </label>
         </p>
+        <br />
         <button type="submit">Save</button>
     </EditForm>
 }
