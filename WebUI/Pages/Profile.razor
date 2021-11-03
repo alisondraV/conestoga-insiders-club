@@ -11,7 +11,7 @@
 @if (authenticationState == null || user == null)
 {
     <h3>Loading...</h3>
-} 
+}
 else
 {
     <table>
@@ -28,17 +28,36 @@ else
             <td><span id="Email">@user.Email</span></td>
         </tr>
     </table>
+
+    <EditForm OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h3>Edit Information</h3>
+        <InputText id="First_Name" @bind-Value="user.FirstName" />
+        <InputText id="Last_Name" @bind-Value="user.LastName" />
+        <InputText id="UserName" @bind-Value="user.UserName" />
+        <InputText id="Email" @bind-Value="user.Email" />
+        <InputText id="Phone_Number" @bind-Value="user.PhoneNumber" />
+
+        <button type="submit">Save</button>
+    </EditForm>
 }
 
-    @code {
-        [CascadingParameter]
-        private Task<AuthenticationState> AuthenticationState { get; set; }
-        private AuthenticationState authenticationState;
-        private ApplicationUser user;
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    private AuthenticationState authenticationState;
+    private ApplicationUser user;
 
-        protected override async Task OnInitializedAsync()
-        {
-            authenticationState = await AuthenticationState;
-            user = await db.GetUser(authenticationState.User.Identity.Name);
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationState;
+        user = await db.GetUser(authenticationState.User.Identity.Name);
     }
+
+    private async void HandleValidSubmit()
+    {
+        // await db.UpdateUser(user);
+    }
+}

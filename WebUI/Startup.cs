@@ -43,6 +43,7 @@ namespace ConestogaInsidersClub
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPreferenceService, PreferenceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
