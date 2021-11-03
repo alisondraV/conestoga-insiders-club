@@ -32,18 +32,17 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public Address Address { get; set; }
 
-        public static ApplicationUser ToModel(UserVM userVM)
+        public static ApplicationUser ToModel(ApplicationUser user, UserVM userVM)
         {
-            return new ApplicationUser
-            {
-                UserName = userVM.UserName,
-                FirstName = userVM.FirstName,
-                LastName = userVM.LastName,
-                Email = userVM.Email,
-                BirthDay = userVM.BirthDay,
-                PhoneNumber = userVM.PhoneNumber,
-                Address = userVM.Address
-            };
+            user.UserName = userVM.UserName;
+            user.FirstName = userVM.FirstName;
+            user.LastName = userVM.LastName;
+            user.Email = userVM.Email;
+            user.BirthDay = userVM.BirthDay;
+            user.PhoneNumber = userVM.PhoneNumber;
+            user.Address = userVM.Address;
+
+            return user;
         }
 
         public static UserVM ToViewModel(ApplicationUser user)

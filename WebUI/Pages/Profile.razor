@@ -7,8 +7,6 @@
 
 <h1>Profile</h1>
 <br />
-
-
 @if (authenticationState == null || user == null)
 {
     <h3>Loading...</h3>
@@ -43,7 +41,8 @@ else if (editMode != true)
     </table>
     <button @onclick="@FlipEditMode">Edit</button>
 }
-else {
+else
+{
     <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -89,7 +88,7 @@ else {
         <p>
             <label>
                 Address:
-                <InputText id="Address" @bind-Value="userViewModel.Address.ToString()" />
+                <InputText id="Address" @bind-Value="userViewModel.Address.Address1" />
             </label>
         </p>
         <button type="submit">Save</button>
@@ -114,8 +113,7 @@ else {
 
     private async void HandleValidSubmit()
     {
-        ApplicationUser updatedUser = UserVM.ToModel(userViewModel);
-        updatedUser.Id = user.Id; // TODO: investigate if all other fields will be deleted
+        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await db.UpdateUser(updatedUser);
         FlipEditMode();
     }

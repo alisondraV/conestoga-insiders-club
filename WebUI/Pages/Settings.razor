@@ -55,7 +55,7 @@
 
     private async void HandleValidSubmit()
     {
-        Preference updatedPreference = PreferenceVM.ToModel(preferenceViewModel);
+        Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
         updatedPreference.UserId = preference.UserId;
         await preferences.UpdatePreference(updatedPreference);
     }
