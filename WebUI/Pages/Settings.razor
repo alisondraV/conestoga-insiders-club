@@ -16,7 +16,7 @@
     <br />
     <p>
         <label>
-            Your favourite platform:
+            Your favourite genre:
             <InputText id="Genre" @bind-Value="preferenceViewModel.Genre" />
         </label>
     </p>
@@ -55,6 +55,8 @@
 
     private async void HandleValidSubmit()
     {
-        await preferences.UpdatePreference(PreferenceVM.ToModel(preferenceViewModel));
+        Preference updatedPreference = PreferenceVM.ToModel(preferenceViewModel);
+        updatedPreference.UserId = preference.UserId;
+        await preferences.UpdatePreference(updatedPreference);
     }
 }

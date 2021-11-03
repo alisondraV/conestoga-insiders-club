@@ -1,6 +1,7 @@
 ﻿@page "/profile"
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
 
 @inject IUserService db;
 
@@ -12,7 +13,7 @@
 {
     <h3>Loading...</h3>
 }
-else
+else if (editMode != true)
 {
     <table>
         <tr>
@@ -27,19 +28,70 @@ else
             <td width="100px"><b>Email:</b></td>
             <td><span id="Email">@user.Email</span></td>
         </tr>
+        <tr>
+            <td width="100px"><b>Birth Day:</b></td>
+            <td><span id="Email">@user.BirthDay.ToShortTimeString()</span></td>
+        </tr>
+        <tr>
+            <td width="100px"><b>Phone Number:</b></td>
+            <td><span id="Email">@user.PhoneNumber</span></td>
+        </tr>
+        <tr>
+            <td width="100px"><b>Address:</b></td>
+            <td><span id="Email">@user.Address</span></td>
+        </tr>
     </table>
-
-    <EditForm OnValidSubmit="@HandleValidSubmit">
+    <button @onclick="@FlipEditMode">Edit</button>
+}
+else {
+    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <h3>Edit Information</h3>
-        <InputText id="First_Name" @bind-Value="user.FirstName" />
-        <InputText id="Last_Name" @bind-Value="user.LastName" />
-        <InputText id="UserName" @bind-Value="user.UserName" />
-        <InputText id="Email" @bind-Value="user.Email" />
-        <InputText id="Phone_Number" @bind-Value="user.PhoneNumber" />
-
+        <br />
+        <p>
+            <label>
+                UserName:
+                <InputText id="UserName" @bind-Value="userViewModel.UserName" />
+            </label>
+        </p>
+        <p>
+            <label>
+                First Name:
+                <InputText id="First_Name" @bind-Value="userViewModel.FirstName" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Last Name:
+                <InputText id="Last_Name" @bind-Value="userViewModel.LastName" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Email:
+                <InputText id="Email" @bind-Value="userViewModel.Email" />
+            </label>
+        </p>
+        <p>
+            <label>
+                BirthDay:
+                <InputDate id="BirthDay" @bind-Value="userViewModel.BirthDay" />
+            </label>
+        </p>
+        <p>
+            <label>
+                PhoneNumber:
+                <InputText id="Phone_Number" @bind-Value="userViewModel.PhoneNumber" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Address:
+                <InputText id="Address" @bind-Value="userViewModel.Address.ToString()" />
+            </label>
+        </p>
         <button type="submit">Save</button>
     </EditForm>
 }
@@ -49,15 +101,27 @@ else
     private Task<AuthenticationState> AuthenticationState { get; set; }
     private AuthenticationState authenticationState;
     private ApplicationUser user;
+    private UserVM userViewModel = new UserVM();
+    private bool editMode = false;
 
     protected override async Task OnInitializedAsync()
     {
         authenticationState = await AuthenticationState;
         user = await db.GetUser(authenticationState.User.Identity.Name);
+
+        userViewModel = UserVM.ToViewModel(user);
     }
 
     private async void HandleValidSubmit()
     {
-        // await db.UpdateUser(user);
+        ApplicationUser updatedUser = UserVM.ToModel(userViewModel);
+        updatedUser.Id = user.Id; // TODO: investigate if all other fields will be deleted
+        await db.UpdateUser(updatedUser);
+        FlipEditMode();
+    }
+
+    private void FlipEditMode()
+    {
+        editMode = !editMode;
     }
 }
