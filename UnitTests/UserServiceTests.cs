@@ -88,5 +88,60 @@ namespace ServiceTests
             // Assert
             Assert.AreEqual(newUserName, updatedUser.UserName);
         }
+
+        [Test, Order(4)]
+        public async Task CreateFriendship_CreatesAFriendshipBetween2Users()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
+
+            // Act
+            await service.CreateFriendship(firstUser.Id, secondUser.Id);
+
+            // Assert
+            var friendships = await context.Friendships.ToListAsync();
+            Assert.That(friendships, Has.Count.EqualTo(1));
+            var friendship = friendships.First();
+            Assert.AreEqual(friendship.UserId1, firstUser.Id);
+            Assert.AreEqual(friendship.UserId2, secondUser.Id);
+            Assert.NotNull(friendship.CreatedAt);
+        }
+
+        [Test, Order(5)]
+        public async Task GetFriends_ListsAllUsersThatAreFriendsWithTheUserInQuestion()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
+
+            // Act
+            var actualFriends = await service.GetFriends(firstUser);
+
+            // Assert
+            Assert.That(actualFriends, Has.Count.EqualTo(1));
+            Assert.AreEqual(secondUser.UserName, actualFriends.First().UserName);
+        }
+
+        [Test, Order(6)]
+        public async Task DeleteFriendship_RemovesAnExistingFriendship()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var firstUser = expectedUsers.First();
+            var secondUser = expectedUsers.ElementAt(1);
+
+            // Act
+            await service.DeleteFriendship(firstUser.Id, secondUser.Id);
+
+            // Assert
+            var friendships = await context.Friendships.ToListAsync();
+            Assert.IsEmpty(friendships);
+        }
     }
 }
