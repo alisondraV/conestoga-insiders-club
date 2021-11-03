@@ -15,17 +15,21 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public bool ReceivePromotionalEmails { get; set; }
 
-        public static Preference ToModel(PreferenceVM preference)
+        public static Preference ToModel(PreferenceVM preferenceVM)
         {
-            return new Preference { Genre = preference.Genre, Platform = preference.Platform };
+            return new Preference { 
+                Genre = preferenceVM.Genre, 
+                Platform = preferenceVM.Platform,
+                ReceivePromotionalEmails = preferenceVM.ReceivePromotionalEmails
+            };
         }
 
         public static PreferenceVM ToViewModel(Preference preference)
         {
-            return new PreferenceVM { 
-                Platform = preference.Platform, 
-                Genre = preference.Genre, 
-                ReceivePromotionalEmails = true // TODO: set it to the actual value
+            return new PreferenceVM {
+                Platform = preference.Platform,
+                Genre = preference.Genre,
+                ReceivePromotionalEmails = preference.ReceivePromotionalEmails
             };
         }
     }
