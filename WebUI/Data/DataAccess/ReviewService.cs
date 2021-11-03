@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,24 +34,39 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public Task<List<Review>> GetApprovedGameReviews(int gameId)
+        public async Task<List<Review>> GetApprovedGameReviews(int gameId)
         {
-            throw new NotImplementedException();
+            return await context.Reviews.Where(a => a.GameId == gameId && a.Approved == true).ToListAsync();
         }
 
-        public Task<int> GetAverageRating(int gameId)
+        public async Task<int> GetAverageRating(int gameId)
         {
-            throw new NotImplementedException();
+            List<Review> reviews = await context.Reviews.Where(a => a.GameId == gameId && a.Approved == true).ToListAsync();
+            int total = 0;
+            if (reviews.Count != 0)
+            {
+                foreach (var review in reviews)
+                {
+                    total += review.Rating;
+                }
+                return total / reviews.Count;
+            }
+            else
+            {
+                return 0;
+            }
+            
+
         }
 
-        public Task<List<Review>> GetReviews()
+        public async Task<List<Review>> GetReviews()
         {
-            throw new NotImplementedException();
+            return await context.Reviews.Where(a => a.Approved == null).ToListAsync();
         }
 
-        public Task<List<Review>> GetReviewsByUser(int userId)
+        public async Task<List<Review>> GetReviewsByUser(int userId)
         {
-            throw new NotImplementedException();
+            return await context.Reviews.Where(a => a.UserId == userId.ToString()).ToListAsync();
         }
 
         public async Task RejectReview(Review review)
