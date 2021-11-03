@@ -47,35 +47,34 @@ namespace ConestogaInsidersClub.Data
         {
             var hasher = new PasswordHasher<ApplicationUser>();
 
-            var adminId = "e0e5e08e-96be-4927-9fc1-c1b355a11abc";
             var userId = "d889434c-de0e-495e-b23e-6f855dc942d7";
+            var adminId = "e0e5e08e-96be-4927-9fc1-c1b355a11abc";
+
             user = new ApplicationUser
             {
                 Id = userId,
+                UserName = "user",
+                NormalizedUserName = "USER",
                 FirstName = "Regular",
                 LastName = "User",
                 Email = "user@example.com",
-                UserName = "user",
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
+                NormalizedEmail = "USER@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
             admin = new ApplicationUser
             {
                 Id = adminId,
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
                 FirstName = "Super",
                 LastName = "Admin",
                 Email = "admin@example.com",
-                UserName = "admin",
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
+                NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
             };
             admin.PasswordHash = hasher.HashPassword(admin, "Qweqwe1!");
 
