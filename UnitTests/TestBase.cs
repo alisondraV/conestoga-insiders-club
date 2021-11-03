@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data;
+using ConestogaInsidersClub.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,20 @@ namespace ServiceTests
             context.Database.EnsureCreated();
 
             context.SaveChanges();
+        }
+
+        protected async Task<ApplicationUser> SeedUser(string userName)
+        {
+            using var context = new ApplicationDbContext(ContextOptions);
+            var user = new ApplicationUser
+            {
+                UserName = userName
+            };
+                await context.Set<ApplicationUser>().AddAsync(user);
+
+            await context.SaveChangesAsync();
+
+            return user;
         }
     }
 }
