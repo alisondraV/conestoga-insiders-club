@@ -32,6 +32,7 @@ namespace ConestogaInsidersClub.Data.Models
         public bool ReceivePromotionalEmails { get; set; }
         [Column("birthday")]
         public DateTime BirthDay { get; set; }
+
         [InverseProperty("UserIdNavigation")]
         public virtual Address Address { get; set; }
         [InverseProperty("UserIdNavigation")]
