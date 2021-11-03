@@ -99,7 +99,7 @@ namespace ConestogaInsidersClub.Data
             {
                 Name = "Indie"
             };
-            
+
             context.Add(genre);
             context.SaveChanges();
         }
@@ -127,7 +127,7 @@ namespace ConestogaInsidersClub.Data
 
             context.Add(game);
             context.SaveChanges();
-            
+
         }
 
         private static void ClearDatabase()

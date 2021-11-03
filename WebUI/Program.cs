@@ -18,7 +18,7 @@ namespace ConestogaInsidersClub
             var host = CreateHostBuilder(args).Build();
             using var scope = host.Services.CreateScope();
             var configuration = scope.ServiceProvider.GetService<IConfiguration>();
-            if (configuration.GetValue<bool>("UseSeeder")) 
+            if (configuration.GetValue<bool>("UseSeeder"))
             {
                 var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 Seeder.Seed(context);
