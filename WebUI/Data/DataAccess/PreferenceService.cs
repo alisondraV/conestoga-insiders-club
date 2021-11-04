@@ -15,7 +15,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
             this.context = context;
         }
 
-        public Task<Preference> GetPreference(string userId)
+        public Task<Preference> GetPreference(string userName)
         {
             return Task.FromResult(new Preference
             {

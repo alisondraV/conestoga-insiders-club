@@ -6,7 +6,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     public interface IPreferenceService
     {
-        Task<Preference> GetPreference(string userId);
+        Task<Preference> GetPreference(string userName);
         Task UpdatePreference(Preference preference);
     }
 }

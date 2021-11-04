@@ -3,7 +3,6 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
 
-@inject IUserService users;
 @inject IPreferenceService preferences;
 
 <h1>Settings</h1>
@@ -47,8 +46,7 @@
     protected override async Task OnInitializedAsync()
     {
         authenticationState = await AuthenticationState;
-        user = await users.GetUser(authenticationState.User.Identity.Name);
-        preference = await preferences.GetPreference(user.Id);
+        preference = await preferences.GetPreference(authenticationState.User.Identity.Name);
 
         preferenceViewModel = PreferenceVM.ToViewModel(preference);
     }

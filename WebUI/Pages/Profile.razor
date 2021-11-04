@@ -3,10 +3,11 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
 
-@inject IUserService db;
+@inject IUserService userService;
 
 <h1>Profile</h1>
 <br />
+
 @if (authenticationState == null || user == null)
 {
     <h3>Loading...</h3>
@@ -15,85 +16,130 @@ else if (editMode != true)
 {
     <table>
         <tr>
-            <td width="100px"><b>Username:</b></td>
-            <td><span id="UserName">@authenticationState.User.Identity.Name</span></td>
+            <td width="150px"><b>Username:</b></td>
+            <td><span id="UserName">@user.UserName</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Full Name:</b></td>
+            <td width="150px"><b>Full Name:</b></td>
             <td><span id="Full_Name">@user.FirstName @user.LastName</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Email:</b></td>
+            <td width="150px"><b>Email:</b></td>
             <td><span id="Email">@user.Email</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>BirthDay:</b></td>
-            <td><span id="Email">@user.BirthDay.ToLongDateString()</span></td>
+            <td width="150px"><b>BirthDay:</b></td>
+            <td><span id="BirthDay">@user.BirthDay.ToLongDateString()</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Phone Number:</b></td>
-            <td><span id="Email">@user.PhoneNumber</span></td>
-        </tr>
-        <tr>
-            <td width="100px"><b>Address:</b></td>
-            <td><span id="Email">@user.Address</span></td>
+            <td width="150px"><b>Phone Number:</b></td>
+            <td><span id="Phone_Number">@user.PhoneNumber</span></td>
         </tr>
     </table>
+    <br />
+    <h4>Address</h4>
+    <table>
+        <tr>
+            <td width="150px"><b>Address:</b></td>
+            <td><span id="Address1">@user.Address.Address1</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>City:</b></td>
+            <td><span id="City">@user.Address.City</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>Province:</b></td>
+            <td><span id="Province">@user.Address.Province</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>Country:</b></td>
+            <td><span id="Country">@user.Address.Country</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>Postal Code:</b></td>
+            <td><span id="Postal_Code">@user.Address.PostalCode</span></td>
+        </tr>
+    </table>
+    <br />
     <button @onclick="@FlipEditMode">Edit</button>
 }
 else
 {
-    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+<EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-        <h3>Edit Information</h3>
-        <br />
-        <p>
-            <label>
-                UserName:
-                <InputText id="UserName" @bind-Value="userViewModel.UserName" />
-            </label>
-        </p>
-        <p>
-            <label>
-                First Name:
-                <InputText id="First_Name" @bind-Value="userViewModel.FirstName" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Last Name:
-                <InputText id="Last_Name" @bind-Value="userViewModel.LastName" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Email:
-                <InputText id="Email" @bind-Value="userViewModel.Email" />
-            </label>
-        </p>
-        <p>
-            <label>
-                BirthDay:
-                <InputDate id="BirthDay" @bind-Value="userViewModel.BirthDay" />
-            </label>
-        </p>
-        <p>
-            <label>
-                PhoneNumber:
-                <InputText id="Phone_Number" @bind-Value="userViewModel.PhoneNumber" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Address:
-                <InputText id="Address" @bind-Value="userViewModel.Address.Address1" />
-            </label>
-        </p>
-        <br />
-        <button type="submit">Save</button>
-    </EditForm>
+    <h3>Edit Information</h3>
+    <br />
+    <p>
+        <label>
+            UserName:
+            <InputText id="UserName_Edit" @bind-Value="userViewModel.UserName" />
+        </label>
+    </p>
+    <p>
+        <label>
+            First Name:
+            <InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Last Name:
+            <InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Email:
+            <InputText id="Email_Edit" @bind-Value="userViewModel.Email" />
+        </label>
+    </p>
+    <p>
+        <label>
+            BirthDay:
+            <InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" />
+        </label>
+    </p>
+    <p>
+        <label>
+            PhoneNumber:
+            <InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Address:
+            <InputText id="Address1_Edit" @bind-Value="userViewModel.Address.Address1" />
+        </label>
+    </p>
+    <p>
+        <label>
+            City:
+            <InputText id="City_Edit" @bind-Value="userViewModel.Address.City" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Province:
+            <InputText id="Province_Edit" @bind-Value="userViewModel.Address.Province" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Country:
+            <InputText id="Country_Edit" @bind-Value="userViewModel.Address.Country" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Address:
+            <InputText id="Postal_Code_Edit" @bind-Value="userViewModel.Address.PostalCode" />
+        </label>
+    </p>
+    <br />
+    <button type="submit">Save</button>
+</EditForm>
 }
 
 @code {
@@ -107,7 +153,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         authenticationState = await AuthenticationState;
-        user = await db.GetUser(authenticationState.User.Identity.Name);
+        user = await userService.GetUser(authenticationState.User.Identity.Name);
 
         userViewModel = UserVM.ToViewModel(user);
     }
@@ -115,7 +161,7 @@ else
     private async void HandleValidSubmit()
     {
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
-        await db.UpdateUser(updatedUser);
+        await userService.UpdateUser(updatedUser);
         FlipEditMode();
     }
 
