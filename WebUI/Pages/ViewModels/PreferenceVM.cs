@@ -17,7 +17,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public static Preference ToModel(Preference preference, PreferenceVM preferenceVM)
         {
-            preference.Genre = preferenceVM.Genre; 
+            preference.Genre = preferenceVM.Genre;
             preference.Platform = preferenceVM.Platform;
             preference.ReceivePromotionalEmails = preferenceVM.ReceivePromotionalEmails;
 
@@ -26,7 +26,8 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public static PreferenceVM ToViewModel(Preference preference)
         {
-            return new PreferenceVM {
+            return new PreferenceVM
+            {
                 Platform = preference.Platform,
                 Genre = preference.Genre,
                 ReceivePromotionalEmails = preference.ReceivePromotionalEmails

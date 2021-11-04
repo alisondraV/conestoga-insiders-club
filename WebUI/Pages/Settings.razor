@@ -6,34 +6,61 @@
 @inject IPreferenceService preferences;
 
 <h1>Settings</h1>
-<br />
-<EditForm Model="@preferenceViewModel" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <h3>Edit Preferences</h3>
+@if (authenticationState == null || user == null)
+{
+    <h3>Loading...</h3>
+}
+else if (editMode != true)
+{
+    <h3>Preferences</h3>
+    <table>
+        <tr>
+            <td width="150px"><b>Address:</b></td>
+            <td><span id="Genre">@preference.Genre</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>City:</b></td>
+            <td><span id="Platform">@preference.Platform</span></td>
+        </tr>
+        <tr>
+            <td width="150px"><b>Do you wish to recieve promotional emails?:</b></td>
+            <td><span id="Recieve_Promotions">@preference.ReceivePromotionalEmails</span></td>
+        </tr>
+    </table>
     <br />
-    <p>
-        <label>
-            Your favourite genre:
-            <InputText id="Genre" @bind-Value="preferenceViewModel.Genre" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Your favourite platform:
-            <InputText id="Platform" @bind-Value="preferenceViewModel.Platform" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Do you wish to recieve promotions?
-            <InputCheckbox id="RecievePromotions" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" />
-        </label>
-    </p>
+    <button @onclick="@FlipEditMode">Edit</button>
+}
+else
+{
+    <br />
+    <EditForm Model="@preferenceViewModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <button type="submit">Save</button>
-</EditForm>
+        <h3>Edit Preferences</h3>
+        <br />
+        <p>
+            <label>
+                Your favourite genre:
+                <InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Your favourite platform:
+                <InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Do you wish to recieve promotions?
+                <InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" />
+            </label>
+        </p>
+
+        <button type="submit">Save</button>
+    </EditForm>
+}
 
 @code {
     [CascadingParameter]
@@ -42,6 +69,7 @@
     private ApplicationUser user;
     private Preference preference;
     private PreferenceVM preferenceViewModel = new PreferenceVM();
+    private bool editMode = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,5 +84,11 @@
         Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
         updatedPreference.UserId = preference.UserId;
         await preferences.UpdatePreference(updatedPreference);
+        FlipEditMode();
+    }
+
+    private void FlipEditMode()
+    {
+        editMode = !editMode;
     }
 }
