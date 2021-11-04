@@ -17,6 +17,7 @@ namespace ConestogaInsidersClub.Data.Models
             OrderItems = new HashSet<OrderItem>();
             Reviews = new HashSet<Review>();
             WishedItems = new HashSet<WishedItem>();
+            Preferences = new HashSet<Preference>();
         }
 
         [Key]
@@ -36,6 +37,8 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("genre")]
         [StringLength(25)]
         public string Genre { get; set; }
+
+        public ICollection<Preference> Preferences { get; set; }
 
         [ForeignKey(nameof(Genre))]
         [InverseProperty(nameof(GameGenre.Games))]

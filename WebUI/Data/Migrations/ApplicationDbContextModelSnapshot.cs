@@ -23,9 +23,9 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<string>("Address1")
@@ -152,9 +152,9 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.CartItem", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<int>("GameId")
@@ -172,15 +172,15 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
                 {
                     b.Property<string>("UserId1")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id1");
 
                     b.Property<string>("UserId2")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id2");
 
                     b.Property<DateTime>("CreatedAt")
@@ -259,9 +259,9 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.HasKey("OrderId");
@@ -298,15 +298,16 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Preference", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
-                    b.Property<int?>("FavouriteGameGameId")
-                        .HasColumnType("int");
+                    b.Property<int>("FavouriteGameId")
+                        .HasColumnType("int")
+                        .HasColumnName("favourite_game_id");
 
-                    b.Property<string>("Genre")
+                    b.Property<string>("GenreName")
                         .IsRequired()
                         .HasMaxLength(25)
                         .IsUnicode(false)
@@ -327,9 +328,9 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasKey("UserId")
                         .HasName("PK__preferen__5CF1C59A3E97A739");
 
-                    b.HasIndex("FavouriteGameGameId");
+                    b.HasIndex("FavouriteGameId");
 
-                    b.HasIndex("Genre");
+                    b.HasIndex("GenreName");
 
                     b.ToTable("preferences");
                 });
@@ -337,9 +338,9 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Review", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<int>("GameId")
@@ -371,9 +372,9 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.WishedItem", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
                     b.Property<int>("GameId")
@@ -616,16 +617,18 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Preference", b =>
                 {
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "FavouriteGame")
-                        .WithMany()
-                        .HasForeignKey("FavouriteGameGameId");
-
-                    b.HasOne("ConestogaInsidersClub.Data.Models.GameGenre", "GenreNavigation")
                         .WithMany("Preferences")
-                        .HasForeignKey("Genre")
+                        .HasForeignKey("FavouriteGameId")
+                        .HasConstraintName("FK_game_TO_preferences")
+                        .IsRequired();
+
+                    b.HasOne("ConestogaInsidersClub.Data.Models.GameGenre", "Genre")
+                        .WithMany("Preferences")
+                        .HasForeignKey("GenreName")
                         .HasConstraintName("FK_game_genres_TO_preferences")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithOne("Preference")
                         .HasForeignKey("ConestogaInsidersClub.Data.Models.Preference", "UserId")
                         .HasConstraintName("FK_users_TO_preferences")
@@ -633,9 +636,9 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Navigation("FavouriteGame");
 
-                    b.Navigation("GenreNavigation");
+                    b.Navigation("Genre");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Review", b =>
@@ -751,6 +754,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderItems");
+
+                    b.Navigation("Preferences");
 
                     b.Navigation("Reviews");
 
