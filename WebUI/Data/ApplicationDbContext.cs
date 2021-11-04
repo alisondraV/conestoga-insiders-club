@@ -176,10 +176,6 @@ namespace ConestogaInsidersClub.Data
 
                 entity.Property(e => e.UserId).IsUnicode(true);
 
-                entity.Property(e => e.GenreName).IsUnicode(false);
-
-                entity.Property(e => e.Platform).IsUnicode(false);
-
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Preferences)
                     .HasForeignKey(d => d.GenreName)
