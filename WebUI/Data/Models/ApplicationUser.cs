@@ -33,8 +33,9 @@ namespace ConestogaInsidersClub.Data.Models
 
         [InverseProperty("UserIdNavigation")]
         public virtual Address Address { get; set; }
-        [InverseProperty("UserIdNavigation")]
-        public virtual Preference Preference { get; set; }
+
+        public Preference Preference { get; set; }
+        
         [InverseProperty(nameof(CartItem.UserIdNavigation))]
         public virtual ICollection<CartItem> CartItems { get; set; }
         [InverseProperty(nameof(Friendship.UserId1Navigation))]

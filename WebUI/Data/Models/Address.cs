@@ -13,7 +13,7 @@ namespace ConestogaInsidersClub.Data.Models
     {
         [Key]
         [Column("user_id")]
-        [StringLength(50)]
+        [StringLength(450)]
         public string UserId { get; set; }
         [Column("address1")]
         [StringLength(50)]

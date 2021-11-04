@@ -108,7 +108,7 @@ namespace ConestogaInsidersClub.Data
         {
             context.Add(new Preference
             {
-                Genre = genre.Name,
+                Genre = genre,
                 Platform = "Windows",
                 UserId = user.Id
             });
