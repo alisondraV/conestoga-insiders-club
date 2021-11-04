@@ -21,7 +21,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
             {
                 UserId = "1",
                 Platform = "Windows",
-                Genre = "Action"
+                Genre = new GameGenre { Name = "Action" }
             });
         }
 

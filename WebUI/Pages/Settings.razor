@@ -6,7 +6,7 @@
 @inject IPreferenceService preferences;
 
 <h1>Settings</h1>
-@if (authenticationState == null || user == null)
+@if (authenticationState == null)
 {
     <h3>Loading...</h3>
 }
@@ -15,16 +15,16 @@ else if (editMode != true)
     <h3>Preferences</h3>
     <table>
         <tr>
-            <td width="150px"><b>Address:</b></td>
-            <td><span id="Genre">@preference.Genre</span></td>
+            <td width="150px"><b>Your favourite genre:</b></td>
+            <td><span id="Genre">@(preference.Genre.Name ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>City:</b></td>
-            <td><span id="Platform">@preference.Platform</span></td>
+            <td width="150px"><b>Your favourite platform:</b></td>
+            <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Do you wish to recieve promotional emails?:</b></td>
-            <td><span id="Recieve_Promotions">@preference.ReceivePromotionalEmails</span></td>
+            <td width="350px"><b>Recieve promotional emails</b></td>
+            <td><input disabled type="checkbox" checked="@(preference.ReceivePromotionalEmails)" id="Recieve_Promotions" /></td>
         </tr>
     </table>
     <br />
@@ -66,7 +66,6 @@ else
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     private AuthenticationState authenticationState;
-    private ApplicationUser user;
     private Preference preference;
     private PreferenceVM preferenceViewModel = new PreferenceVM();
     private bool editMode = false;

@@ -8,7 +8,7 @@
 <h1>Profile</h1>
 <br />
 
-@if (authenticationState == null || user == null)
+@if (user == null)
 {
     <h3>Loading...</h3>
 }
@@ -33,7 +33,7 @@ else if (editMode != true)
         </tr>
         <tr>
             <td width="150px"><b>Phone Number:</b></td>
-            <td><span id="Phone_Number">@user.PhoneNumber</span></td>
+            <td><span id="Phone_Number">@(user.PhoneNumber ?? "Not set yet")</span></td>
         </tr>
     </table>
     <br />
@@ -41,23 +41,23 @@ else if (editMode != true)
     <table>
         <tr>
             <td width="150px"><b>Address:</b></td>
-            <td><span id="Address1">@user.Address.Address1</span></td>
+            <td><span id="Address1">@(user.Address.Address1 ?? "Not set yet")</span></td>
         </tr>
         <tr>
             <td width="150px"><b>City:</b></td>
-            <td><span id="City">@user.Address.City</span></td>
+            <td><span id="City">@(user.Address.City ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
             <td width="150px"><b>Province:</b></td>
-            <td><span id="Province">@user.Address.Province</span></td>
+            <td><span id="Province">@(user.Address.Province ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
             <td width="150px"><b>Country:</b></td>
-            <td><span id="Country">@user.Address.Country</span></td>
+            <td><span id="Country">@(user.Address.Country ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
             <td width="150px"><b>Postal Code:</b></td>
-            <td><span id="Postal_Code">@user.Address.PostalCode</span></td>
+            <td><span id="Postal_Code">@(user.Address.PostalCode ?? "*Not set yet*")</span></td>
         </tr>
     </table>
     <br />
