@@ -24,7 +24,7 @@ namespace ConestogaInsidersClub.Data.Models
 
         [InverseProperty(nameof(Game.GenreNavigation))]
         public virtual ICollection<Game> Games { get; set; }
-        [InverseProperty(nameof(Preference.GenreNavigation))]
+        [InverseProperty(nameof(Preference.Genre))]
         public virtual ICollection<Preference> Preferences { get; set; }
     }
 }
