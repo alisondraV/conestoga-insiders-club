@@ -13,11 +13,11 @@ namespace ConestogaInsidersClub.Data.Models
     {
         [Key]
         [Column("user_id1")]
-        [StringLength(50)]
+        [StringLength(450)]
         public string UserId1 { get; set; }
         [Key]
         [Column("user_id2")]
-        [StringLength(50)]
+        [StringLength(450)]
         public string UserId2 { get; set; }
         [Column("created_at", TypeName = "date")]
         public DateTime CreatedAt { get; set; }

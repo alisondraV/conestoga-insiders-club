@@ -21,7 +21,7 @@ namespace ConestogaInsidersClub.Data.Models
         public int OrderId { get; set; }
         [Required]
         [Column("user_id")]
-        [StringLength(50)]
+        [StringLength(450)]
         public string UserId { get; set; }
         [Column("created_at", TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }

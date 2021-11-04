@@ -11,9 +11,8 @@ namespace ConestogaInsidersClub.Data.Models
     [Table("preferences")]
     public partial class Preference
     {
-        [Key]
         [Column("user_id")]
-        [StringLength(50)]
+        [StringLength(450)]
         public string UserId { get; set; }
 
         [Required]
@@ -21,22 +20,19 @@ namespace ConestogaInsidersClub.Data.Models
         [StringLength(50)]
         public string Platform { get; set; }
 
-        [Required]
-        [Column("genre")]
-        [StringLength(25)]
-        public string Genre { get; set; }
-
         [Column("receive_promotional_emails")]
         public bool ReceivePromotionalEmails { get; set; }
 
         [Column("favourite_game_id")]
-        public Game FavouriteGame { get; set; }
+        public int FavouriteGameId { get; set; }
 
-        [ForeignKey(nameof(Genre))]
-        [InverseProperty(nameof(GameGenre.Preferences))]
-        public virtual GameGenre GenreNavigation { get; set; }
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(ApplicationUser.Preference))]
-        public virtual ApplicationUser UserIdNavigation { get; set; }
+        [Required]
+        [Column("genre")]
+        [StringLength(25)]
+        public string GenreName { get; set; }
+
+        public ApplicationUser User { get; set; }
+        public Game FavouriteGame { get; set; }
+        public GameGenre Genre { get; set; }
     }
 }
