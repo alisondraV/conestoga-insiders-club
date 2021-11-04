@@ -15,18 +15,16 @@ namespace ConestogaInsidersClub.Data.Models
         [StringLength(450)]
         public string UserId { get; set; }
 
-        [Required]
         [Column("platform")]
         [StringLength(50)]
         public string Platform { get; set; }
 
         [Column("receive_promotional_emails")]
-        public bool ReceivePromotionalEmails { get; set; }
+        public bool? ReceivePromotionalEmails { get; set; }
 
         [Column("favourite_game_id")]
-        public int FavouriteGameId { get; set; }
+        public int? FavouriteGameId { get; set; }
 
-        [Required]
         [Column("genre")]
         [StringLength(25)]
         public string GenreName { get; set; }
