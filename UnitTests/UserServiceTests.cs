@@ -17,14 +17,16 @@ namespace ServiceTests
         [OneTimeSetUp]
         public async Task BeforeAll()
         {
-            expectedUsers = await SeedUsers(new ApplicationUser()
-            {
-                UserName = "Foo",
-            },
+            expectedUsers = await SeedEntities(
+                new ApplicationUser()
+                {
+                    UserName = "Foo",
+                },
                 new ApplicationUser()
                 {
                     UserName = "Bar"
-                });
+                }
+            );
         }
 
         [Test, Order(1)]

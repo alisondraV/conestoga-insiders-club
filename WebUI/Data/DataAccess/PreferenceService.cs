@@ -8,9 +8,19 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     public class PreferenceService : IPreferenceService
     {
-        public Task<Preference> GetPreference(string userName)
+        private readonly ApplicationDbContext context;
+        private readonly IUserService userService;
+
+        public PreferenceService(ApplicationDbContext context, IUserService userService)
         {
-            throw new NotImplementedException();
+            this.context = context;
+            this.userService = userService;
+        }
+
+        public async Task<Preference> GetPreference(string userName)
+        {
+            var user = await userService.GetUser(userName);
+            return user.Preference;
         }
 
         public Task UpdatePreference(Preference preference)

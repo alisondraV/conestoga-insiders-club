@@ -28,18 +28,24 @@ namespace ServiceTests
             context.SaveChanges();
         }
 
-        protected async Task<ApplicationUser> SeedUser(string userName)
+        protected async Task<List<T>> SeedEntities<T>(params T[] entities) where T : class
+        {
+            foreach (var entity in entities)
+            {
+                await SeedEntities(entity);
+            }
+
+            return entities.ToList();
+        }
+
+        protected async Task<T> SeedEntities<T>(T entity) where T : class
         {
             using var context = new ApplicationDbContext(ContextOptions);
-            var user = new ApplicationUser
-            {
-                UserName = userName
-            };
-                await context.Set<ApplicationUser>().AddAsync(user);
 
+            await context.Set<T>().AddAsync(entity);
             await context.SaveChangesAsync();
 
-            return user;
+            return entity;
         }
     }
 }
