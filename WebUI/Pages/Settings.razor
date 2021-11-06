@@ -5,6 +5,7 @@
 
 @inject IPreferenceService preferenceService;
 @inject IGameService gameService;
+@inject IGameGenreService gameGenreService;
 @inject IUserService userService;
 
 <h1>Settings</h1>
@@ -22,7 +23,7 @@ else
         <table>
             <tr>
                 <td><b>Your favourite genre:</b></td>
-                <td><span id="Genre">@(preference.Genre.Name ?? "*Not set yet*")</span></td>
+                <td><span id="Genre">@(preference.GenreName ?? "*Not set yet*")</span></td>
             </tr>
             <tr>
                 <td><b>Your favourite platform:</b></td>
@@ -49,7 +50,15 @@ else
             <table>
                 <tr>
                     <td>Your favourite genre:</td>
-                    <td><InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" /></td>
+                    <td>
+                        <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
+                            <option value="">None</option>
+                            @foreach (var genre in gameGenres)
+                            {
+                                <option value="@genre.Name">@genre.Name</option>
+                            }
+                        </InputSelect>
+                    </td>
                 </tr>
                 <tr>
                     <td>Your favourite platform:</td>
@@ -59,7 +68,7 @@ else
                     <td>Your favourite game:</td>
                     <td>
                         <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
-                            <option value="null">None</option>
+                            <option value="">None</option>
                             @foreach (var game in games)
                             {
                                 <option value="@game.GameId">@game.Name</option>
@@ -149,6 +158,7 @@ else
     private ApplicationUser user;
     private Preference preference;
     private List<Game> games;
+    private List<GameGenre> gameGenres;
     private UserVM userViewModel = new UserVM();
     private PreferenceVM preferenceViewModel = new PreferenceVM();
     private bool editPreferenceMode = false;
@@ -160,6 +170,7 @@ else
         user = await userService.GetUser(authenticationState.User.Identity.Name);
         preference = await preferenceService.GetPreference(user.UserName);
         games = await gameService.GetGames();
+        gameGenres = await gameGenreService.GetGameGenres();
 
         userViewModel = UserVM.ToViewModel(user);
         preferenceViewModel = PreferenceVM.ToViewModel(preference);

@@ -9,9 +9,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [MinLength(3, ErrorMessage = "Platform name should be at least 3 characters long")]
         public string Platform { get; set; }
 
-        [StringLength(25)]
-        [MinLength(3, ErrorMessage = "Genre name should be at least 3 characters long")]
-        public string Genre { get; set; }
+        public string GenreName { get; set; }
 
         public bool ReceivePromotionalEmails { get; set; }
 
@@ -19,7 +17,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public static Preference ToModel(Preference preference, PreferenceVM preferenceVM)
         {
-            preference.Genre.Name = preferenceVM.Genre;
+            preference.GenreName = preferenceVM.GenreName == "" ? null : preferenceVM.GenreName;
             preference.Platform = preferenceVM.Platform;
             preference.ReceivePromotionalEmails = preferenceVM.ReceivePromotionalEmails;
             preference.FavouriteGameId = preferenceVM.FavouriteGameId;
@@ -32,7 +30,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             return new PreferenceVM
             {
                 Platform = preference.Platform,
-                Genre = preference.Genre.Name,
+                GenreName = preference.GenreName,
                 ReceivePromotionalEmails = preference.ReceivePromotionalEmails ?? false,
                 FavouriteGameId = preference.FavouriteGameId
             };
