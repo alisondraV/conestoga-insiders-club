@@ -4,6 +4,7 @@
 @using ConestogaInsidersClub.Pages.ViewModels;
 
 @inject IUserService userService;
+@inject NavigationManager NavManager
 
 <h1>Profile</h1>
 <br />
@@ -41,42 +42,42 @@ else if (editMode != true)
 }
 else
 {
-<EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <h3>Edit Information</h3>
-    <br />
-    <table>
-        <tr>
-            @* TODO: Log out user when the username is updated *@ 
-            <td>UserName:</td>
-            <td><InputText id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
-        </tr>
-        <tr>
-            <td>First Name:</td>
-            <td><InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" /></td>
-        </tr>
-        <tr>
-            <td>Last Name:</td>
-            <td><InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" /></td>
-        </tr>
-        <tr>
-            <td>Email:</td>
-            <td><InputText id="Email_Edit" @bind-Value="userViewModel.Email" /></td>
-        </tr>
-        <tr>
-            <td>BirthDay:</td>
-            <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
-        </tr>
-        <tr>
-            <td>PhoneNumber:</td>
-            <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
-        </tr>
-    </table>
-    <br />
-    <button type="submit">Save</button>
-</EditForm>
+        <h3>Edit Information</h3>
+        <br />
+        <table>
+            <tr>
+                @* TODO: Log out user when the username is updated *@
+                <td>UserName:</td>
+                <td><InputText id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td><InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" /></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" /></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><InputText id="Email_Edit" @bind-Value="userViewModel.Email" /></td>
+            </tr>
+            <tr>
+                <td>BirthDay:</td>
+                <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
+            </tr>
+            <tr>
+                <td>PhoneNumber:</td>
+                <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
+            </tr>
+        </table>
+        <br />
+        <button type="submit">Save</button>
+    </EditForm>
 }
 
 @code {
@@ -84,6 +85,7 @@ else
     private Task<AuthenticationState> AuthenticationState { get; set; }
     private AuthenticationState authenticationState;
     private ApplicationUser user;
+    private string userName;
     private UserVM userViewModel = new UserVM();
     private bool editMode = false;
 
@@ -91,6 +93,7 @@ else
     {
         authenticationState = await AuthenticationState;
         user = await userService.GetUser(authenticationState.User.Identity.Name);
+        userName = user.UserName;
 
         userViewModel = UserVM.ToViewModel(user);
     }
@@ -100,6 +103,11 @@ else
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
         FlipEditMode();
+
+        if (userName != updatedUser.UserName)
+        {
+            NavManager.NavigateTo("Identity/Account/LogOut");
+        }
     }
 
     private void FlipEditMode()
