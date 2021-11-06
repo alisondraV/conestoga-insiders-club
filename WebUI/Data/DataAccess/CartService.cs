@@ -21,14 +21,14 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public async Task<int> GetCartCount(int userId)
+        public async Task<int> GetCartCount(string userId)
         {
             List<CartItem> items = await context.CartItems.Where(a => a.UserId == userId.ToString()).ToListAsync();
             int total = items.Count();
             return total;
         }
 
-        public Task<List<CartItem>> GetCartItems(int userId)
+        public Task<List<CartItem>> GetCartItems(string userId)
         {
             return context.CartItems.Where(a => a.UserId == userId.ToString()).ToListAsync();
         }

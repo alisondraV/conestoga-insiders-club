@@ -9,9 +9,9 @@ namespace ConestogaInsidersClub.Data.DataAccess
     interface ICartService
     {
         Task AddCartItem(CartItem item);
-        Task<List<CartItem>> GetCartItems(int userId);
+        Task<List<CartItem>> GetCartItems(string userId);
         Task RemoveCartItem(CartItem item);
-        Task<int> GetCartCount(int userId);
+        Task<int> GetCartCount(string userId);
 
     }
 }
