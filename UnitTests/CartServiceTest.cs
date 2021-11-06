@@ -19,7 +19,7 @@ namespace ServiceTests
         [OneTimeSetUp]
         public async Task BeforeAll()
         {
-           
+
             using var context = new ApplicationDbContext(ContextOptions);
 
             testGame = new Game()
@@ -94,7 +94,7 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new CartService(context);
- 
+
             // Act
             var cartCount = await service.GetCartCount(testUser.Id);
 

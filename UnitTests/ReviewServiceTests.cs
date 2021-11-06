@@ -50,21 +50,18 @@ namespace ServiceTests
             await context.Set<ApplicationUser>().AddAsync(testUser2);
 
 
-            testReview = new Review() 
-            { 
+            testReview = new Review()
+            {
                 GameId = testGame.GameId,
                 UserId = testUser.Id,
                 Rating = 5,
                 Description = "good game",
-                Approved = false 
+                Approved = false
             };
             await context.Set<Review>().AddAsync(testReview);
 
             await context.SaveChangesAsync();
         }
-
-        //Task DeleteReview(Review review);
-        //Task<double> GetAverageRating(int gameId);
 
         [Test, Order(1)]
         public async Task GetReviews()
