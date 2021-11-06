@@ -20,33 +20,32 @@ namespace ServiceTests
         {
             using var context = new ApplicationDbContext(ContextOptions);
 
-            user = await SeedEntities(new ApplicationUser
-            {
-                UserName = "Foo"
-            });
-
-            var genre = await SeedEntities(new GameGenre
+            var genre = new GameGenre
             {
                 Name = "Indie"
-            });
+            };
 
             var game = new Game
             {
                 Name = "Portal"
             };
 
-            var preferences = await context.Preferences.ToListAsync();
-            preference = await SeedEntities(new Preference
+            preference = new Preference
             {
-                UserId = user.Id,
                 FavouriteGame = game,
-                GenreName = genre.Name,
+                Genre = genre,
                 Platform = "Windows",
                 ReceivePromotionalEmails = false
-            });
+            };
 
-            user.Preference = preference;
-            context.Update(user);
+            user = new ApplicationUser
+            {
+                UserName = "Foo",
+                Preference = preference
+            };
+
+            await SeedEntities(user);
+
             await context.SaveChangesAsync();
         }
 
@@ -58,7 +57,6 @@ namespace ServiceTests
             var service = new PreferenceService(context, new UserService(context));
 
             // Act
-            var users = await context.Users.ToListAsync();
             var actualPreference = await service.GetPreference(user.UserName);
 
             // Assert

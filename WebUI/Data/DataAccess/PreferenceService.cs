@@ -19,7 +19,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task<Preference> GetPreference(string userName)
         {
-            var user = await userService.GetUser(userName);
+            var user = await userService.GetUserWithRelatedData(userName);
             return user.Preference;
         }
 
