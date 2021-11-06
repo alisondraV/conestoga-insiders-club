@@ -17,9 +17,7 @@ namespace ServiceTests
         [OneTimeSetUp]
         public async Task BeforeAll()
         {
-            using var context = new ApplicationDbContext(ContextOptions);
-
-            expectedUsers = new List<ApplicationUser> {
+            expectedUsers = await SeedEntities(
                 new ApplicationUser()
                 {
                     UserName = "Foo",
@@ -27,15 +25,8 @@ namespace ServiceTests
                 new ApplicationUser()
                 {
                     UserName = "Bar"
-                },
-            };
-
-            foreach (var user in expectedUsers)
-            {
-                await context.Set<ApplicationUser>().AddAsync(user);
-            }
-
-            await context.SaveChangesAsync();
+                }
+            );
         }
 
         [Test, Order(1)]

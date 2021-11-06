@@ -22,7 +22,19 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<ApplicationUser> GetUser(string userName)
         {
-            return context.Users.Where(u => u.UserName == userName).SingleAsync();
+            return context.Users
+                .Where(u => u.UserName == userName)
+                .SingleAsync();
+        }
+
+        public Task<ApplicationUser> GetUserWithRelatedData(string userName)
+        {
+            return context.Users
+                .Where(u => u.UserName == userName)
+                .Include(u => u.Preference)
+                .ThenInclude(p => p.FavouriteGame)
+                .Include(u => u.Address)
+                .SingleAsync();
         }
 
         public async Task UpdateUser(ApplicationUser user)

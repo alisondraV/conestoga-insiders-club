@@ -187,12 +187,6 @@ namespace ConestogaInsidersClub.Data
                     .HasForeignKey(d => d.FavouriteGameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_game_TO_preferences");
-
-                entity.HasOne(d => d.User)
-                    .WithOne(p => p.Preference)
-                    .HasForeignKey<Preference>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_preferences");
             });
 
             modelBuilder.Entity<Review>(entity =>
