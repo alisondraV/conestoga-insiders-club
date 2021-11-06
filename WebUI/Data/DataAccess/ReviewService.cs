@@ -47,10 +47,10 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task<List<Review>> GetReviews()
         {
-            return await context.Reviews.Where(a => a.Approved == null).ToListAsync();
+            return await context.Reviews.Where(a => a.Approved == false).ToListAsync();
         }
 
-        public async Task<List<Review>> GetReviewsByUser(int userId)
+        public async Task<List<Review>> GetReviewsByUser(string userId)
         {
             return await context.Reviews.Where(a => a.UserId == userId.ToString()).ToListAsync();
         }

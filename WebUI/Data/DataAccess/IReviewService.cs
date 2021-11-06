@@ -14,7 +14,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task RejectReview(Review review);
         Task AddReview(Review review);
         Task DeleteReview(Review review);
-        Task<List<Review>> GetReviewsByUser(int userId);
+        Task<List<Review>> GetReviewsByUser(string userId);
         Task<double> GetAverageRating(int gameId);
 
     }
