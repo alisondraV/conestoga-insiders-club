@@ -15,11 +15,14 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public bool ReceivePromotionalEmails { get; set; }
 
+        public Game FavouriteGame { get; set; }
+
         public static Preference ToModel(Preference preference, PreferenceVM preferenceVM)
         {
             preference.Genre.Name = preferenceVM.Genre;
             preference.Platform = preferenceVM.Platform;
             preference.ReceivePromotionalEmails = preferenceVM.ReceivePromotionalEmails;
+            preference.FavouriteGame = preferenceVM.FavouriteGame;
 
             return preference;
         }
@@ -30,7 +33,8 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             {
                 Platform = preference.Platform,
                 Genre = preference.Genre.Name,
-                ReceivePromotionalEmails = preference.ReceivePromotionalEmails
+                ReceivePromotionalEmails = preference.ReceivePromotionalEmails ?? false,
+                FavouriteGame = preference.FavouriteGame
             };
         }
     }

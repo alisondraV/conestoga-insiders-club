@@ -43,6 +43,7 @@ namespace ConestogaInsidersClub
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IGameService, GameService>();
             services.AddTransient<IPreferenceService, PreferenceService>();
         }
 
