@@ -56,20 +56,20 @@ else
                     <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
                 </tr>
                 <tr>
-                    <td>Do you wish to recieve promotions?</td>
-                    <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
-                </tr>
-                <tr>
                     <td>Your favourite game:</td>
                     <td>
-                        <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
+                        <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
                             <option value="null">None</option>
                             @foreach (var game in games)
                             {
-                                <option value="@game">@game.Name</option>
+                                <option value="@game.GameId">@game.Name</option>
                             }
                         </InputSelect>
                     </td>
+                </tr>
+                <tr>
+                    <td>Do you wish to recieve promotions?</td>
+                    <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
                 </tr>
             </table>
             <button type="submit">Save</button>
@@ -168,7 +168,6 @@ else
     private async void HandlePreferenceSubmit()
     {
         Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
-        updatedPreference.UserId = preference.UserId;
         await preferenceService.UpdatePreference(updatedPreference);
         FlipEditPreferenceMode();
     }
