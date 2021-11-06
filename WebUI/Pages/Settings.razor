@@ -5,104 +5,188 @@
 
 @inject IPreferenceService preferenceService;
 @inject IGameService gameService;
+@inject IUserService userService;
 
 <h1>Settings</h1>
-@if (authenticationState == null)
+<br />
+
+@if (user == null)
 {
     <h3>Loading...</h3>
 }
-else if (editMode != true)
-{
-    <h3>Preferences</h3>
-    <table>
-        <tr>
-            <td><b>Your favourite genre:</b></td>
-            <td><span id="Genre">@(preference.Genre.Name ?? "*Not set yet*")</span></td>
-        </tr>
-        <tr>
-            <td><b>Your favourite platform:</b></td>
-            <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
-        </tr>
-        <tr>
-            <td><b>Your favourite game:</b></td>
-            <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
-        </tr>
-        <tr>
-            <td><b>Recieve promotional emails</b></td>
-            <td><input disabled type="checkbox" checked="@(preference.ReceivePromotionalEmails ?? false)" id="Recieve_Promotions" /></td>
-        </tr>
-    </table>
-    <br />
-    <button @onclick="@FlipEditMode">Edit</button>
-}
 else
 {
-    <br />
-    <EditForm Model="@preferenceViewModel" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <h3>Edit Preferences</h3>
-        <br />
+    if (editPreferenceMode != true)
+    {
+        <h4>Preferences</h4>
         <table>
             <tr>
-                <td>Your favourite genre:</td>
-                <td><InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" /></td>
+                <td><b>Your favourite genre:</b></td>
+                <td><span id="Genre">@(preference.Genre.Name ?? "*Not set yet*")</span></td>
             </tr>
             <tr>
-                <td>Your favourite platform:</td>
-                <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
+                <td><b>Your favourite platform:</b></td>
+                <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
             </tr>
             <tr>
-                <td>Do you wish to recieve promotions?</td>
-                <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
+                <td><b>Your favourite game:</b></td>
+                <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
             </tr>
             <tr>
-                <td>Your favourite game:</td>
-                <td>
-                    <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
-                        <option value="null">None</option>
-                        @foreach (var game in games)
-                        {
-                            <option value="@game">@game.Name</option>
-                        }
-                    </InputSelect>
-                </td>
+                <td><b>Recieve promotional emails</b></td>
+                <td><input disabled type="checkbox" checked="@(preference.ReceivePromotionalEmails ?? false)" id="Recieve_Promotions" /></td>
             </tr>
         </table>
+        <button @onclick="@FlipEditPreferenceMode">Edit</button>
+    }
+    else
+    {
+        <EditForm Model="@preferenceViewModel" OnValidSubmit="@HandlePreferenceSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <h3>Edit Preferences</h3>
+            <table>
+                <tr>
+                    <td>Your favourite genre:</td>
+                    <td><InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" /></td>
+                </tr>
+                <tr>
+                    <td>Your favourite platform:</td>
+                    <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
+                </tr>
+                <tr>
+                    <td>Do you wish to recieve promotions?</td>
+                    <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
+                </tr>
+                <tr>
+                    <td>Your favourite game:</td>
+                    <td>
+                        <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
+                            <option value="null">None</option>
+                            @foreach (var game in games)
+                                    {
+                                <option value="@game">@game.Name</option>
+                                    }
+                        </InputSelect>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Save</button>
+        </EditForm>
+    }
+
+    <br />
+    <br />
+
+    if (editAddressMode != true)
+    {
+        <h4>Address</h4>
+        <table>
+            <tr>
+                <td><b>Address:</b></td>
+                <td><span id="Address1">@(user.Address.Address1 ?? "Not set yet")</span></td>
+            </tr>
+            <tr>
+                <td><b>City:</b></td>
+                <td><span id="City">@(user.Address.City ?? "*Not set yet*")</span></td>
+            </tr>
+            <tr>
+                <td><b>Province:</b></td>
+                <td><span id="Province">@(user.Address.Province ?? "*Not set yet*")</span></td>
+            </tr>
+            <tr>
+                <td><b>Country:</b></td>
+                <td><span id="Country">@(user.Address.Country ?? "*Not set yet*")</span></td>
+            </tr>
+            <tr>
+                <td><b>Postal Code:</b></td>
+                <td><span id="Postal_Code">@(user.Address.PostalCode ?? "*Not set yet*")</span></td>
+            </tr>
+        </table>
+        <button @onclick="@FlipEditAddressMode">Edit</button>
         <br />
-        <button type="submit">Save</button>
-    </EditForm>
+    }
+    else
+    {
+        <EditForm Model="@userViewModel" OnValidSubmit="@HandleAddressSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <h3>Edit Address</h3>
+            <table>
+                <tr>
+                    <td>Address:</td>
+                    <td><InputText id="Address1_Edit" @bind-Value="userViewModel.Address.Address1" /></td>
+                </tr>
+                <tr>
+                    <td>City:</td>
+                    <td><InputText id="City_Edit" @bind-Value="userViewModel.Address.City" /></td>
+                </tr>
+                <tr>
+                    <td>Province:</td>
+                    <td><InputText id="Province_Edit" @bind-Value="userViewModel.Address.Province" /></td>
+                </tr>
+                <tr>
+                    <td>Country:</td>
+                    <td><InputText id="Country_Edit" @bind-Value="userViewModel.Address.Country" /></td>
+                </tr>
+                <tr>
+                    <td>Postal Code:</td>
+                    <td><InputText id="Postal_Code_Edit" @bind-Value="userViewModel.Address.PostalCode" /></td>
+                </tr>
+            </table>
+            <br />
+            <button type="submit">Save</button>
+        </EditForm>
+    }
 }
 
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     private AuthenticationState authenticationState;
+    private ApplicationUser user;
     private Preference preference;
     private List<Game> games;
+    private UserVM userViewModel = new UserVM();
     private PreferenceVM preferenceViewModel = new PreferenceVM();
-    private bool editMode = false;
+    private bool editPreferenceMode = false;
+    private bool editAddressMode = false;
 
     protected override async Task OnInitializedAsync()
     {
         authenticationState = await AuthenticationState;
-        preference = await preferenceService.GetPreference(authenticationState.User.Identity.Name);
+        user = await userService.GetUser(authenticationState.User.Identity.Name);
+        preference = await preferenceService.GetPreference(user.UserName);
         games = await gameService.GetGames();
 
+        userViewModel = UserVM.ToViewModel(user);
         preferenceViewModel = PreferenceVM.ToViewModel(preference);
     }
 
-    private async void HandleValidSubmit()
+    private async void HandlePreferenceSubmit()
     {
         Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
         updatedPreference.UserId = preference.UserId;
         await preferenceService.UpdatePreference(updatedPreference);
-        FlipEditMode();
+        FlipEditPreferenceMode();
     }
 
-    private void FlipEditMode()
+    private async void HandleAddressSubmit()
     {
-        editMode = !editMode;
+        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        await userService.UpdateUser(updatedUser);
+        FlipEditAddressMode();
+    }
+
+    private void FlipEditPreferenceMode()
+    {
+        editPreferenceMode = !editPreferenceMode;
+    }
+
+    private void FlipEditAddressMode()
+    {
+        editAddressMode = !editAddressMode;
     }
 }
