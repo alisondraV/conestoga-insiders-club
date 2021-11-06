@@ -66,8 +66,11 @@ namespace ServiceTests
             var actualPreference = await service.GetPreference(user.UserName);
 
             // Assert
-            Assert.AreEqual(actualPreference.UserId, preference.UserId);
-            Assert.AreEqual(actualPreference.Platform, preference.Platform);
+            Assert.AreEqual(preference.UserId, actualPreference.UserId);
+            Assert.AreEqual(preference.Platform, actualPreference.Platform);
+            Assert.AreEqual(preference.FavouriteGameId, actualPreference.FavouriteGameId);
+            Assert.AreEqual(preference.FavouriteGame.Name, actualPreference.FavouriteGame.Name);
+            Assert.AreEqual(preference.GenreName, actualPreference.GenreName);
         }
 
         [Test, Order(2)]
@@ -87,9 +90,9 @@ namespace ServiceTests
             var actualPreference = await context.Preferences.AsNoTracking().Include(p => p.Genre).FirstOrDefaultAsync();
 
             // Assert
-            Assert.AreEqual(actualPreference.GenreName, otherGenre.Name);
-            Assert.AreEqual(actualPreference.Platform, expectedPlatform);
-            Assert.AreEqual(actualPreference.ReceivePromotionalEmails, expectedReceivePromoEmails);
+            Assert.AreEqual(otherGenre.Name, actualPreference.GenreName);
+            Assert.AreEqual(expectedPlatform, actualPreference.Platform);
+            Assert.AreEqual(expectedReceivePromoEmails, actualPreference.ReceivePromotionalEmails);
         }
     }
 }

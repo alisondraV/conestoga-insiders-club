@@ -32,6 +32,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return context.Users
                 .Where(u => u.UserName == userName)
                 .Include(u => u.Preference)
+                .ThenInclude(p => p.FavouriteGame)
                 .Include(u => u.Address)
                 .SingleAsync();
         }
