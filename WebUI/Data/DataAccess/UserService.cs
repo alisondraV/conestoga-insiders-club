@@ -20,12 +20,22 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return context.Users.ToListAsync();
         }
 
-        public async Task<ApplicationUser> GetUser(string userName)
+        public Task<ApplicationUser> GetUser(string userName)
         {
-            ApplicationUser user = await context.Users.Where(u => u.UserName == userName).SingleAsync();
-            Address address = await context.Addresses.Where(u => u.UserId == user.Id).SingleAsync();
-            user.Address = address;
-            return user;
+            return context.Users
+                .Where(u => u.UserName == userName)
+                .SingleAsync();
+        }
+
+        public Task<ApplicationUser> GetUserWithRelatedData(string userName)
+        {
+            return context.Users
+                .Where(u => u.UserName == userName)
+                .Include(u => u.Address)
+                .Include(u => u.Preference)
+                .ThenInclude(p => p.FavouriteGame)
+                .Include(u => u.Address)
+                .SingleAsync();
         }
 
         public async Task UpdateUser(ApplicationUser user)

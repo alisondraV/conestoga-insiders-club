@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    public interface IPreferenceService
+    interface IPreferenceService
     {
         Task<Preference> GetPreference(string userName);
         Task UpdatePreference(Preference preference);
