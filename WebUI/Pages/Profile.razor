@@ -16,23 +16,23 @@ else if (editMode != true)
 {
     <table>
         <tr>
-            <td width="150px"><b>Username:</b></td>
+            <td><b>Username:</b></td>
             <td><span id="UserName">@user.UserName</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Full Name:</b></td>
+            <td><b>Full Name:</b></td>
             <td><span id="Full_Name">@user.FirstName @user.LastName</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Email:</b></td>
+            <td><b>Email:</b></td>
             <td><span id="Email">@user.Email</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>BirthDay:</b></td>
+            <td><b>BirthDay:</b></td>
             <td><span id="BirthDay">@user.BirthDay.ToLongDateString()</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Phone Number:</b></td>
+            <td><b>Phone Number:</b></td>
             <td><span id="Phone_Number">@(user.PhoneNumber ?? "Not set yet")</span></td>
         </tr>
     </table>
@@ -40,23 +40,23 @@ else if (editMode != true)
     <h4>Address</h4>
     <table>
         <tr>
-            <td width="150px"><b>Address:</b></td>
+            <td><b>Address:</b></td>
             <td><span id="Address1">@(user.Address.Address1 ?? "Not set yet")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>City:</b></td>
+            <td><b>City:</b></td>
             <td><span id="City">@(user.Address.City ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Province:</b></td>
+            <td><b>Province:</b></td>
             <td><span id="Province">@(user.Address.Province ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Country:</b></td>
+            <td><b>Country:</b></td>
             <td><span id="Country">@(user.Address.Country ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="150px"><b>Postal Code:</b></td>
+            <td><b>Postal Code:</b></td>
             <td><span id="Postal_Code">@(user.Address.PostalCode ?? "*Not set yet*")</span></td>
         </tr>
     </table>
@@ -71,72 +71,52 @@ else
 
     <h3>Edit Information</h3>
     <br />
-    <p>
-        <label>
-            UserName:
-            <InputText id="UserName_Edit" @bind-Value="userViewModel.UserName" />
-        </label>
-    </p>
-    <p>
-        <label>
-            First Name:
-            <InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Last Name:
-            <InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Email:
-            <InputText id="Email_Edit" @bind-Value="userViewModel.Email" />
-        </label>
-    </p>
-    <p>
-        <label>
-            BirthDay:
-            <InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" />
-        </label>
-    </p>
-    <p>
-        <label>
-            PhoneNumber:
-            <InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Address:
-            <InputText id="Address1_Edit" @bind-Value="userViewModel.Address.Address1" />
-        </label>
-    </p>
-    <p>
-        <label>
-            City:
-            <InputText id="City_Edit" @bind-Value="userViewModel.Address.City" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Province:
-            <InputText id="Province_Edit" @bind-Value="userViewModel.Address.Province" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Country:
-            <InputText id="Country_Edit" @bind-Value="userViewModel.Address.Country" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Address:
-            <InputText id="Postal_Code_Edit" @bind-Value="userViewModel.Address.PostalCode" />
-        </label>
-    </p>
+    <table>
+        <tr>
+            <td>UserName:</td>
+            <td><InputText id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td><InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" /></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" /></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><InputText id="Email_Edit" @bind-Value="userViewModel.Email" /></td>
+        </tr>
+        <tr>
+            <td>BirthDay:</td>
+            <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
+        </tr>
+        <tr>
+            <td>PhoneNumber:</td>
+            <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td><InputText id="Address1_Edit" @bind-Value="userViewModel.Address.Address1" /></td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td><InputText id="City_Edit" @bind-Value="userViewModel.Address.City" /></td>
+        </tr>
+        <tr>
+            <td>Province:</td>
+            <td><InputText id="Province_Edit" @bind-Value="userViewModel.Address.Province" /></td>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td><InputText id="Country_Edit" @bind-Value="userViewModel.Address.Country" /></td>
+        </tr>
+        <tr>
+            <td>Postal Code:</td>
+            <td><InputText id="Postal_Code_Edit" @bind-Value="userViewModel.Address.PostalCode" /></td>
+        </tr>
+    </table>
     <br />
     <button type="submit">Save</button>
 </EditForm>

@@ -16,19 +16,19 @@ else if (editMode != true)
     <h3>Preferences</h3>
     <table>
         <tr>
-            <td width="350px"><b>Your favourite genre:</b></td>
+            <td><b>Your favourite genre:</b></td>
             <td><span id="Genre">@(preference.Genre.Name ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="350px"><b>Your favourite platform:</b></td>
+            <td><b>Your favourite platform:</b></td>
             <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="350px"><b>Your favourite game:</b></td>
+            <td><b>Your favourite game:</b></td>
             <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
         </tr>
         <tr>
-            <td width="350px"><b>Recieve promotional emails</b></td>
+            <td><b>Recieve promotional emails</b></td>
             <td><input disabled type="checkbox" checked="@(preference.ReceivePromotionalEmails ?? false)" id="Recieve_Promotions" /></td>
         </tr>
     </table>
@@ -44,37 +44,33 @@ else
 
         <h3>Edit Preferences</h3>
         <br />
-        <p>
-            <label>
-                Your favourite genre:
-                <InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Your favourite platform:
-                <InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Do you wish to recieve promotions?
-                <InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" />
-            </label>
-        </p>
-        <p>
-            <label>
-                Your favourite game:
-                <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
-                    <option value="null">None</option>
-                    @foreach (var game in games)
-                    {
-                        <option value="@game">@game.Name</option>
-                    }
-                </InputSelect>
-            </label>
-        </p>
-
+        <table>
+            <tr>
+                <td>Your favourite genre:</td>
+                <td><InputText id="Genre_Edit" @bind-Value="preferenceViewModel.Genre" /></td>
+            </tr>
+            <tr>
+                <td>Your favourite platform:</td>
+                <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
+            </tr>
+            <tr>
+                <td>Do you wish to recieve promotions?</td>
+                <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
+            </tr>
+            <tr>
+                <td>Your favourite game:</td>
+                <td>
+                    <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
+                        <option value="null">None</option>
+                        @foreach (var game in games)
+                        {
+                            <option value="@game">@game.Name</option>
+                        }
+                    </InputSelect>
+                </td>
+            </tr>
+        </table>
+        <br />
         <button type="submit">Save</button>
     </EditForm>
 }
