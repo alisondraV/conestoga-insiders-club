@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,12 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return user.Preference;
         }
 
-        public Task UpdatePreference(Preference preference)
+        public async Task UpdatePreference(Preference preference)
         {
-            throw new NotImplementedException();
+            context.Preferences.Update(preference);
+            var preferences = await context.Preferences.AsNoTracking().ToListAsync();
+            var genres = await context.GameGenres.AsNoTracking().ToListAsync();
+            await context.SaveChangesAsync();
         }
     }
 }
