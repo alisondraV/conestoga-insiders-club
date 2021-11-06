@@ -65,9 +65,9 @@ else
                         <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGame">
                             <option value="null">None</option>
                             @foreach (var game in games)
-                                    {
+                            {
                                 <option value="@game">@game.Name</option>
-                                    }
+                            }
                         </InputSelect>
                     </td>
                 </tr>
