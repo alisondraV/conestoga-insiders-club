@@ -65,6 +65,7 @@ namespace ConestogaInsidersClub.Data
                 EmailConfirmed = true,
                 PhoneNumber = "2136547890",
                 PhoneNumberConfirmed = true,
+                BirthDay = System.DateTime.Now.AddYears(-25),
                 Address = address
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
