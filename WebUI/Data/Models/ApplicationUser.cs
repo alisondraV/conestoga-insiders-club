@@ -25,9 +25,11 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("first_name")]
         [StringLength(50)]
         public string FirstName { get; set; }
+
         [Column("last_name")]
         [StringLength(50)]
         public string LastName { get; set; }
+
         [Column("birthday")]
         public DateTime BirthDay { get; set; }
 

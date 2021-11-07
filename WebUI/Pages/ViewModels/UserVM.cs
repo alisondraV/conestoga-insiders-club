@@ -18,7 +18,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         [Required]
         [MinLength(2, ErrorMessage = "UserName name should be at least 2 characters long")]
-        [MaxLength(50, ErrorMessage = "UserName name is too long")]
+        [MaxLength(256, ErrorMessage = "UserName name is too long")]
         public string UserName { get; set; }
 
         [Required]
