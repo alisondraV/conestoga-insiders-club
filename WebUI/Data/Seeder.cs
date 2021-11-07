@@ -135,6 +135,7 @@ namespace ConestogaInsidersClub.Data
             context.RemoveRange(context.Preferences);
             context.RemoveRange(context.GameGenres);
             context.RemoveRange(context.Games);
+            context.RemoveRange(context.Friendships);
             context.RemoveRange(context.UserRoles);
             context.RemoveRange(context.Users);
             context.RemoveRange(context.Roles);
