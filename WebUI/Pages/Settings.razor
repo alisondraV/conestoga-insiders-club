@@ -181,6 +181,7 @@ else
         Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
         await preferenceService.UpdatePreference(updatedPreference);
         FlipEditPreferenceMode();
+        StateHasChanged();
     }
 
     private async void HandleAddressSubmit()
@@ -188,6 +189,7 @@ else
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
         FlipEditAddressMode();
+        StateHasChanged();
     }
 
     private void FlipEditPreferenceMode()

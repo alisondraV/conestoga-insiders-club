@@ -103,6 +103,7 @@ else
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
         FlipEditMode();
+        StateHasChanged();
 
         if (userName != updatedUser.UserName)
         {
