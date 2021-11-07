@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data;
+using ConestogaInsidersClub.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,26 @@ namespace ServiceTests
             context.Database.EnsureCreated();
 
             context.SaveChanges();
+        }
+
+        protected async Task<List<T>> SeedEntities<T>(params T[] entities) where T : class
+        {
+            foreach (var entity in entities)
+            {
+                await SeedEntities(entity);
+            }
+
+            return entities.ToList();
+        }
+
+        protected async Task<T> SeedEntities<T>(T entity) where T : class
+        {
+            using var context = new ApplicationDbContext(ContextOptions);
+
+            await context.Set<T>().AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return entity;
         }
     }
 }

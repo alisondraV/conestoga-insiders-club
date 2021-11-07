@@ -48,7 +48,7 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => e.UserId)
                     .HasName("PK__addresse__5CF1C59A90B364F3");
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
                 entity.Property(e => e.Address1).IsUnicode(false);
 
@@ -74,7 +74,7 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => new { e.UserId, e.GameId })
                     .HasName("PK__cart_ite__B30FD466E5616F1B");
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.CartItems)
@@ -94,9 +94,9 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => new { e.UserId1, e.UserId2 })
                     .HasName("PK__friendsh__2EA53AFBF202847F");
 
-                entity.Property(e => e.UserId1).IsUnicode(false);
+                entity.Property(e => e.UserId1).IsUnicode(true);
 
-                entity.Property(e => e.UserId2).IsUnicode(false);
+                entity.Property(e => e.UserId2).IsUnicode(true);
 
                 entity.HasOne(d => d.UserId1Navigation)
                     .WithMany(p => p.FriendshipUserId1Navigations)
@@ -140,7 +140,7 @@ namespace ConestogaInsidersClub.Data
             {
                 entity.Property(e => e.OrderId).ValueGeneratedNever();
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
                 entity.HasOne(d => d.UserIdNavigation)
                     .WithMany(p => p.Orders)
@@ -174,23 +174,19 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => e.UserId)
                     .HasName("PK__preferen__5CF1C59A3E97A739");
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
-                entity.Property(e => e.Genre).IsUnicode(false);
-
-                entity.Property(e => e.Platform).IsUnicode(false);
-
-                entity.HasOne(d => d.GenreNavigation)
+                entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Preferences)
-                    .HasForeignKey(d => d.Genre)
+                    .HasForeignKey(d => d.GenreName)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_game_genres_TO_preferences");
 
-                entity.HasOne(d => d.UserIdNavigation)
-                    .WithOne(p => p.Preference)
-                    .HasForeignKey<Preference>(d => d.UserId)
+                entity.HasOne(d => d.FavouriteGame)
+                    .WithMany(g => g.Preferences)
+                    .HasForeignKey(d => d.FavouriteGameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_preferences");
+                    .HasConstraintName("FK_game_TO_preferences");
             });
 
             modelBuilder.Entity<Review>(entity =>
@@ -198,7 +194,7 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => new { e.UserId, e.GameId })
                     .HasName("PK__reviews__B30FD466087C2256");
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
                 entity.Property(e => e.Description).IsUnicode(false);
 
@@ -220,7 +216,7 @@ namespace ConestogaInsidersClub.Data
                 entity.HasKey(e => new { e.UserId, e.GameId })
                     .HasName("PK__wished_i__B30FD466E0DD1830");
 
-                entity.Property(e => e.UserId).IsUnicode(false);
+                entity.Property(e => e.UserId).IsUnicode(true);
 
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.WishedItems)
