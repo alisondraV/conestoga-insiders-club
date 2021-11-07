@@ -45,9 +45,9 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return reviews.Average(a => a.Rating);
         }
 
-        public async Task<List<Review>> GetReviews()
+        public async Task<List<Review>> GetReviewsAwaitingApproval()
         {
-            return await context.Reviews.Where(a => a.Approved == false).ToListAsync();
+            return await context.Reviews.Where(a => a.Approved == null).ToListAsync();
         }
 
         public async Task<List<Review>> GetReviewsByUser(string userId)

@@ -13,9 +13,8 @@ namespace ServiceTests
     class ReviewServiceTests : TestBase
     {
         private Game testGame;
-        private ApplicationUser testUser;
-        private ApplicationUser testUser2;
         private Review testReview;
+        private List<ApplicationUser> users;
 
         [OneTimeSetUp]
         public async Task BeforeAll()
@@ -31,32 +30,30 @@ namespace ServiceTests
             };
             await context.Set<Game>().AddAsync(testGame);
 
-            testUser = new ApplicationUser()
-            {
-                Id = "d123",
-                UserName = "test",
-                NormalizedUserName = "TEST",
-                Email = "test@user.com"
-            };
-            testUser2 = new ApplicationUser()
-            {
-                Id = "d124",
-                UserName = "fake",
-                NormalizedUserName = "FAKE",
-                Email = "fake@user.com"
-            };
-            await context.Set<ApplicationUser>().AddAsync(testUser);
-
-            await context.Set<ApplicationUser>().AddAsync(testUser2);
-
+            users = await SeedEntities(
+                new ApplicationUser()
+                {
+                    Id = "d123",
+                    UserName = "test",
+                    NormalizedUserName = "TEST",
+                    Email = "test@user.com"
+                },
+                new ApplicationUser()
+                {
+                    Id = "d124",
+                    UserName = "fake",
+                    NormalizedUserName = "FAKE",
+                    Email = "fake@user.com"
+                }
+            );
 
             testReview = new Review()
             {
                 GameId = testGame.GameId,
-                UserId = testUser.Id,
+                UserId = users[0].Id,
                 Rating = 5,
                 Description = "good game",
-                Approved = false
+                Approved = null
             };
             await context.Set<Review>().AddAsync(testReview);
 
@@ -70,7 +67,7 @@ namespace ServiceTests
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new ReviewService(context);
             //Act
-            var reviews = await service.GetReviews();
+            var reviews = await service.GetReviewsAwaitingApproval();
             //Assert
             Assert.IsNotNull(reviews);
             Assert.That(reviews, Has.Count.EqualTo(1));
@@ -85,14 +82,14 @@ namespace ServiceTests
             Review review = new Review()
             {
                 GameId = testGame.GameId,
-                UserId = testUser2.Id,
+                UserId = users[1].Id,
                 Rating = 3,
                 Description = "decent game",
-                Approved = false
+                Approved = null
             };
             //Act
             await service.AddReview(review);
-            var reviews = await service.GetReviews();
+            var reviews = await service.GetReviewsAwaitingApproval();
             //Assert
             Assert.IsNotNull(reviews);
             Assert.That(reviews, Has.Count.EqualTo(2));
@@ -104,7 +101,7 @@ namespace ServiceTests
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new ReviewService(context);
-            var reviews = await service.GetReviews();
+            var reviews = await service.GetReviewsAwaitingApproval();
             var review = reviews[1];
             //Act
             await service.ApproveReview(review);
@@ -120,7 +117,7 @@ namespace ServiceTests
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new ReviewService(context);
-            var reviews = await service.GetReviews();
+            var reviews = await service.GetReviewsAwaitingApproval();
             var review = reviews[0];
             //Act
             await service.RejectReview(review);
@@ -150,7 +147,7 @@ namespace ServiceTests
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new ReviewService(context);
             //Act
-            var userReviews = await service.GetReviewsByUser(testUser.Id);
+            var userReviews = await service.GetReviewsByUser(users[0].Id);
             //Assert
             Assert.IsNotNull(userReviews);
             Assert.That(userReviews, Has.Count.EqualTo(1));
@@ -178,7 +175,7 @@ namespace ServiceTests
             Review review = new Review()
             {
                 GameId = testGame.GameId,
-                UserId = testUser2.Id,
+                UserId = users[1].Id,
                 Rating = 3,
                 Description = "decent game",
                 Approved = true

@@ -8,7 +8,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     interface IReviewService
     {
-        Task<List<Review>> GetReviews();
+        Task<List<Review>> GetReviewsAwaitingApproval();
         Task<List<Review>> GetApprovedGameReviews(int gameId);
         Task ApproveReview(Review review);
         Task RejectReview(Review review);
