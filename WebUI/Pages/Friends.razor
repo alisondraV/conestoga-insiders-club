@@ -4,6 +4,7 @@
 @using ConestogaInsidersClub.Pages.Components;
 
 @inject IUserService userService;
+@inject NavigationManager NavigationManager;
 
 <h1>Friends</h1>
 
@@ -29,11 +30,9 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var friend in friends)
                 {
-                    <UserCard 
-                        InvokeParentMethod="@(() => RemoveFriend(friend.Id))" 
-                        User="friend" 
-                        ButtonText="Remove Friend"
-                    />
+                    <UserCard InvokeParentMethod="@(() => RemoveFriend(friend.Id))"
+                              User="friend"
+                              ButtonText="Remove Friend" />
                 }
             </div>
         }
@@ -49,11 +48,9 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var possibleFriend in possibleFriends)
                 {
-                    <UserCard 
-                        InvokeParentMethod="@(() => AddFriend(possibleFriend.Id))" 
-                        User="possibleFriend" 
-                        ButtonText="Add friend"
-                    />
+                    <UserCard InvokeParentMethod="@(() => AddFriend(possibleFriend.Id))"
+                              User="possibleFriend"
+                              ButtonText="Add friend" />
                 }
             </div>
         }
@@ -94,12 +91,12 @@ else
     private async void AddFriend(string userId)
     {
         await userService.CreateFriendship(currentUser.Id, userId);
-        StateHasChanged();
+        NavigationManager.NavigateTo("friends", true);
     }
 
     private async void RemoveFriend(string userId)
     {
         await userService.DeleteFriendship(currentUser.Id, userId);
-        StateHasChanged();
+        NavigationManager.NavigateTo("friends", true);
     }
 }
