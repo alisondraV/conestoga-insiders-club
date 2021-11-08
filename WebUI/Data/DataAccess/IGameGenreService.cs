@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    interface IPreferenceService
+    public interface IGameGenreService
     {
-        Task<Preference> GetPreference(string userName);
-        Task UpdatePreference(Preference preference);
+        Task<GameGenre> GetGameGenre(int genreId);
+        Task<List<GameGenre>> GetGameGenres();
     }
 }
