@@ -120,7 +120,7 @@ namespace ServiceTests
             var cart = service.GetCartItems(testUser.Id);
             // Assert
             Assert.NotNull(cart);
-            Assert.False(cart.Result.Any());
+            Assert.IsEmpty(cart.Result);
         }
 
     }
