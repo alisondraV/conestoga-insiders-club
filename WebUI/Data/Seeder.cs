@@ -8,7 +8,8 @@ namespace ConestogaInsidersClub.Data
     {
         static GameGenre genre;
         static Game game;
-        static Address address;
+        static Address mailingAddress;
+        static Address shippingAddress;
         static ApplicationDbContext context;
         static IdentityRole adminRole;
         static IdentityRole userRole;
@@ -19,9 +20,9 @@ namespace ConestogaInsidersClub.Data
         {
             Seeder.context = context;
             ClearDatabase();
+            SeedAddresses();
             SeedUserRoles();
             SeedApplicationUsers();
-            SeedAddresses();
             SeedGameGenres();
             SeedGames();
             SeedPreferences();
@@ -66,7 +67,8 @@ namespace ConestogaInsidersClub.Data
                 PhoneNumber = "2136547890",
                 PhoneNumberConfirmed = true,
                 BirthDay = System.DateTime.Now.AddYears(-25),
-                Address = address
+                MailingAddressId = mailingAddress.AddressId,
+                ShippingAddressId = shippingAddress.AddressId,
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
@@ -102,16 +104,24 @@ namespace ConestogaInsidersClub.Data
 
         private static void SeedAddresses()
         {
-            address = new Address
+            mailingAddress = new Address
             {
-                UserId = user.Id,
                 Address1 = "123 Main St",
                 City = "Kitchener",
                 Province = "ON",
                 Country = "Canada"
             };
 
-            context.Add(address);
+            shippingAddress = new Address
+            {
+                Address1 = "145 King St",
+                City = "Waterloo",
+                Province = "ON",
+                Country = "Canada"
+            };
+
+            context.Add(mailingAddress);
+            context.Add(shippingAddress);
             context.SaveChanges();
         }
 

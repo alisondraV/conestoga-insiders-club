@@ -11,10 +11,13 @@ namespace ConestogaInsidersClub.Data.Models
     [Table("addresses")]
     public partial class Address
     {
-        [Key]
-        [Column("user_id")]
-        [StringLength(450)]
-        public string UserId { get; set; }
+        public Address()
+        {
+            ShippingUsers = new HashSet<ApplicationUser>();
+            MailingUsers = new HashSet<ApplicationUser>();
+        }
+
+        public int AddressId { get; set; }
 
         [Column("address1")]
         [StringLength(50)]
@@ -40,8 +43,7 @@ namespace ConestogaInsidersClub.Data.Models
         [StringLength(10)]
         public string PostalCode { get; set; }
 
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(ApplicationUser.Address))]
-        public virtual ApplicationUser UserIdNavigation { get; set; }
+        public ICollection<ApplicationUser> ShippingUsers { get; set; }
+        public ICollection<ApplicationUser> MailingUsers { get; set; }
     }
 }

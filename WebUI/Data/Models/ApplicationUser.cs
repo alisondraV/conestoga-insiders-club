@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -20,6 +19,7 @@ namespace ConestogaInsidersClub.Data.Models
             Orders = new HashSet<Order>();
             Reviews = new HashSet<Review>();
             WishedItems = new HashSet<WishedItem>();
+            Cards = new HashSet<Card>();
         }
 
         [Column("first_name")]
@@ -33,8 +33,15 @@ namespace ConestogaInsidersClub.Data.Models
         [Column("birthday")]
         public DateTime BirthDay { get; set; }
 
-        [InverseProperty("UserIdNavigation")]
-        public virtual Address Address { get; set; }
+        public Gender? Gender { get; set; }
+
+        public int? MailingAddressId { get; set; }
+
+        public int? ShippingAddressId { get; set; }
+
+        public Address MailingAddress { get; set; }
+
+        public Address ShippingAddress { get; set; }
 
         public Preference Preference { get; set; }
 
@@ -50,5 +57,6 @@ namespace ConestogaInsidersClub.Data.Models
         public virtual ICollection<Review> Reviews { get; set; }
         [InverseProperty(nameof(WishedItem.UserIdNavigation))]
         public virtual ICollection<WishedItem> WishedItems { get; set; }
+        public ICollection<Card> Cards { get; set; }
     }
 }

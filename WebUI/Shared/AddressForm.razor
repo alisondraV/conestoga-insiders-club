@@ -1,0 +1,89 @@
+﻿@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@if (editAddressMode != true)
+{
+    <h4>@addressType Address</h4>
+    <table>
+        <tr>
+            <td><b>Address:</b></td>
+            <td><span id="Address1">@(address.Address1 ?? "Not set yet")</span></td>
+        </tr>
+        <tr>
+            <td><b>City:</b></td>
+            <td><span id="City">@(address.City ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Province:</b></td>
+            <td><span id="Province">@(address.Province ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Country:</b></td>
+            <td><span id="Country">@(address.Country ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Postal Code:</b></td>
+            <td><span id="Postal_Code">@(address.PostalCode ?? "*Not set yet*")</span></td>
+        </tr>
+    </table>
+    <button @onclick="@FlipEditAddressMode">Edit</button>
+    <br />
+}
+else
+{
+    <EditForm Model="@address" OnValidSubmit="@HandleAddressSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h3>Edit @addressType Address</h3>
+        <table>
+            <tr>
+                <td>Address:</td>
+                <td><InputText id="Address1_Edit" @bind-Value="address.Address1" /></td>
+            </tr>
+            <tr>
+                <td>City:</td>
+                <td><InputText id="City_Edit" @bind-Value="address.City" /></td>
+            </tr>
+            <tr>
+                <td>Province:</td>
+                <td><InputText id="Province_Edit" @bind-Value="address.Province" /></td>
+            </tr>
+            <tr>
+                <td>Country:</td>
+                <td><InputText id="Country_Edit" @bind-Value="address.Country" /></td>
+            </tr>
+            <tr>
+                <td>Postal Code:</td>
+                <td><InputText id="Postal_Code_Edit" @bind-Value="address.PostalCode" /></td>
+            </tr>
+        </table>
+        <br />
+        <button type="submit">Save</button>
+    </EditForm>
+    }
+
+@code {
+    [Parameter]
+    public string addressType { get; set; }
+
+    [Parameter]
+    public Address address { get; set; }
+
+    [Parameter]
+    public EventCallback<Address> onSave { get; set; }
+
+    private bool editAddressMode = false;
+
+    private async void HandleAddressSubmit()
+    {
+        await onSave.InvokeAsync(address);
+        FlipEditAddressMode();
+        StateHasChanged();
+    }
+
+    private void FlipEditAddressMode()
+    {
+        editAddressMode = !editAddressMode;
+    }
+}

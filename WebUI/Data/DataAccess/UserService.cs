@@ -33,7 +33,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .Where(u => u.UserName == userName)
                 .Include(u => u.Preference)
                 .ThenInclude(p => p.FavouriteGame)
-                .Include(u => u.Address)
+                .Include(u => u.MailingAddress)
+                .Include(u => u.ShippingAddress)
                 .SingleAsync();
         }
 
@@ -66,6 +67,14 @@ namespace ConestogaInsidersClub.Data.DataAccess
             var friendship = await context.Friendships.FirstOrDefaultAsync(f => f.UserId1 == userId1 && f.UserId2 == userId2);
             context.Friendships.Remove(friendship);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<List<Card>> GetCards(string userId)
+        {
+            var user = await context.Users
+                .Include(u => u.Cards)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            return user.Cards.ToList();
         }
     }
 }

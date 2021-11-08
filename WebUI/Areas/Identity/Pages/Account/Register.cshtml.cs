@@ -105,13 +105,14 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
                     UserName = Input.UserName,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    BirthDay = Input.Birthday
+                    BirthDay = Input.Birthday,
+                    MailingAddress = new Address(),
+                    ShippingAddress = new Address()
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _context.AddAsync(new Address { UserId = user.Id });
                     await _context.AddAsync(new Preference { UserId = user.Id });
                     await _context.SaveChangesAsync();
 

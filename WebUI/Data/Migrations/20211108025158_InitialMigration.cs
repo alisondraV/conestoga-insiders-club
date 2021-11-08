@@ -10,6 +10,24 @@ namespace ConestogaInsidersClub.Data.Migrations
             migrationBuilder.AlterDatabase(
                 collation: "SQL_Latin1_General_CP1_CI_AS");
 
+            migrationBuilder.AddColumn<int>(
+                name: "Gender",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "MailingAddressId",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "ShippingAddressId",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
+
             migrationBuilder.AddColumn<DateTime>(
                 name: "birthday",
                 table: "AspNetUsers",
@@ -35,7 +53,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "addresses",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     address1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     address2 = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: true),
                     city = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
@@ -45,13 +64,29 @@ namespace ConestogaInsidersClub.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__addresse__5CF1C59A90B364F3", x => x.user_id);
+                    table.PrimaryKey("PK_addresses", x => x.AddressId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cards",
+                columns: table => new
+                {
+                    CardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    ExpirationYear = table.Column<int>(type: "int", nullable: false),
+                    ExpirationMonth = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cards", x => x.CardId);
                     table.ForeignKey(
-                        name: "FK_users_TO_addresses",
-                        column: x => x.user_id,
+                        name: "FK_Cards_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,10 +219,10 @@ namespace ConestogaInsidersClub.Data.Migrations
                 columns: table => new
                 {
                     user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    platform = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    receive_promotional_emails = table.Column<bool>(type: "bit", nullable: false),
-                    favourite_game_id = table.Column<int>(type: "int", nullable: false),
-                    genre = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
+                    platform = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    receive_promotional_emails = table.Column<bool>(type: "bit", nullable: true),
+                    favourite_game_id = table.Column<int>(type: "int", nullable: true),
+                    genre = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,11 +240,11 @@ namespace ConestogaInsidersClub.Data.Migrations
                         principalColumn: "game_id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_users_TO_preferences",
+                        name: "FK_preferences_AspNetUsers_user_id",
                         column: x => x.user_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,6 +299,21 @@ namespace ConestogaInsidersClub.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_MailingAddressId",
+                table: "AspNetUsers",
+                column: "MailingAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ShippingAddressId",
+                table: "AspNetUsers",
+                column: "ShippingAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_UserId",
+                table: "Cards",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_cart_items_game_id",
                 table: "cart_items",
                 column: "game_id");
@@ -307,12 +357,37 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "IX_wished_items_game_id",
                 table: "wished_items",
                 column: "game_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_addresses_MailingAddressId",
+                table: "AspNetUsers",
+                column: "MailingAddressId",
+                principalTable: "addresses",
+                principalColumn: "AddressId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_addresses_ShippingAddressId",
+                table: "AspNetUsers",
+                column: "ShippingAddressId",
+                principalTable: "addresses",
+                principalColumn: "AddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_addresses_MailingAddressId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_addresses_ShippingAddressId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropTable(
                 name: "addresses");
+
+            migrationBuilder.DropTable(
+                name: "Cards");
 
             migrationBuilder.DropTable(
                 name: "cart_items");
@@ -340,6 +415,26 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "game_genres");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_MailingAddressId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_ShippingAddressId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Gender",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "MailingAddressId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "ShippingAddressId",
+                table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
                 name: "birthday",

@@ -13,5 +13,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task<List<ApplicationUser>> GetFriends(ApplicationUser user);
         Task DeleteFriendship(string userId1, string userId2);
         Task<ApplicationUser> GetUserWithRelatedData(string userName);
+        Task<List<Card>> GetCards(string userId);
     }
 }
