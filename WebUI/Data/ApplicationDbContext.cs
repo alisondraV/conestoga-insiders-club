@@ -43,6 +43,22 @@ namespace ConestogaInsidersClub.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.Property(e => e.Gender)
+                    .HasConversion<int>();
+            });
+            
+            modelBuilder.Entity<Card>(entity =>
+            {
+                entity.Property(e => e.CardNumber)
+                    .HasMaxLength(16);
+
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Cards)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.HasKey(e => e.UserId)
