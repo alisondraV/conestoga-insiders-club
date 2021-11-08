@@ -61,7 +61,7 @@ namespace ServiceTests
         }
 
         [Test, Order(1)]
-        public async Task GetReviews()
+        public async Task GetReviews_GetTheReviewThatHasNotBeenApproved()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -70,11 +70,12 @@ namespace ServiceTests
             var reviews = await service.GetReviewsAwaitingApproval();
             //Assert
             Assert.IsNotNull(reviews);
+            Assert.IsNull(reviews[0].Approved);
             Assert.That(reviews, Has.Count.EqualTo(1));
         }
 
         [Test, Order(2)]
-        public async Task AddReviews()
+        public async Task AddReviews_ShouldAddNewReview()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -96,7 +97,7 @@ namespace ServiceTests
         }
 
         [Test, Order(3)]
-        public async Task ApproveReview()
+        public async Task ApproveReview_ShouldApproveTheReview()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -112,7 +113,7 @@ namespace ServiceTests
         }
 
         [Test, Order(4)]
-        public async Task RejectReview()
+        public async Task RejectReview_ShouldRejectTheOtherReview()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -128,7 +129,20 @@ namespace ServiceTests
         }
 
         [Test, Order(5)]
-        public async Task GetApprovedReviews()
+        public async Task GetRejectedReviews_ShouldGetListOfRejectedReviews()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new ReviewService(context);
+            //Act
+            var rejectedReviews = await service.GetRejectedReviews();
+            //Assert
+            Assert.IsNotNull(rejectedReviews);
+            Assert.That(rejectedReviews, Has.Count.EqualTo(1));
+        }
+
+        [Test, Order(6)]
+        public async Task GetApprovedReviews_ShouldGetAListOfApprovedReviews()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -140,8 +154,8 @@ namespace ServiceTests
             Assert.That(approvedReviews, Has.Count.EqualTo(1));
         }
 
-        [Test, Order(6)]
-        public async Task GetReviewsByUser()
+        [Test, Order(7)]
+        public async Task GetReviewsByUser_ShouldGetTheReviewsMadeByUser()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -153,8 +167,8 @@ namespace ServiceTests
             Assert.That(userReviews, Has.Count.EqualTo(1));
         }
 
-        [Test, Order(7)]
-        public async Task GetAverage()
+        [Test, Order(8)]
+        public async Task GetAverage_GetTheAverageRatingOfTheGame()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -166,8 +180,8 @@ namespace ServiceTests
             Assert.AreEqual(3, average);
         }
 
-        [Test, Order(8)]
-        public async Task RemoveReviews()
+        [Test, Order(9)]
+        public async Task RemoveReviews_ShouldRemoveTheReviews()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);

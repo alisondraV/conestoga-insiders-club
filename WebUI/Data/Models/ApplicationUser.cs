@@ -34,6 +34,8 @@ namespace ConestogaInsidersClub.Data.Models
         public virtual Address Address { get; set; }
 
         public Preference Preference { get; set; }
+        [Column("birthday")]
+        public DateTime BirthDay { get; set; }
 
         [InverseProperty(nameof(CartItem.UserIdNavigation))]
         public virtual ICollection<CartItem> CartItems { get; set; }

@@ -38,13 +38,16 @@ namespace ServiceTests
             };
             await context.Set<Game>().AddAsync(testGame2);
 
-            testUser = new ApplicationUser()
-            {
-                Id = "d123",
-                UserName = "test",
-                NormalizedUserName = "TEST",
-                Email = "test@user.com",
-            };
+            testUser = await SeedEntities(
+                new ApplicationUser()
+                {
+                    Id = "d123",
+                    UserName = "test",
+                    NormalizedUserName = "TEST",
+                    Email = "test@user.com"
+                }
+            );
+
             await context.Set<ApplicationUser>().AddAsync(testUser);
 
             CartItem cartItem = new CartItem { GameId = testGame.GameId, UserId = testUser.Id };
@@ -54,7 +57,7 @@ namespace ServiceTests
         }
 
         [Test, Order(1)]
-        public async Task GetCartItems()
+        public async Task GetCartItems_ShouldGetAllCartItemsForUser()
         {
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -69,7 +72,7 @@ namespace ServiceTests
         }
 
         [Test, Order(2)]
-        public async Task AddItemToCart()
+        public async Task AddItemToCart_ShouldAddItemToUsersCart()
         {
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -89,7 +92,7 @@ namespace ServiceTests
         }
 
         [Test, Order(3)]
-        public async Task GetCartItemCount()
+        public async Task GetCartItemCount_ShouldGetCurrentCartCount()
         {
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
@@ -103,7 +106,7 @@ namespace ServiceTests
         }
 
         [Test, Order(4)]
-        public async Task DeleteCartItems()
+        public async Task DeleteCartItems_ShouldRemoveItemsFromCart()
         {
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);

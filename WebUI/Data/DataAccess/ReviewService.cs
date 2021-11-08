@@ -49,6 +49,11 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return await context.Reviews.Where(a => a.Approved == null).ToListAsync();
         }
 
+        public async Task<List<Review>> GetRejectedReviews()
+        {
+            return await context.Reviews.Where(a => a.Approved == false).ToListAsync();
+        }
+
         public async Task<List<Review>> GetReviewsByUser(string userId)
         {
             return await context.Reviews.Where(a => a.UserId == userId.ToString()).ToListAsync();
