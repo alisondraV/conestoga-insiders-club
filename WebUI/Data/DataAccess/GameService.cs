@@ -48,5 +48,15 @@ namespace ConestogaInsidersClub.Data.DataAccess
             context.Games.Remove(game);
             await context.SaveChangesAsync();
         }
+
+        public async Task AddToWishlist(Game game, string userId)
+        {
+            context.WishedItems.Add(new WishedItem
+            {
+                GameId = game.GameId,
+                UserId = userId
+            });
+            await context.SaveChangesAsync();
+        }
     }
 }
