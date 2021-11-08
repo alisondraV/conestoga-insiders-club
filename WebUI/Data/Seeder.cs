@@ -66,7 +66,8 @@ namespace ConestogaInsidersClub.Data
                 PhoneNumber = "2136547890",
                 PhoneNumberConfirmed = true,
                 BirthDay = System.DateTime.Now.AddYears(-25),
-                Address = address
+                MailingAddress = address,
+                ShippingAddress = address,
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
@@ -104,7 +105,6 @@ namespace ConestogaInsidersClub.Data
         {
             address = new Address
             {
-                UserId = user.Id,
                 Address1 = "123 Main St",
                 City = "Kitchener",
                 Province = "ON",

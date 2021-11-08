@@ -30,7 +30,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [Phone]
         public string PhoneNumber { get; set; }
 
-        public Address Address { get; set; }
+        public Address MailingAddress { get; set; }
 
         public static ApplicationUser ToModel(ApplicationUser user, UserVM userVM)
         {
@@ -40,7 +40,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             user.Email = userVM.Email;
             user.BirthDay = userVM.BirthDay;
             user.PhoneNumber = userVM.PhoneNumber;
-            user.Address = userVM.Address;
+            user.MailingAddress = userVM.MailingAddress;
 
             return user;
         }
@@ -55,7 +55,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
                 Email = user.Email,
                 BirthDay = user.BirthDay,
                 PhoneNumber = user.PhoneNumber,
-                Address = user.Address
+                MailingAddress = user.MailingAddress
             };
         }
     }
