@@ -33,7 +33,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .Where(u => u.UserName == userName)
                 .Include(u => u.Preference)
                 .ThenInclude(p => p.FavouriteGame)
-                .Include(u => u.Address)
+                .Include(u => u.MailingAddress)
                 .SingleAsync();
         }
 

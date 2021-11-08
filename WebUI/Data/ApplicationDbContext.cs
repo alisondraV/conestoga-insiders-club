@@ -47,6 +47,14 @@ namespace ConestogaInsidersClub.Data
             {
                 entity.Property(e => e.Gender)
                     .HasConversion<int>();
+
+                entity.HasOne(e => e.MailingAddress)
+                    .WithMany(a => a.MailingUsers)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.ShippingAddress)
+                    .WithMany(a => a.ShippingUsers)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             
             modelBuilder.Entity<Card>(entity =>
@@ -61,11 +69,6 @@ namespace ConestogaInsidersClub.Data
 
             modelBuilder.Entity<Address>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PK__addresse__5CF1C59A90B364F3");
-
-                entity.Property(e => e.UserId).IsUnicode(true);
-
                 entity.Property(e => e.Address1).IsUnicode(false);
 
                 entity.Property(e => e.Address2).IsUnicode(false);
@@ -77,12 +80,6 @@ namespace ConestogaInsidersClub.Data
                 entity.Property(e => e.PostalCode).IsUnicode(false);
 
                 entity.Property(e => e.Province).IsUnicode(false);
-
-                entity.HasOne(d => d.UserIdNavigation)
-                    .WithOne(p => p.Address)
-                    .HasForeignKey<Address>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_addresses");
             });
 
             modelBuilder.Entity<CartItem>(entity =>

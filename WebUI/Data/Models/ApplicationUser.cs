@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -36,8 +35,8 @@ namespace ConestogaInsidersClub.Data.Models
 
         public Gender? Gender { get; set; }
 
-        [InverseProperty("UserIdNavigation")]
-        public virtual Address Address { get; set; }
+        public virtual Address MailingAddress { get; set; }
+        public virtual Address ShippingAddress { get; set; }
 
         public Preference Preference { get; set; }
 
