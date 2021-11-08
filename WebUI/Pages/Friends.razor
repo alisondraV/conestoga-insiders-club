@@ -39,6 +39,8 @@ else
     }
     else
     {
+        <input id="Search" @onchange="@LookForUser" placeholder="Enter the username you want to search for..." />
+
         if (possibleFriends.Count == 0)
         {
             <h4>There are no available friends at the moment :(</h4>
@@ -72,15 +74,24 @@ else
         currentUser = await userService.GetUser(authenticationState.User.Identity.Name);
         friends = await userService.GetFriends(currentUser);
 
+        possibleFriends = await GetPossibleFriends();
+    }
+
+    private async Task<List<ApplicationUser>> GetPossibleFriends()
+    {
+        var pf = new List<ApplicationUser> { };
         var users = await userService.GetUsers();
         var friendsIds = friends.Select(u => u.Id).ToList();
+
         foreach (var user in users)
         {
             if (user.Id != currentUser.Id && !friendsIds.Contains(user.Id))
             {
-                possibleFriends.Add(user);
+                pf.Add(user);
             }
         }
+
+        return pf;
     }
 
     private void SwitchToFriendsTab(bool isFriendsTab)
@@ -98,5 +109,20 @@ else
     {
         await userService.DeleteFriendship(currentUser.Id, userId);
         NavigationManager.NavigateTo("friends", true);
+    }
+
+    private async void LookForUser(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        string searchQuery = (string)args.Value;
+
+        if (searchQuery == "")
+        {
+            possibleFriends = await GetPossibleFriends();
+        }
+        else
+        {
+            possibleFriends = possibleFriends.FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
+        }
+        StateHasChanged();
     }
 }

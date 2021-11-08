@@ -2,3 +2,10 @@
     width: 150px;
     margin: 20px 20px 40px 0;
 }
+
+#Search {
+    width: 350px;
+    margin-bottom: 30px;
+    display: block;
+    padding: 3px;
+}
