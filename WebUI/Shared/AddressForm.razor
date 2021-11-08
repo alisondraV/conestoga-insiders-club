@@ -1,15 +1,9 @@
 ﻿@using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
-@using ConestogaInsidersClub.Pages.ViewModels;
-
-@inject IPreferenceService preferenceService;
-@inject IGameService gameService;
-@inject IGameGenreService gameGenreService;
-@inject IUserService userService;
 
 @if (editAddressMode != true)
 {
-    <h4>Address</h4>
+    <h4>@addressType Address</h4>
     <table>
         <tr>
             <td><b>Address:</b></td>
@@ -41,7 +35,7 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <h3>Edit Address</h3>
+        <h3>Edit @addressType Address</h3>
         <table>
             <tr>
                 <td>Address:</td>
@@ -71,6 +65,9 @@ else
 
 @code {
     [Parameter]
+    public string addressType { get; set; }
+
+    [Parameter]
     public Address address { get; set; }
 
     [Parameter]
@@ -90,5 +87,3 @@ else
         editAddressMode = !editAddressMode;
     }
 }
-
-

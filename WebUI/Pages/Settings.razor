@@ -54,9 +54,9 @@ else
                         <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
                             <option value="">None</option>
                             @foreach (var genre in gameGenres)
-                            {
+                                    {
                                 <option value="@genre.Name">@genre.Name</option>
-                            }
+                                    }
                         </InputSelect>
                     </td>
                 </tr>
@@ -70,9 +70,9 @@ else
                         <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
                             <option value="">None</option>
                             @foreach (var game in games)
-                            {
+                                    {
                                 <option value="@game.GameId">@game.Name</option>
-                            }
+                                    }
                         </InputSelect>
                     </td>
                 </tr>
@@ -88,7 +88,12 @@ else
     <br />
     <br />
 
-    <AddressForm address="user.MailingAddress" onSave="@HandleAddressSubmit" />
+    <AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
+
+    <br />
+    <br />
+
+    <AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
 }
 
 @code {
@@ -124,9 +129,16 @@ else
         StateHasChanged();
     }
 
-    private async void HandleAddressSubmit(Address newAddress)
+    private async void HandleMailingAddressSubmit(Address newAddress)
     {
         userViewModel.MailingAddress = newAddress;
+        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        await userService.UpdateUser(updatedUser);
+    }
+
+    private async void HandleShippingAddressSubmit(Address newAddress)
+    {
+        userViewModel.ShippingAddress = newAddress;
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
     }
