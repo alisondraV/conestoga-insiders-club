@@ -33,14 +33,17 @@ namespace ConestogaInsidersClub.Data.DataAccess
             await context.SaveChangesAsync();
         }
 
-        public Task RemoveFromWishlist(Game game, string userId)
+        public async Task RemoveFromWishlist(Game game, string userId)
         {
-            throw new NotImplementedException();
+            var wishedItem = await context.WishedItems.FirstOrDefaultAsync(w => w.GameId == game.GameId);
+            context.WishedItems.Remove(wishedItem);
+            await context.SaveChangesAsync();
         }
 
-        public Task AddOrRemoveFromWishlist(Game game, string userId)
+        public async Task AddOrRemoveFromWishlist(Game game, string userId)
         {
-            throw new NotImplementedException();
+            var gameInWishlist = await context.WishedItems.AnyAsync(w => w.GameId == game.GameId && w.UserId == userId);
+            await (gameInWishlist ? RemoveFromWishlist(game, userId) : AddToWishlist(game, userId));
         }
     }
 }

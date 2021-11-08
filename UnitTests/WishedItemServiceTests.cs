@@ -14,6 +14,7 @@ namespace ServiceTests
     {
         public List<WishedItem> expectedWishedItems;
         public ApplicationUser user;
+        public Game newGame;
 
         [OneTimeSetUp]
         public async Task BeforeAll()
@@ -39,6 +40,11 @@ namespace ServiceTests
                     GameId = 2,
                     Name = "GTA"
                 }
+            });
+
+            newGame = await SeedEntities(new Game
+            {
+                Name = "CS:GO"
             });
         }
 
@@ -66,17 +72,50 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new WishedItemService(context);
-            var game = await SeedEntities(new Game
-            {
-                Name = "CS:GO"
-            });
 
             // Act
-            await service.AddToWishlist(game, user.Id);
+            await service.AddToWishlist(newGame, user.Id);
             var actualWishedItems = await service.GetWishedGamesForUser(user.Id);
 
             // Assert
             Assert.That(actualWishedItems, Has.Count.EqualTo(expectedWishedItems.Count + 1));
+        }
+
+        [Test, Order(3)]
+        public async Task RemoveFromWishlist_ShouldRemoveAGameFromTheUsersWishlist()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new WishedItemService(context);
+
+            // Act
+            await service.RemoveFromWishlist(newGame, user.Id);
+            var actualWishedItems = await service.GetWishedGamesForUser(user.Id);
+
+            // Assert
+            Assert.That(actualWishedItems, Has.Count.EqualTo(expectedWishedItems.Count));
+        }
+
+        [Test, Order(4)]
+        public async Task AddOrRemoveFromWishlist_ShouldAddOrRemoveAGameFromTheUsersWishlistDependingOnIfItIsAlreadyWishedFor()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new WishedItemService(context);
+
+            // Act
+            await service.AddOrRemoveFromWishlist(newGame, user.Id);
+            var actualWishedItems = await service.GetWishedGamesForUser(user.Id);
+
+            // Assert
+            Assert.That(actualWishedItems, Has.Count.EqualTo(expectedWishedItems.Count + 1));
+
+            // Act
+            await service.AddOrRemoveFromWishlist(newGame, user.Id);
+            actualWishedItems = await service.GetWishedGamesForUser(user.Id);
+
+            // Assert
+            Assert.That(actualWishedItems, Has.Count.EqualTo(expectedWishedItems.Count));
         }
     }
 }
