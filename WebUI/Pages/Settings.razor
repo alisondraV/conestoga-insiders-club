@@ -34,8 +34,8 @@ else
                 <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
             </tr>
             <tr>
-                <td><b>Recieve promotional emails</b></td>
-                <td><input disabled type="checkbox" checked="@(preference.ReceivePromotionalEmails ?? false)" id="Recieve_Promotions" /></td>
+                <td><b>Recieve promotional email:</b></td>
+                <td><span id="Recieve_Promotions">@(preference.ReceivePromotionalEmails ?? false ? "Yes" : "No")</span></td>
             </tr>
         </table>
         <button @onclick="@FlipEditPreferenceMode">Edit</button>
