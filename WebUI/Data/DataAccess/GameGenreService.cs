@@ -19,10 +19,5 @@ namespace ConestogaInsidersClub.Data.DataAccess
         {
             return context.GameGenres.ToListAsync();
         }
-
-        public Task<GameGenre> GetGameGenre(int genreId)
-        {
-            return context.GameGenres.FindAsync(genreId).AsTask();
-        }
     }
 }
