@@ -67,12 +67,5 @@ namespace ConestogaInsidersClub.Data.DataAccess
             context.Friendships.Remove(friendship);
             await context.SaveChangesAsync();
         }
-
-        public Task<List<Game>> GetWishedGames(string userId)
-        {
-            return context.WishedItems
-                .Where(w => w.UserId == userId)
-                .Select(w => w.Game).ToListAsync();
-        }
     }
 }

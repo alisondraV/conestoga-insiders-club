@@ -164,27 +164,5 @@ namespace ServiceTests
             var ids = allGames.Select(g => g.GameId);
             Assert.That(ids, Has.No.Member(targetGameId));
         }
-
-        [Test, Order(7)]
-        public async Task AddToWishlist_AddsTheGameToTheUsersWishlist()
-        {
-            // Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new GameService(context);
-            var targetGame = expectedGames.First();
-
-            var user = await SeedEntities(new ApplicationUser
-            {
-                UserName = "Foo"
-            });
-
-            // Act
-            await service.AddToWishlist(targetGame, user.Id);
-            var wishedItems = await context.WishedItems.Where(w => w.UserId == user.Id).ToListAsync();
-
-            // Assert
-            Assert.That(wishedItems, Has.Count.EqualTo(1));
-            Assert.AreEqual(targetGame.GameId, wishedItems.First().GameId);
-        }
     }
 }
