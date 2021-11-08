@@ -51,6 +51,7 @@ namespace ConestogaInsidersClub.Data
             var hasher = new PasswordHasher<ApplicationUser>();
 
             var userId = "d889434c-de0e-495e-b23e-6f855dc942d7";
+            var secondUserId = "a789434c-de0e-495e-c67e-c1b215a11abc";
             var adminId = "e0e5e08e-96be-4927-9fc1-c1b355a11abc";
 
             user = new ApplicationUser
@@ -70,6 +71,23 @@ namespace ConestogaInsidersClub.Data
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
+            var secondUser = new ApplicationUser
+            {
+                Id = secondUserId,
+                UserName = "JaD",
+                NormalizedUserName = "JAD",
+                FirstName = "Jane",
+                LastName = "Doe",
+                Email = "jdoe@example.com",
+                NormalizedEmail = "JDOE@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumber = "1234567890",
+                PhoneNumberConfirmed = true,
+                BirthDay = System.DateTime.Now.AddYears(-20),
+                Address = address
+            };
+            secondUser.PasswordHash = hasher.HashPassword(user, "Abcqwe1!");
+
             admin = new ApplicationUser
             {
                 Id = adminId,
@@ -86,6 +104,7 @@ namespace ConestogaInsidersClub.Data
             admin.PasswordHash = hasher.HashPassword(admin, "Qweqwe1!");
 
             context.Users.Add(user);
+            context.Users.Add(secondUser);
             context.Users.Add(admin);
             context.UserRoles.Add(new IdentityUserRole<string>
             {
