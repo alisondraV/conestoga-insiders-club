@@ -134,5 +134,41 @@ namespace ServiceTests
             var friendships = await context.Friendships.ToListAsync();
             Assert.IsEmpty(friendships);
         }
+
+        [Test, Order(7)]
+        public async Task GetWishedGames_ListsAllGamesThatAreWishedByTheUser()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+            var expectedWishItems = await SeedEntities(new WishedItem
+            {
+                UserId = targetUser.Id,
+                Game = new Game
+                {
+                    GameId = 1,
+                    Name = "Portal"
+                }
+            }, new WishedItem
+            {
+                UserId = targetUser.Id,
+                Game = new Game
+                {
+                    GameId = 2,
+                    Name = "GTA"
+                }
+            });
+
+            // Act
+            var actualGames = await service.GetWishedGames(targetUser.Id);
+
+            // Assert
+            Assert.That(actualGames, Has.Count.EqualTo(expectedWishItems.Count));
+            for (int i = 0; i < actualGames.Count; i++)
+            {
+                Assert.AreEqual(expectedWishItems[i].Game.Name, actualGames[i].Name);
+            }
+        }
     }
 }
