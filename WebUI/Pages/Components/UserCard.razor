@@ -1,0 +1,22 @@
+﻿@using ConestogaInsidersClub.Data.Models;
+
+<div class="border border-secondary rounded mr-3 mb-3 p-3 bg-light d-flex-column">
+    <span><b>@User.UserName</b></span>
+    <br />
+    <span>@User.FirstName @User.LastName</span>
+    <br />
+    <button onclick="@InvokeParentMethod">@ButtonText</button>
+</div>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; }
+
+    [Parameter]
+    public ApplicationUser User { get; set; }
+}
+
+@functions {
+    [Parameter]
+    public Action InvokeParentMethod { get; set; }
+}

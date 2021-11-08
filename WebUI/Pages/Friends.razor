@@ -1,6 +1,7 @@
 ﻿@page "/friends"
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.Components;
 
 @inject IUserService userService;
 
@@ -25,12 +26,16 @@ else
         }
         else
         {
-            @foreach (var friend in friends)
-            {
-                <div>
-                    <p>@friend.UserName</p>
-                </div>
-            }
+            <div class="d-inline-flex flex-wrap">
+                @foreach (var friend in friends)
+                {
+                    <UserCard 
+                        InvokeParentMethod="@(() => RemoveFriend(friend.Id))" 
+                        User="friend" 
+                        ButtonText="Remove Friend"
+                    />
+                }
+            </div>
         }
     }
     else
@@ -41,16 +46,16 @@ else
         }
         else
         {
-            @foreach (var possibleFriend in possibleFriends)
-            {
-                <div class="col-3 border border-secondary rounded mb-2 p-3 bg-light d-flex-column justify-content-center align-items-center">
-                    <span><b>@possibleFriend.UserName</b></span>
-                    <br />
-                    <span>@possibleFriend.FirstName @possibleFriend.LastName</span>
-                    <br />
-                    <button @onclick="() => AddFriend(possibleFriend.Id)">Add a friend</button>
-                </div>
-            }
+            <div class="d-inline-flex flex-wrap">
+                @foreach (var possibleFriend in possibleFriends)
+                {
+                    <UserCard 
+                        InvokeParentMethod="@(() => AddFriend(possibleFriend.Id))" 
+                        User="possibleFriend" 
+                        ButtonText="Add friend"
+                    />
+                }
+            </div>
         }
     }
 }
@@ -89,6 +94,12 @@ else
     private async void AddFriend(string userId)
     {
         await userService.CreateFriendship(currentUser.Id, userId);
+        StateHasChanged();
+    }
+
+    private async void RemoveFriend(string userId)
+    {
+        await userService.DeleteFriendship(currentUser.Id, userId);
         StateHasChanged();
     }
 }
