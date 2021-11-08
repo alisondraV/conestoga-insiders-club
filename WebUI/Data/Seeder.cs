@@ -7,6 +7,8 @@ namespace ConestogaInsidersClub.Data
     public class Seeder
     {
         static GameGenre genre;
+        static Game game;
+        static Address address;
         static ApplicationDbContext context;
         static IdentityRole adminRole;
         static IdentityRole userRole;
@@ -19,9 +21,10 @@ namespace ConestogaInsidersClub.Data
             ClearDatabase();
             SeedUserRoles();
             SeedApplicationUsers();
+            SeedAddresses();
             SeedGameGenres();
-            SeedPreferences();
             SeedGames();
+            SeedPreferences();
         }
 
         private static void SeedUserRoles()
@@ -60,7 +63,10 @@ namespace ConestogaInsidersClub.Data
                 Email = "user@example.com",
                 NormalizedEmail = "USER@EXAMPLE.COM",
                 EmailConfirmed = true,
+                PhoneNumber = "2136547890",
                 PhoneNumberConfirmed = true,
+                BirthDay = System.DateTime.Now.AddYears(-25),
+                Address = address
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
@@ -74,6 +80,7 @@ namespace ConestogaInsidersClub.Data
                 Email = "admin@example.com",
                 NormalizedEmail = "ADMIN@EXAMPLE.COM",
                 EmailConfirmed = true,
+                PhoneNumber = "1299947890",
                 PhoneNumberConfirmed = true,
             };
             admin.PasswordHash = hasher.HashPassword(admin, "Qweqwe1!");
@@ -93,6 +100,21 @@ namespace ConestogaInsidersClub.Data
             context.SaveChanges();
         }
 
+        private static void SeedAddresses()
+        {
+            address = new Address
+            {
+                UserId = user.Id,
+                Address1 = "123 Main St",
+                City = "Kitchener",
+                Province = "ON",
+                Country = "Canada"
+            };
+
+            context.Add(address);
+            context.SaveChanges();
+        }
+
         private static void SeedGameGenres()
         {
             genre = new GameGenre
@@ -104,20 +126,10 @@ namespace ConestogaInsidersClub.Data
             context.SaveChanges();
         }
 
-        private static void SeedPreferences()
-        {
-            context.Add(new Preference
-            {
-                Genre = genre,
-                Platform = "Windows",
-                UserId = user.Id
-            });
-            context.SaveChanges();
-        }
 
         private static void SeedGames()
         {
-            var game = new Game
+            game = new Game
             {
                 Name = "Portal",
                 Description = "Teleporting game",
@@ -127,7 +139,19 @@ namespace ConestogaInsidersClub.Data
 
             context.Add(game);
             context.SaveChanges();
+        }
 
+        private static void SeedPreferences()
+        {
+            context.Add(new Preference
+            {
+                Genre = genre,
+                Platform = "Windows",
+                ReceivePromotionalEmails = false,
+                FavouriteGame = game,
+                UserId = user.Id
+            });
+            context.SaveChanges();
         }
 
         private static void ClearDatabase()
@@ -137,6 +161,7 @@ namespace ConestogaInsidersClub.Data
             context.RemoveRange(context.Games);
             context.RemoveRange(context.Friendships);
             context.RemoveRange(context.UserRoles);
+            context.RemoveRange(context.Addresses);
             context.RemoveRange(context.Users);
             context.RemoveRange(context.Roles);
         }
