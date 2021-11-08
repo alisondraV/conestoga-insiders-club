@@ -134,5 +134,28 @@ namespace ServiceTests
             var friendships = await context.Friendships.ToListAsync();
             Assert.IsEmpty(friendships);
         }
+
+        [Test, Order(7)]
+        public async Task GetCards_ListsAllCreditCardsThatTheUserHas()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+
+            var expectedCards = await SeedEntities(new Card
+            {
+                UserId = targetUser.Id,
+            },
+            new Card { 
+            UserId = targetUser.Id });
+
+            // Act
+            var actualCards = await service.GetCards(targetUser.Id);
+
+            // Assert
+            Assert.That(actualCards, Has.Count.EqualTo(expectedCards.Count));
+            Assert.IsTrue(actualCards.All(c => c != null));
+        }
     }
 }
