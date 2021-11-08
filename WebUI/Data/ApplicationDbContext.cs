@@ -59,7 +59,7 @@ namespace ConestogaInsidersClub.Data
                     .HasForeignKey(u => u.ShippingAddressId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
-            
+
             modelBuilder.Entity<Card>(entity =>
             {
                 entity.Property(e => e.CardNumber)

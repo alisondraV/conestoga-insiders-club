@@ -40,7 +40,7 @@ namespace ConestogaInsidersClub.Data.Models
         public int? ShippingAddressId { get; set; }
 
         public Address MailingAddress { get; set; }
-        
+
         public Address ShippingAddress { get; set; }
 
         public Preference Preference { get; set; }

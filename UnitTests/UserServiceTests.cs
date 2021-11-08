@@ -147,8 +147,10 @@ namespace ServiceTests
             {
                 UserId = targetUser.Id,
             },
-            new Card { 
-            UserId = targetUser.Id });
+            new Card
+            {
+                UserId = targetUser.Id
+            });
 
             // Act
             var actualCards = await service.GetCards(targetUser.Id);
