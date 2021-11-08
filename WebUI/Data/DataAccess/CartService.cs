@@ -23,9 +23,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task<int> GetCartCount(string userId)
         {
-            List<CartItem> items = await context.CartItems.Where(a => a.UserId == userId.ToString()).ToListAsync();
-            int total = items.Count();
-            return total;
+            return await context.CartItems.Where(a => a.UserId == userId).CountAsync();
         }
 
         public Task<List<CartItem>> GetCartItems(string userId)
