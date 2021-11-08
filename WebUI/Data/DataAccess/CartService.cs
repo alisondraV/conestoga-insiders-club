@@ -30,7 +30,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<List<CartItem>> GetCartItems(string userId)
         {
-            return context.CartItems.Where(a => a.UserId == userId.ToString()).ToListAsync();
+            return context.CartItems.Where(a => a.UserId == userId).ToListAsync();
         }
 
         public async Task RemoveCartItem(CartItem item)
