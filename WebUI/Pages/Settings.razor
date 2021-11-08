@@ -88,67 +88,7 @@ else
     <br />
     <br />
 
-    if (editAddressMode != true)
-    {
-        <h4>Mailing Address</h4>
-        <table>
-            <tr>
-                <td><b>Address:</b></td>
-                <td><span id="Address1">@(user.MailingAddress.Address1 ?? "Not set yet")</span></td>
-            </tr>
-            <tr>
-                <td><b>City:</b></td>
-                <td><span id="City">@(user.MailingAddress.City ?? "*Not set yet*")</span></td>
-            </tr>
-            <tr>
-                <td><b>Province:</b></td>
-                <td><span id="Province">@(user.MailingAddress.Province ?? "*Not set yet*")</span></td>
-            </tr>
-            <tr>
-                <td><b>Country:</b></td>
-                <td><span id="Country">@(user.MailingAddress.Country ?? "*Not set yet*")</span></td>
-            </tr>
-            <tr>
-                <td><b>Postal Code:</b></td>
-                <td><span id="Postal_Code">@(user.MailingAddress.PostalCode ?? "*Not set yet*")</span></td>
-            </tr>
-        </table>
-        <button @onclick="@FlipEditAddressMode">Edit</button>
-        <br />
-    }
-    else
-    {
-        <EditForm Model="@userViewModel" OnValidSubmit="@HandleAddressSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <h3>Edit Address</h3>
-            <table>
-                <tr>
-                    <td>Address:</td>
-                    <td><InputText id="Address1_Edit" @bind-Value="userViewModel.MailingAddress.Address1" /></td>
-                </tr>
-                <tr>
-                    <td>City:</td>
-                    <td><InputText id="City_Edit" @bind-Value="userViewModel.MailingAddress.City" /></td>
-                </tr>
-                <tr>
-                    <td>Province:</td>
-                    <td><InputText id="Province_Edit" @bind-Value="userViewModel.MailingAddress.Province" /></td>
-                </tr>
-                <tr>
-                    <td>Country:</td>
-                    <td><InputText id="Country_Edit" @bind-Value="userViewModel.MailingAddress.Country" /></td>
-                </tr>
-                <tr>
-                    <td>Postal Code:</td>
-                    <td><InputText id="Postal_Code_Edit" @bind-Value="userViewModel.MailingAddress.PostalCode" /></td>
-                </tr>
-            </table>
-            <br />
-            <button type="submit">Save</button>
-        </EditForm>
-    }
+    <AddressForm address="user.MailingAddress" onSave="@HandleAddressSubmit" />
 }
 
 @code {
@@ -184,21 +124,15 @@ else
         StateHasChanged();
     }
 
-    private async void HandleAddressSubmit()
+    private async void HandleAddressSubmit(Address newAddress)
     {
+        userViewModel.MailingAddress = newAddress;
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
-        FlipEditAddressMode();
-        StateHasChanged();
     }
 
     private void FlipEditPreferenceMode()
     {
         editPreferenceMode = !editPreferenceMode;
-    }
-
-    private void FlipEditAddressMode()
-    {
-        editAddressMode = !editAddressMode;
     }
 }

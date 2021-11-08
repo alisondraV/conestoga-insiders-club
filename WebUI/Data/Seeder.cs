@@ -19,9 +19,9 @@ namespace ConestogaInsidersClub.Data
         {
             Seeder.context = context;
             ClearDatabase();
+            SeedAddresses();
             SeedUserRoles();
             SeedApplicationUsers();
-            SeedAddresses();
             SeedGameGenres();
             SeedGames();
             SeedPreferences();
