@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ConestogaInsidersClub.Data.Models;
+using ConestogaInsidersClub.Data;
+using System;
 
 namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
 {
@@ -23,17 +25,20 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -66,6 +71,11 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [DataType(DataType.Date)]
+            [Display(Name = "Birthday")]
+            public DateTime Birthday { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -94,12 +104,16 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     UserName = Input.UserName,
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName
+                    LastName = Input.LastName,
+                    BirthDay = Input.Birthday
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    await _context.AddAsync(new Address { UserId = user.Id });
+                    await _context.AddAsync(new Preference { UserId = user.Id });
+                    await _context.SaveChangesAsync();
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

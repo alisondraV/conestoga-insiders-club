@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    interface IGameGenreService
+    public interface IGameGenreService
     {
         Task<List<GameGenre>> GetGameGenres();
     }
