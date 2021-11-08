@@ -35,8 +35,13 @@ namespace ConestogaInsidersClub.Data.Models
 
         public Gender? Gender { get; set; }
 
-        public virtual Address MailingAddress { get; set; }
-        public virtual Address ShippingAddress { get; set; }
+        public int? MailingAddressId { get; set; }
+
+        public int? ShippingAddressId { get; set; }
+
+        public Address MailingAddress { get; set; }
+        
+        public Address ShippingAddress { get; set; }
 
         public Preference Preference { get; set; }
 

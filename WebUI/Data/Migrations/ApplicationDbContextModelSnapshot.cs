@@ -110,7 +110,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("MailingAddressAddressId")
+                    b.Property<int?>("MailingAddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("NormalizedEmail")
@@ -133,7 +133,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShippingAddressAddressId")
+                    b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -145,7 +145,7 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MailingAddressAddressId");
+                    b.HasIndex("MailingAddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -155,7 +155,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("ShippingAddressAddressId");
+                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -178,13 +178,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CardId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Card");
+                    b.ToTable("Cards");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.CartItem", b =>
@@ -562,13 +564,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.HasOne("ConestogaInsidersClub.Data.Models.Address", "MailingAddress")
                         .WithMany("MailingUsers")
-                        .HasForeignKey("MailingAddressAddressId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MailingAddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.Address", "ShippingAddress")
                         .WithMany("ShippingUsers")
-                        .HasForeignKey("ShippingAddressAddressId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("MailingAddress");
 

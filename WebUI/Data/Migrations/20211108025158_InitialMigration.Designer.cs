@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConestogaInsidersClub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211108012122_AddCreditCardTableAndOtherUserProperties")]
-    partial class AddCreditCardTableAndOtherUserProperties
+    [Migration("20211108025158_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,11 +24,10 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasMaxLength(450)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("user_id");
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .HasMaxLength(50)
@@ -66,8 +65,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("varchar(2)")
                         .HasColumnName("province");
 
-                    b.HasKey("UserId")
-                        .HasName("PK__addresse__5CF1C59A90B364F3");
+                    b.HasKey("AddressId");
 
                     b.ToTable("addresses");
                 });
@@ -114,6 +112,9 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -134,6 +135,9 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShippingAddressId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -143,6 +147,8 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MailingAddressId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -150,6 +156,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -172,13 +180,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CardId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Card");
+                    b.ToTable("Cards");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.CartItem", b =>
@@ -552,15 +562,21 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
+            modelBuilder.Entity("ConestogaInsidersClub.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
-                        .WithOne("Address")
-                        .HasForeignKey("ConestogaInsidersClub.Data.Models.Address", "UserId")
-                        .HasConstraintName("FK_users_TO_addresses")
-                        .IsRequired();
+                    b.HasOne("ConestogaInsidersClub.Data.Models.Address", "MailingAddress")
+                        .WithMany("MailingUsers")
+                        .HasForeignKey("MailingAddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("UserIdNavigation");
+                    b.HasOne("ConestogaInsidersClub.Data.Models.Address", "ShippingAddress")
+                        .WithMany("ShippingUsers")
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("MailingAddress");
+
+                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Card", b =>
@@ -766,10 +782,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
+                {
+                    b.Navigation("MailingUsers");
+
+                    b.Navigation("ShippingUsers");
+                });
+
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Address");
-
                     b.Navigation("Cards");
 
                     b.Navigation("CartItems");

@@ -30,6 +30,7 @@ namespace ConestogaInsidersClub.Data
         public virtual DbSet<Preference> Preferences { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<WishedItem> WishedItems { get; set; }
+        public virtual DbSet<Card> Cards { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -50,11 +51,13 @@ namespace ConestogaInsidersClub.Data
 
                 entity.HasOne(e => e.MailingAddress)
                     .WithMany(a => a.MailingUsers)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(u => u.MailingAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(e => e.ShippingAddress)
                     .WithMany(a => a.ShippingUsers)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(u => u.ShippingAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
             
             modelBuilder.Entity<Card>(entity =>
@@ -62,8 +65,13 @@ namespace ConestogaInsidersClub.Data
                 entity.Property(e => e.CardNumber)
                     .HasMaxLength(16);
 
+                entity.Property(e => e.UserId)
+                    .IsUnicode(true)
+                    .HasMaxLength(450);
+
                 entity.HasOne(e => e.User)
                     .WithMany(u => u.Cards)
+                    .HasForeignKey(u => u.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
