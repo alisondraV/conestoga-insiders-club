@@ -41,14 +41,12 @@ namespace ServiceTests
             testUser = await SeedEntities(
                 new ApplicationUser()
                 {
-                    Id = "d123",
+                    Id = "d125",
                     UserName = "test",
                     NormalizedUserName = "TEST",
                     Email = "test@user.com"
                 }
             );
-
-            await context.Set<ApplicationUser>().AddAsync(testUser);
 
             CartItem cartItem = new CartItem { GameId = testGame.GameId, UserId = testUser.Id };
             await context.Set<CartItem>().AddAsync(cartItem);
