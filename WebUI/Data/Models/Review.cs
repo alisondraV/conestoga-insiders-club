@@ -24,7 +24,7 @@ namespace ConestogaInsidersClub.Data.Models
         [StringLength(512)]
         public string Description { get; set; }
         [Column("approved")]
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         [ForeignKey(nameof(GameId))]
         [InverseProperty("Reviews")]
