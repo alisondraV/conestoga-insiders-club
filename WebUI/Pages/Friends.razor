@@ -28,7 +28,7 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var friend in friends)
                 {
-                    <UserCard OnClick="@(() => RemoveFriend(friend.Id))"
+                    <UserCard OnClick="() => RemoveFriend(friend.Id)"
                               User="friend"
                               ButtonText="Remove Friend" />
                 }
@@ -48,7 +48,7 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var possibleFriend in possibleFriends)
                 {
-                    <UserCard OnClick="@(() => AddFriend(possibleFriend.Id))"
+                    <UserCard OnClick="() => AddFriend(possibleFriend.Id)"
                               User="possibleFriend"
                               ButtonText="Add friend" />
                 }
@@ -107,13 +107,10 @@ else
     {
         string searchQuery = (string)args.Value;
 
-        if (searchQuery == "")
+        possibleFriends = await GetPossibleFriends();
+        if (searchQuery != "")
         {
-            possibleFriends = await GetPossibleFriends();
-        }
-        else
-        {
-            possibleFriends = (await GetPossibleFriends())
+            possibleFriends = possibleFriends
                 .FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
         }
         StateHasChanged();
