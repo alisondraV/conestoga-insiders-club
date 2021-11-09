@@ -5,7 +5,7 @@
     <br />
     <span>@User.FirstName @User.LastName</span>
     <br />
-    <button onclick="@InvokeParentMethod">@ButtonText</button>
+    <button onclick="@OnClick">@ButtonText</button>
 </div>
 
 @code {
@@ -18,5 +18,5 @@
 
 @functions {
     [Parameter]
-    public Action InvokeParentMethod { get; set; }
+    public Action OnClick { get; set; }
 }

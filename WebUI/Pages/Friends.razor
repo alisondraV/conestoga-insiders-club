@@ -3,11 +3,10 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 
 @inject IUserService userService;
-@inject NavigationManager NavigationManager;
 
 <h1>Friends</h1>
 
-@if (currentUser == null)
+@if (currentUser == null || friends == null || possibleFriends == null)
 {
     <h3>Loading...</h3>
 }
@@ -29,7 +28,7 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var friend in friends)
                 {
-                    <UserCard InvokeParentMethod="@(() => RemoveFriend(friend.Id))"
+                    <UserCard OnClick="@(() => RemoveFriend(friend.Id))"
                               User="friend"
                               ButtonText="Remove Friend" />
                 }
@@ -49,7 +48,7 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var possibleFriend in possibleFriends)
                 {
-                    <UserCard InvokeParentMethod="@(() => AddFriend(possibleFriend.Id))"
+                    <UserCard OnClick="@(() => AddFriend(possibleFriend.Id))"
                               User="possibleFriend"
                               ButtonText="Add friend" />
                 }
@@ -72,25 +71,15 @@ else
         authenticationState = await AuthenticationState;
         currentUser = await userService.GetUser(authenticationState.User.Identity.Name);
         friends = await userService.GetFriends(currentUser);
-
         possibleFriends = await GetPossibleFriends();
     }
 
     private async Task<List<ApplicationUser>> GetPossibleFriends()
     {
-        var pf = new List<ApplicationUser> { };
         var users = await userService.GetUsers();
         var friendsIds = friends.Select(u => u.Id).ToList();
 
-        foreach (var user in users)
-        {
-            if (user.Id != currentUser.Id && !friendsIds.Contains(user.Id))
-            {
-                pf.Add(user);
-            }
-        }
-
-        return pf;
+        return users.Where(u => u.Id != currentUser.Id && !friendsIds.Contains(u.Id)).ToList();
     }
 
     private void SwitchToFriendsTab(bool isFriendsTab)
@@ -101,16 +90,20 @@ else
     private async void AddFriend(string userId)
     {
         await userService.CreateFriendship(currentUser.Id, userId);
-        NavigationManager.NavigateTo("friends", true);
+        friends = await userService.GetFriends(currentUser);
+        possibleFriends = await GetPossibleFriends();
+        StateHasChanged();
     }
 
     private async void RemoveFriend(string userId)
     {
         await userService.DeleteFriendship(currentUser.Id, userId);
-        NavigationManager.NavigateTo("friends", true);
+        friends = await userService.GetFriends(currentUser);
+        possibleFriends = await GetPossibleFriends();
+        StateHasChanged();
     }
 
-    private async void LookForUser(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    private async void LookForUser(ChangeEventArgs args)
     {
         string searchQuery = (string)args.Value;
 
@@ -120,7 +113,8 @@ else
         }
         else
         {
-            possibleFriends = possibleFriends.FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
+            possibleFriends = (await GetPossibleFriends())
+                .FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
         }
         StateHasChanged();
     }
