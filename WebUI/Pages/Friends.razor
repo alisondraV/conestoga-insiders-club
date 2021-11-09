@@ -70,8 +70,7 @@ else
     {
         authenticationState = await AuthenticationState;
         currentUser = await userService.GetUser(authenticationState.User.Identity.Name);
-        friends = await userService.GetFriends(currentUser);
-        possibleFriends = await GetPossibleFriends();
+        await RefreshFriends();
     }
 
     private async Task<List<ApplicationUser>> GetPossibleFriends()
@@ -90,14 +89,17 @@ else
     private async void AddFriend(string userId)
     {
         await userService.CreateFriendship(currentUser.Id, userId);
-        friends = await userService.GetFriends(currentUser);
-        possibleFriends = await GetPossibleFriends();
-        StateHasChanged();
+        await RefreshFriends();
     }
 
     private async void RemoveFriend(string userId)
     {
         await userService.DeleteFriendship(currentUser.Id, userId);
+        await RefreshFriends();
+    }
+
+    private async Task RefreshFriends()
+    {
         friends = await userService.GetFriends(currentUser);
         possibleFriends = await GetPossibleFriends();
         StateHasChanged();
