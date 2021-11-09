@@ -1,44 +1,116 @@
 ﻿@page "/profile"
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
 
-@inject IUserService db;
+@inject IUserService userService;
 
 <h1>Profile</h1>
 <br />
 
-
-@if (authenticationState == null || user == null)
+@if (user == null)
 {
     <h3>Loading...</h3>
-} 
-else
+}
+else if (editMode != true)
 {
     <table>
         <tr>
-            <td width="100px"><b>Username:</b></td>
-            <td><span id="UserName">@authenticationState.User.Identity.Name</span></td>
+            <td><b>Username:</b></td>
+            <td><span id="UserName">@user.UserName</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Full Name:</b></td>
+            <td><b>Full Name:</b></td>
             <td><span id="Full_Name">@user.FirstName @user.LastName</span></td>
         </tr>
         <tr>
-            <td width="100px"><b>Email:</b></td>
+            <td><b>Email:</b></td>
             <td><span id="Email">@user.Email</span></td>
         </tr>
+        <tr>
+            <td><b>BirthDay:</b></td>
+            <td><span id="BirthDay">@user.BirthDay.ToLongDateString()</span></td>
+        </tr>
+        <tr>
+            <td><b>Phone Number:</b></td>
+            <td><span id="Phone_Number">@(user.PhoneNumber ?? "Not set yet")</span></td>
+        </tr>
     </table>
+    <br />
+    <button @onclick="@FlipEditMode">Edit</button>
+}
+else
+{
+    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h3>Edit Information</h3>
+        <br />
+        <table>
+            <tr>
+                <td>UserName:</td>
+                <td><InputText disabled="true" id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td><InputText id="First_Name_Edit" @bind-Value="userViewModel.FirstName" /></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><InputText id="Last_Name_Edit" @bind-Value="userViewModel.LastName" /></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><InputText id="Email_Edit" @bind-Value="userViewModel.Email" /></td>
+            </tr>
+            <tr>
+                <td>BirthDay:</td>
+                <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
+            </tr>
+            <tr>
+                <td>PhoneNumber:</td>
+                <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
+            </tr>
+        </table>
+        <br />
+        <button type="submit">Save</button>
+    </EditForm>
 }
 
-    @code {
-        [CascadingParameter]
-        private Task<AuthenticationState> AuthenticationState { get; set; }
-        private AuthenticationState authenticationState;
-        private ApplicationUser user;
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    private AuthenticationState authenticationState;
+    private ApplicationUser user;
+    private string userName;
+    private UserVM userViewModel = new UserVM();
+    private bool editMode = false;
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationState;
+        user = await userService.GetUser(authenticationState.User.Identity.Name);
+        userName = user.UserName;
+
+        userViewModel = UserVM.ToViewModel(user);
+    }
+
+    private async void HandleValidSubmit()
+    {
+        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        await userService.UpdateUser(updatedUser);
+        FlipEditMode();
+        StateHasChanged();
+
+        if (userName != updatedUser.UserName)
         {
-            authenticationState = await AuthenticationState;
-            user = await db.GetUser(authenticationState.User.Identity.Name);
+            @* TODO: Log out the user when the username is updated *@
         }
     }
+
+    private void FlipEditMode()
+    {
+        editMode = !editMode;
+    }
+}

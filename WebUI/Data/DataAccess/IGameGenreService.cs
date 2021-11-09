@@ -1,12 +1,13 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    interface IPreferenceService
+    public interface IGameGenreService
     {
-        Task<Preference> GetPreference(string userName);
-        Task UpdatePreference(Preference preference);
+        Task<List<GameGenre>> GetGameGenres();
     }
 }

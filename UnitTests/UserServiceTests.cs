@@ -17,10 +17,16 @@ namespace ServiceTests
         [OneTimeSetUp]
         public async Task BeforeAll()
         {
+            var address = new Address
+            {
+                Address1 = "1 King St."
+            };
+
             expectedUsers = await SeedEntities(
                 new ApplicationUser()
                 {
                     UserName = "Foo",
+                    MailingAddress = address,
                 },
                 new ApplicationUser()
                 {
@@ -80,6 +86,24 @@ namespace ServiceTests
             Assert.AreEqual(newUserName, updatedUser.UserName);
         }
 
+        [Test, Order(3)]
+        public async Task UpdateUser_UpdatesTheAddressOfAnExistingUser()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+            var expectedAddress1 = "1 Queen St.";
+
+            // Act
+            targetUser.MailingAddress.Address1 = expectedAddress1;
+            await service.UpdateUser(targetUser);
+            var updatedUser = await context.Users.FindAsync(targetUser.Id);
+
+            // Assert
+            Assert.AreEqual(expectedAddress1, updatedUser.MailingAddress.Address1);
+        }
+
         [Test, Order(4)]
         public async Task CreateFriendship_CreatesAFriendshipBetween2Users()
         {
@@ -133,6 +157,31 @@ namespace ServiceTests
             // Assert
             var friendships = await context.Friendships.ToListAsync();
             Assert.IsEmpty(friendships);
+        }
+
+        [Test, Order(7)]
+        public async Task GetCards_ListsAllCreditCardsThatTheUserHas()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+
+            var expectedCards = await SeedEntities(new Card
+            {
+                UserId = targetUser.Id,
+            },
+            new Card
+            {
+                UserId = targetUser.Id
+            });
+
+            // Act
+            var actualCards = await service.GetCards(targetUser.Id);
+
+            // Assert
+            Assert.That(actualCards, Has.Count.EqualTo(expectedCards.Count));
+            Assert.IsTrue(actualCards.All(c => c != null));
         }
     }
 }

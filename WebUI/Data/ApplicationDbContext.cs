@@ -30,6 +30,7 @@ namespace ConestogaInsidersClub.Data
         public virtual DbSet<Preference> Preferences { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<WishedItem> WishedItems { get; set; }
+        public virtual DbSet<Card> Cards { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,13 +44,39 @@ namespace ConestogaInsidersClub.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.Property(e => e.Gender)
+                    .HasConversion<int>();
+
+                entity.HasOne(e => e.MailingAddress)
+                    .WithMany(a => a.MailingUsers)
+                    .HasForeignKey(u => u.MailingAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.ShippingAddress)
+                    .WithMany(a => a.ShippingUsers)
+                    .HasForeignKey(u => u.ShippingAddressId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Card>(entity =>
+            {
+                entity.Property(e => e.CardNumber)
+                    .HasMaxLength(16);
+
+                entity.Property(e => e.UserId)
+                    .IsUnicode(true)
+                    .HasMaxLength(450);
+
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Cards)
+                    .HasForeignKey(u => u.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             modelBuilder.Entity<Address>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PK__addresse__5CF1C59A90B364F3");
-
-                entity.Property(e => e.UserId).IsUnicode(true);
-
                 entity.Property(e => e.Address1).IsUnicode(false);
 
                 entity.Property(e => e.Address2).IsUnicode(false);
@@ -61,12 +88,6 @@ namespace ConestogaInsidersClub.Data
                 entity.Property(e => e.PostalCode).IsUnicode(false);
 
                 entity.Property(e => e.Province).IsUnicode(false);
-
-                entity.HasOne(d => d.UserIdNavigation)
-                    .WithOne(p => p.Address)
-                    .HasForeignKey<Address>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_addresses");
             });
 
             modelBuilder.Entity<CartItem>(entity =>
