@@ -12,8 +12,7 @@ namespace ServiceTests
 {
     class CartServiceTest : TestBase
     {
-        private Game testGame;
-        private Game testGame2;
+        private List<Game> testGames;
         private ApplicationUser testUser;
 
         [OneTimeSetUp]
@@ -22,21 +21,19 @@ namespace ServiceTests
 
             using var context = new ApplicationDbContext(ContextOptions);
 
-            testGame = new Game()
-            {
-                GameId = 1,
-                Name = "Age of Empires IV",
-                Description = "RTS Game"
-            };
-            await context.Set<Game>().AddAsync(testGame);
-
-            testGame2 = new Game()
-            {
-                GameId = 2,
-                Name = "Assassin's Creed Unity",
-                Description = "Action game"
-            };
-            await context.Set<Game>().AddAsync(testGame2);
+            testGames = await SeedEntities(
+                new Game()
+                {
+                    GameId = 1,
+                    Name = "Age of Empires IV",
+                    Description = "RTS Game"
+                },
+                new Game()
+                {
+                    GameId = 2,
+                    Name = "Assassin's Creed Unity",
+                    Description = "Action game"
+                });
 
             testUser = await SeedEntities(
                 new ApplicationUser()
@@ -48,8 +45,12 @@ namespace ServiceTests
                 }
             );
 
-            CartItem cartItem = new CartItem { GameId = testGame.GameId, UserId = testUser.Id };
-            await context.Set<CartItem>().AddAsync(cartItem);
+            CartItem cartItem = await SeedEntities(
+                new CartItem 
+                { 
+                    GameId = testGames[0].GameId,
+                    UserId = testUser.Id 
+                });
 
             await context.SaveChangesAsync();
         }
@@ -77,7 +78,7 @@ namespace ServiceTests
             var service = new CartService(context);
             CartItem cartItem = new CartItem()
             {
-                GameId = testGame2.GameId,
+                GameId = testGames[1].GameId,
                 UserId = testUser.Id
             };
             // Act
@@ -109,10 +110,14 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new CartService(context);
-            CartItem cartItem = new CartItem { GameId = testGame.GameId, UserId = testUser.Id };
+            CartItem cartItem = new CartItem 
+            { 
+                GameId = testGames[0].GameId,
+                UserId = testUser.Id 
+            };
             CartItem cartItem2 = new CartItem()
             {
-                GameId = testGame2.GameId,
+                GameId = testGames[1].GameId,
                 UserId = testUser.Id
             };
             // Act

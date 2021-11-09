@@ -22,13 +22,13 @@ namespace ServiceTests
 
             using var context = new ApplicationDbContext(ContextOptions);
 
-            testGame = new Game()
-            {
-                GameId = 1,
-                Name = "Age of Empires IV",
-                Description = "RTS Game"
-            };
-            await context.Set<Game>().AddAsync(testGame);
+            testGame = await SeedEntities(
+                new Game
+                {
+                    GameId = 1,
+                    Name = "Age of Empires IV",
+                    Description = "RTS Game"
+                });
 
             users = await SeedEntities(
                 new ApplicationUser()
@@ -47,15 +47,15 @@ namespace ServiceTests
                 }
             );
 
-            testReview = new Review()
-            {
-                GameId = testGame.GameId,
-                UserId = users[0].Id,
-                Rating = 5,
-                Description = "good game",
-                Approved = null
-            };
-            await context.Set<Review>().AddAsync(testReview);
+            testReview = await SeedEntities(
+                new Review()
+                {
+                    GameId = testGame.GameId,
+                    UserId = users[0].Id,
+                    Rating = 5,
+                    Description = "good game",
+                    Approved = null
+                });
 
             await context.SaveChangesAsync();
         }
