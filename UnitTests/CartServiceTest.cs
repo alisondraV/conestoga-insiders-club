@@ -46,10 +46,10 @@ namespace ServiceTests
             );
 
             CartItem cartItem = await SeedEntities(
-                new CartItem 
-                { 
+                new CartItem
+                {
                     GameId = testGames[0].GameId,
-                    UserId = testUser.Id 
+                    UserId = testUser.Id
                 });
 
             await context.SaveChangesAsync();
@@ -110,10 +110,10 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new CartService(context);
-            CartItem cartItem = new CartItem 
-            { 
+            CartItem cartItem = new CartItem
+            {
                 GameId = testGames[0].GameId,
-                UserId = testUser.Id 
+                UserId = testUser.Id
             };
             CartItem cartItem2 = new CartItem()
             {
