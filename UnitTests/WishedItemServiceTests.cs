@@ -30,7 +30,12 @@ namespace ServiceTests
                 Game = new Game
                 {
                     GameId = 1,
-                    Name = "Portal"
+                    Name = "Portal",
+                    Description = "asd",
+                    GenreNavigation = new GameGenre
+                    {
+                        Name = "Indie"
+                    }
                 }
             }, new WishedItem
             {
@@ -38,13 +43,23 @@ namespace ServiceTests
                 Game = new Game
                 {
                     GameId = 2,
-                    Name = "GTA"
+                    Name = "GTA",
+                    Description = "asdas",
+                    GenreNavigation = new GameGenre
+                    {
+                        Name = "Action"
+                    }
                 }
             });
 
             newGame = await SeedEntities(new Game
             {
-                Name = "CS:GO"
+                Name = "CS:GO",
+                Description = "asdasaa",
+                GenreNavigation = new GameGenre
+                {
+                    Name = "Shooter"
+                }
             });
         }
 

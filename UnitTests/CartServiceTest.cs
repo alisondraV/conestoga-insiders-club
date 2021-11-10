@@ -21,18 +21,26 @@ namespace ServiceTests
 
             using var context = new ApplicationDbContext(ContextOptions);
 
+            var genre = await SeedEntities(new GameGenre
+            {
+                Name = "Indie"
+            });
+
             testGames = await SeedEntities(
                 new Game()
                 {
                     GameId = 1,
                     Name = "Age of Empires IV",
-                    Description = "RTS Game"
+                    Description = "RTS Game",
+                    Genre = genre.Name
                 },
                 new Game()
                 {
                     GameId = 2,
                     Name = "Assassin's Creed Unity",
-                    Description = "Action game"
+                    Description = "Action game",
+                    Genre = genre.Name
+                    
                 });
 
             testUser = await SeedEntities(
