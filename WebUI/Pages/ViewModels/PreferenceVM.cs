@@ -25,10 +25,10 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public Preference ToModel(Preference preference)
         {
-            preference.GenreName = this.GenreName == "" ? null : this.GenreName;
-            preference.Platform = this.Platform;
-            preference.ReceivePromotionalEmails = this.ReceivePromotionalEmails;
-            preference.FavouriteGameId = this.FavouriteGameId;
+            preference.GenreName = GenreName == "" ? null : GenreName;
+            preference.Platform = Platform;
+            preference.ReceivePromotionalEmails = ReceivePromotionalEmails;
+            preference.FavouriteGameId = FavouriteGameId;
 
             return preference;
         }

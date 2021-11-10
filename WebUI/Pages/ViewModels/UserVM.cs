@@ -48,14 +48,14 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public ApplicationUser ToModel(ApplicationUser user)
         {
-            user.UserName = this.UserName;
-            user.FirstName = this.FirstName;
-            user.LastName = this.LastName;
-            user.Email = this.Email;
-            user.BirthDay = this.BirthDay;
-            user.PhoneNumber = this.PhoneNumber;
-            user.MailingAddress = this.MailingAddress;
-            user.ShippingAddress = this.ShippingAddress;
+            user.UserName = UserName;
+            user.FirstName = FirstName;
+            user.LastName = LastName;
+            user.Email = Email;
+            user.BirthDay = BirthDay;
+            user.PhoneNumber = PhoneNumber;
+            user.MailingAddress = MailingAddress;
+            user.ShippingAddress = ShippingAddress;
 
             return user;
         }
