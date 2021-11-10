@@ -38,7 +38,7 @@ else
                 <td><span id="Recieve_Promotions">@(preference.ReceivePromotionalEmails ?? false ? "Yes" : "No")</span></td>
             </tr>
         </table>
-        <button @onclick="@FlipEditPreferenceMode">Edit</button>
+        <button class="btn-primary rounded" @onclick="@FlipEditPreferenceMode">Edit</button>
     }
     else
     {
@@ -54,9 +54,9 @@ else
                         <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
                             <option value="">None</option>
                             @foreach (var genre in gameGenres)
-                                    {
+                            {
                                 <option value="@genre.Name">@genre.Name</option>
-                                    }
+                            }
                         </InputSelect>
                     </td>
                 </tr>
@@ -70,9 +70,9 @@ else
                         <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
                             <option value="">None</option>
                             @foreach (var game in games)
-                                    {
+                            {
                                 <option value="@game.GameId">@game.Name</option>
-                                    }
+                            }
                         </InputSelect>
                     </td>
                 </tr>
@@ -81,7 +81,7 @@ else
                     <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
                 </tr>
             </table>
-            <button type="submit">Save</button>
+            <button class="btn-info  rounded" type="submit">Save</button>
         </EditForm>
     }
 

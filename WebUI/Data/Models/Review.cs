@@ -14,7 +14,7 @@ namespace ConestogaInsidersClub.Data.Models
         public int GameId { get; set; }
         public byte Rating { get; set; }
         public string Description { get; set; }
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         public Game Game { get; set; }
         public ApplicationUser User { get; set; }
