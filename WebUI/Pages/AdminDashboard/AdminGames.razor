@@ -13,50 +13,10 @@
 <button @onclick="@InitAdd">Add Game</button>
 <br />
 
-@* ---Add Game Section--- *@
-@if (addGame == true)
+@* ---Game Form--- *@
+@if (showForm)
 {
-    <EditForm Model="@adminGameViewModel" OnValidSubmit="@AddGameValidSubmit">
-        <br />
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <br />
-        <h3>Create New Game</h3>
-        <br />
-        <table>
-            <tr>
-                <td>Name:</td>
-                <td><InputText id="Game_Name_Add" @bind-Value="adminGameViewModel.Name" /></td>
-            </tr>
-            <tr>
-                <td>Description:</td>
-                <td><InputText id="Game_Description_Add" @bind-Value="adminGameViewModel.Description" /></td>
-            </tr>
-            <tr>
-                <td>Price:</td>
-                <td><InputNumber id="Game_Price_Add" @bind-Value="adminGameViewModel.Price" /></td>
-            </tr>
-            <tr>
-                <td>Genre:</td>
-                <td>
-                    <InputSelect id="Game_Genre_Add" @bind-Value="adminGameViewModel.Genre">
-                        <option value="">None</option>
-                        @foreach (var genre in gameGenres)
-                            {
-                            <option value="@genre.Name">@genre.Name</option>
-                            }
-                    </InputSelect>
-                </td>
-            </tr>
-        </table>
-        <br />
-        <button type="submit">Save</button>
-    </EditForm>
-}
-@* ---Edit Game Section--- *@
-else if (editGame == true)
-{
-    <EditForm Model="@adminGameViewModel" OnValidSubmit="@EditGameValidSubmit">
+    <EditForm Model="@adminGameViewModel" OnValidSubmit="@HandleFormSubmit">
         <br />
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -91,11 +51,11 @@ else if (editGame == true)
         </table>
         <br />
         <button class="btn btn-primary" type="submit">Save</button>
-        <button class="btn btn-secondary" @onclick="@ToggleEditGameForm">Cancel</button>
+        <button class="btn btn-secondary" @onclick="@ToggleGameForm">Cancel</button>
     </EditForm>
 }
 @* --- Display Game List --- *@
-else if (games != null)
+else if (games != null && games.Count != 0)
 {
     <div class="row" style="padding-top: 10px">
         @foreach (var game in games)
@@ -127,8 +87,8 @@ else
     private GameVM adminGameViewModel = new GameVM();
     private List<Game> games;
     private List<GameGenre> gameGenres;
-    private bool addGame = false;
-    private bool editGame = false;
+    private bool showForm = false;
+    private bool isAdd = true;
     #endregion
 
     //Initializes game list and game genre list
@@ -144,23 +104,28 @@ else
     }
 
     #region CRUD Opperations
+    private async Task HandleFormSubmit()
+    {
+        await (isAdd ? AddGameValidSubmit() : EditGameValidSubmit());
+    }
+
     //Adds new game to DB
-    private async void AddGameValidSubmit()
+    private async Task AddGameValidSubmit()
     {
         Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.AddGame(createGame);
         await FetchGames();
-        ToggleAddGameForm();
+        ToggleGameForm();
         StateHasChanged();
     }
 
     //Handles edit operations to selected game record
-    private async void EditGameValidSubmit()
+    private async Task EditGameValidSubmit()
     {
         Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.UpdateGame(updateGame);
         await FetchGames();
-        ToggleEditGameForm();
+        ToggleGameForm();
         StateHasChanged();
     }
 
@@ -174,29 +139,25 @@ else
 
     private void InitEdit(Game game)
     {
+        isAdd = false;
         selectedGame = game;
         adminGameViewModel = GameVM.ToViewModel(game);
-        ToggleEditGameForm();
+        ToggleGameForm();
     }
 
     private void InitAdd()
     {
+        isAdd = true;
         selectedGame = new Game();
         adminGameViewModel = GameVM.ToViewModel(selectedGame);
-        ToggleAddGameForm();
+        ToggleGameForm();
     }
 
     #region Visibility Toggles
     //Toggles visibility of "Add Game" form
-    private void ToggleAddGameForm()
+    private void ToggleGameForm()
     {
-        addGame = !addGame;
-    }
-
-    //Toggles visibilityt of "Edit Game" form
-    private void ToggleEditGameForm()
-    {
-        editGame = !editGame;
+        showForm = !showForm;
     }
     #endregion
 }
