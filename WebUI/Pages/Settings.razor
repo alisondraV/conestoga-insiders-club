@@ -1,149 +1,81 @@
 ﻿@page "/settings"
-@using ConestogaInsidersClub.Data.Models;
-@using ConestogaInsidersClub.Data.DataAccess;
-@using ConestogaInsidersClub.Pages.ViewModels;
-
-@inject IPreferenceService preferenceService;
-@inject IGameService gameService;
-@inject IGameGenreService gameGenreService;
-@inject IUserService userService;
-@inject NavigationManager NavigationManager;
 
 <h1>Settings</h1>
 <br />
 
-@if (user == null)
+@if (preference == null || gameGenres == null || games == null)
 {
     <h3>Loading...</h3>
 }
+else if (editPreferenceMode != true)
+{
+    <h4>Preferences</h4>
+    <table>
+        <tr>
+            <td><b>Your favourite genre:</b></td>
+            <td><span id="Genre">@(preference.GenreName ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Your favourite platform:</b></td>
+            <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Your favourite game:</b></td>
+            <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Recieve promotional email:</b></td>
+            <td><span id="Recieve_Promotions">@(preference.ReceivePromotionalEmails ?? false ? "Yes" : "No")</span></td>
+        </tr>
+    </table>
+    <button class="btn-primary rounded mb-5 mt-2" @onclick="@FlipEditPreferenceMode">Edit</button>
+}
 else
 {
-    if (editPreferenceMode != true)
-    {
-        <h4>Preferences</h4>
+    <EditForm Model="@preferenceViewModel" OnValidSubmit="@HandlePreferenceSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h3>Edit Preferences</h3>
         <table>
             <tr>
-                <td><b>Your favourite genre:</b></td>
-                <td><span id="Genre">@(preference.GenreName ?? "*Not set yet*")</span></td>
+                <td>Your favourite genre:</td>
+                <td>
+                    <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
+                        <option value="">None</option>
+                        @foreach (var genre in gameGenres)
+                            {
+                            <option value="@genre.Name">@genre.Name</option>
+                            }
+                    </InputSelect>
+                </td>
             </tr>
             <tr>
-                <td><b>Your favourite platform:</b></td>
-                <td><span id="Platform">@(preference.Platform ?? "*Not set yet*")</span></td>
+                <td>Your favourite platform:</td>
+                <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
             </tr>
             <tr>
-                <td><b>Your favourite game:</b></td>
-                <td><span id="Favourite_Game">@(preference.FavouriteGame?.Name ?? "*Not set yet*")</span></td>
+                <td>Your favourite game:</td>
+                <td>
+                    <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
+                        <option value="">None</option>
+                        @foreach (var game in games)
+                            {
+                            <option value="@game.GameId">@game.Name</option>
+                            }
+                    </InputSelect>
+                </td>
             </tr>
             <tr>
-                <td><b>Recieve promotional email:</b></td>
-                <td><span id="Recieve_Promotions">@(preference.ReceivePromotionalEmails ?? false ? "Yes" : "No")</span></td>
+                <td>Do you wish to recieve promotions?</td>
+                <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
             </tr>
         </table>
-        <button class="btn-primary rounded mb-5 mt-2" @onclick="@FlipEditPreferenceMode">Edit</button>
-    }
-    else
-    {
-        <EditForm Model="@preferenceViewModel" OnValidSubmit="@HandlePreferenceSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <h3>Edit Preferences</h3>
-            <table>
-                <tr>
-                    <td>Your favourite genre:</td>
-                    <td>
-                        <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
-                            <option value="">None</option>
-                            @foreach (var genre in gameGenres)
-                                    {
-                                <option value="@genre.Name">@genre.Name</option>
-                                    }
-                        </InputSelect>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Your favourite platform:</td>
-                    <td><InputText id="Platform_Edit" @bind-Value="preferenceViewModel.Platform" /></td>
-                </tr>
-                <tr>
-                    <td>Your favourite game:</td>
-                    <td>
-                        <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
-                            <option value="">None</option>
-                            @foreach (var game in games)
-                                    {
-                                <option value="@game.GameId">@game.Name</option>
-                                    }
-                        </InputSelect>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Do you wish to recieve promotions?</td>
-                    <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
-                </tr>
-            </table>
-            <button class="btn-info rounded mb-5 mt-2" type="submit">Save</button>
-        </EditForm>
-    }
-    <AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
-    <AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
-    <br />
-    <button class="btn-link rounded mb-lg-5 w-25" @onclick="GoToCreditCardPage">Update credit card info</button>
+        <button class="btn-info rounded mb-5 mt-2" type="submit">Save</button>
+    </EditForm>
 }
 
-@code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationState { get; set; }
-    private AuthenticationState authenticationState;
-    private ApplicationUser user;
-    private Preference preference;
-    private List<Game> games;
-    private List<GameGenre> gameGenres;
-    private UserVM userViewModel = new UserVM();
-    private PreferenceVM preferenceViewModel = new PreferenceVM();
-    private bool editPreferenceMode = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        authenticationState = await AuthenticationState;
-        user = await userService.GetUser(authenticationState.User.Identity.Name);
-        preference = await preferenceService.GetPreference(user.UserName);
-        games = await gameService.GetGames();
-        gameGenres = await gameGenreService.GetGameGenres();
-
-        userViewModel = UserVM.ToViewModel(user);
-        preferenceViewModel = PreferenceVM.ToViewModel(preference);
-    }
-
-    private async void HandlePreferenceSubmit()
-    {
-        Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
-        await preferenceService.UpdatePreference(updatedPreference);
-        FlipEditPreferenceMode();
-        StateHasChanged();
-    }
-
-    private async void HandleMailingAddressSubmit(Address newAddress)
-    {
-        userViewModel.MailingAddress = newAddress;
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
-        await userService.UpdateUser(updatedUser);
-    }
-
-    private async void HandleShippingAddressSubmit(Address newAddress)
-    {
-        userViewModel.ShippingAddress = newAddress;
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
-        await userService.UpdateUser(updatedUser);
-    }
-
-    private void GoToCreditCardPage()
-    {
-        NavigationManager.NavigateTo("credit-card");
-    }
-
-    private void FlipEditPreferenceMode()
-    {
-        editPreferenceMode = !editPreferenceMode;
-    }
-}
+<AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
+<AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
+<br />
+<button class="btn-link rounded mb-lg-5 w-25" @onclick="GoToCreditCardPage">Update credit card info</button>
