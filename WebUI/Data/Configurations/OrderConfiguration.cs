@@ -8,8 +8,6 @@ namespace ConestogaInsidersClub.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.HasKey(x => x.OrderId);
-
             builder.Property(e => e.UserId)
                 .HasMaxLength(450);
 

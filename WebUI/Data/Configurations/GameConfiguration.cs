@@ -8,8 +8,6 @@ namespace ConestogaInsidersClub.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Game> builder)
         {
-            builder.Property(e => e.GameId);
-
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
