@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using ConestogaInsidersClub.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 #nullable disable
 
@@ -23,7 +24,7 @@ namespace ConestogaInsidersClub.Data
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<CartItem> CartItems { get; set; }
         public virtual DbSet<Friendship> Friendships { get; set; }
-        public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<Game> Games { get; set; } 
         public virtual DbSet<GameGenre> GameGenres { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
@@ -42,6 +43,8 @@ namespace ConestogaInsidersClub.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<ApplicationUser>(entity =>
@@ -73,21 +76,6 @@ namespace ConestogaInsidersClub.Data
                     .WithMany(u => u.Cards)
                     .HasForeignKey(u => u.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<Address>(entity =>
-            {
-                entity.Property(e => e.Address1).IsUnicode(false);
-
-                entity.Property(e => e.Address2).IsUnicode(false);
-
-                entity.Property(e => e.City).IsUnicode(false);
-
-                entity.Property(e => e.Country).IsUnicode(false);
-
-                entity.Property(e => e.PostalCode).IsUnicode(false);
-
-                entity.Property(e => e.Province).IsUnicode(false);
             });
 
             modelBuilder.Entity<CartItem>(entity =>
