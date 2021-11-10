@@ -10,7 +10,7 @@
 <h1>Manage Games</h1>
 <p>CRUD tools for game creation and management.</p>
 
-<button @onclick="@ToggleAddGameForm">Add Game</button>
+<button @onclick="@InitAdd">Add Game</button>
 <br />
 
 @* ---Add Game Section--- *@
@@ -66,11 +66,11 @@ else if (editGame == true)
         <table>
             <tr>
                 <td>Name:</td>
-                <td><InputText id="Game_Name_Edit" @bind-Value="this.adminGameViewModel.Name" />@this.adminGameViewModel.Name</td>
+                <td><InputText id="Game_Name_Edit" @bind-Value="adminGameViewModel.Name" /></td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td><InputText id="Game_Description_Edit" @bind-Value="adminGameViewModel.Description" />@adminGameViewModel.Description</td>
+                <td><InputText id="Game_Description_Edit" @bind-Value="adminGameViewModel.Description" /></td>
             </tr>
             <tr>
                 <td>Price:</td>
@@ -105,7 +105,7 @@ else if (games != null)
                     <div class="card-body">
                         <h5 class="card-title">@game.Name</h5>
                         <p class="card-text">@game.Description</p>
-                        <button @onclick="@ToggleEditGameForm" class="btn btn-primary">Edit Game</button>
+                        <button @onclick="() => InitEdit(game)" class="btn btn-primary">Edit Game</button>
                         <button @onclick="() => HandleDelete(game)" class="btn btn-danger">Delete Game</button>
                     </div>
                 </div>
@@ -123,7 +123,7 @@ else
 @code {
 
     #region Declarations
-    private Game game = new Game();
+    private Game selectedGame = new Game();
     private GameVM adminGameViewModel = new GameVM();
     private List<Game> games;
     private List<GameGenre> gameGenres;
@@ -147,8 +147,9 @@ else
     //Adds new game to DB
     private async void AddGameValidSubmit()
     {
-        Game createGame = GameVM.ToModel(game, adminGameViewModel);
+        Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.AddGame(createGame);
+        await FetchGames();
         ToggleAddGameForm();
         StateHasChanged();
     }
@@ -156,8 +157,9 @@ else
     //Handles edit operations to selected game record
     private async void EditGameValidSubmit()
     {
-        Game updateGame = GameVM.ToModel(game, adminGameViewModel);
+        Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.UpdateGame(updateGame);
+        await FetchGames();
         ToggleEditGameForm();
         StateHasChanged();
     }
@@ -169,6 +171,20 @@ else
         StateHasChanged();
     }
     #endregion
+
+    private void InitEdit(Game game)
+    {
+        selectedGame = game;
+        adminGameViewModel = GameVM.ToViewModel(game);
+        ToggleEditGameForm();
+    }
+
+    private void InitAdd()
+    {
+        selectedGame = new Game();
+        adminGameViewModel = GameVM.ToViewModel(selectedGame);
+        ToggleAddGameForm();
+    }
 
     #region Visibility Toggles
     //Toggles visibility of "Add Game" form
