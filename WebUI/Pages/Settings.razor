@@ -105,7 +105,7 @@ else
     private List<Game> games;
     private List<GameGenre> gameGenres;
     private UserVM userViewModel;
-    private PreferenceVM preferenceViewModel = new PreferenceVM();
+    private PreferenceVM preferenceViewModel;
     private bool editPreferenceMode = false;
 
     protected override async Task OnInitializedAsync()
@@ -117,12 +117,12 @@ else
         gameGenres = await gameGenreService.GetGameGenres();
 
         userViewModel = new UserVM(user);
-        preferenceViewModel = PreferenceVM.ToViewModel(preference);
+        preferenceViewModel = new PreferenceVM(preference);
     }
 
     private async void HandlePreferenceSubmit()
     {
-        Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
+        Preference updatedPreference = preferenceViewModel.ToModel(preference);
         await preferenceService.UpdatePreference(updatedPreference);
         FlipEditPreferenceMode();
         StateHasChanged();
