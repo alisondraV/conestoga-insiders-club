@@ -94,16 +94,6 @@ else if (editGame == true)
         <button class="btn btn-secondary" @onclick="@ToggleEditGameForm">Cancel</button>
     </EditForm>
 }
-@* ---Delete Game Section--- *@
-else if (deleteGame == true)
-{
-    <br />
-    <h3>Delete Record</h3>
-    <p>Are you sure you wish to delete this record?</p>
-    @*TODO - Add Delete functionality*@
-    <button class="btn btn-danger">Delete Record</button>
-    <button  class="btn btn-secondary" @onclick="@ToggleDeleteGameForm">Cancel</button>
-}
 @* --- Display Game List --- *@
 else if (games != null)
 {
@@ -116,7 +106,7 @@ else if (games != null)
                         <h5 class="card-title">@game.Name</h5>
                         <p class="card-text">@game.Description</p>
                         <button @onclick="@ToggleEditGameForm" class="btn btn-primary">Edit Game</button>
-                        <button @onclick="@ToggleDeleteGameForm" class="btn btn-danger">Delete Game</button>
+                        <button @onclick="() => HandleDelete(game)" class="btn btn-danger">Delete Game</button>
                     </div>
                 </div>
             </div>
@@ -139,14 +129,18 @@ else
     private List<GameGenre> gameGenres;
     private bool addGame = false;
     private bool editGame = false;
-    private bool deleteGame = false;
     #endregion
 
     //Initializes game list and game genre list
     protected override async Task OnInitializedAsync()
     {
-        games = await gameService.GetGames();
+        await FetchGames();
         gameGenres = await gameGenreService.GetGameGenres();
+    }
+
+    private async Task FetchGames()
+    {
+        games = await gameService.GetGames();
     }
 
     #region CRUD Opperations
@@ -168,12 +162,10 @@ else
         StateHasChanged();
     }
 
-    //Handles delete operations to selected game record
-    private async void DeleteGameValidSubmit()
+    private async Task HandleDelete(Game game)
     {
-        Game deleteGame = GameVM.ToModel(game, adminGameViewModel);
-        await gameService.DeleteGame(deleteGame);
-        ToggleDeleteGameForm();
+        await gameService.DeleteGame(game);
+        await FetchGames();
         StateHasChanged();
     }
     #endregion
@@ -189,12 +181,6 @@ else
     private void ToggleEditGameForm()
     {
         editGame = !editGame;
-    }
-
-    //Toggles visibilityt of "Delete Game" form
-    private void ToggleDeleteGameForm()
-    {
-        deleteGame = !deleteGame;
     }
     #endregion
 }

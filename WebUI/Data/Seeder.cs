@@ -158,7 +158,7 @@ namespace ConestogaInsidersClub.Data
                 Genre = genre,
                 Platform = "Windows",
                 ReceivePromotionalEmails = false,
-                FavouriteGame = game,
+                //FavouriteGame = game,
                 UserId = user.Id
             });
             context.SaveChanges();
