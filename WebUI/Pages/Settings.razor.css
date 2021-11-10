@@ -6,6 +6,6 @@ td {
     width: 250px;
 }
 
-tr {
+tr, .credit {
     height: 40px;
 }

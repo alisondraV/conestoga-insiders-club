@@ -1,11 +1,12 @@
-﻿button {
+﻿button, td {
     width: 200px;
 }
 
-td {
-    width: 150px;
+button, tr {
+    height: 40px;
 }
 
-tr {
-    height: 40px;
+.btn-delete {
+    height: 30px;
+    width: 100px;
 }
