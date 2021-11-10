@@ -40,7 +40,7 @@ namespace ServiceTests
                     Name = "Assassin's Creed Unity",
                     Description = "Action game",
                     Genre = genre.Name
-                    
+
                 });
 
             testUser = await SeedEntities(
