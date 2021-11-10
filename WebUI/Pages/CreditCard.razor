@@ -8,54 +8,82 @@
 <h2>Credit Cards</h2>
 <br />
 
-@if (user == null)
+@if (editMode != true)
 {
-    <h3>Loading...</h3>
-}
-else if (editMode != true)
-{
-}
+    if (cards.Count != 0)
+    {
+        <table>
+            @foreach (var card in cards)
+            {
+                <tr>
+                    <td><b>Card Number :</b></td>
+                    <td><span id="Card_Number">@card.CardNumber</span></td>
+                </tr>
+                <tr>
+                    <td><b>Expiration Date:</b></td>
+                    <td><span id="Expiration_Date">@card.ExpirationYear/@card.ExpirationYear</span></td>
+                </tr>
+                <tr />
+            }
+        </table>
+        <button class="btn-primary rounded mt-2" @onclick="@FlipEditMode">Edit</button>
+    }
+    else
+    {
+        <p>You don't have any credit cards recorded, do you want to add one?</p>
+    }
+    <button class="btn-primary rounded mt-2" @onclick="@FlipEditMode">Add a credit card</button>
+    }
 else
 {
-    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@userViewModel" OnValidSubmit="@HandleCreditCardSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <h3>Edit Information</h3>
+        <h3>Edit Credit Cards</h3>
         <br />
         <table>
-            <tr>
-                <td>UserName:</td>
-                <td><InputText disabled="true" id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
-            </tr>
+            @foreach (var card in cards)
+            {
+                <tr>
+                    <td><b>Enter Card Number :</b></td>
+                    <td><InputText id="Card_Number_Edit" @bind-Value="userViewModel.Cards.First().CardNumber" /></td>
+                </tr>
+                <tr>
+                    <td><b>Expiration Month:</b></td>
+                    <td><InputNumber id="Card_Month_Edit" @bind-Value="userViewModel.Cards.First().ExpirationMonth" /></td>
+                </tr>
+                <tr>
+                    <td><b>Expiration Year:</b></td>
+                    <td><InputNumber id="Card_Year_Edit" @bind-Value="userViewModel.Cards.First().ExpirationYear" /></td>
+                </tr>
+                <tr />
+            }
         </table>
         <button class="btn-info rounded mt-2" type="submit">Save</button>
     </EditForm>
 }
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationState { get; set; }
-    private AuthenticationState authenticationState;
-    private ApplicationUser user;
-    private UserVM userViewModel = new UserVM();
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+    [CascadingParameter(Name = "userViewModel")]
+    private UserVM userViewModel { get; set; }
+
+private ICollection<Card> cards;
     private bool editMode = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        authenticationState = await AuthenticationState;
-        user = await userService.GetUser(authenticationState.User.Identity.Name);
-
-        userViewModel = UserVM.ToViewModel(user);
+        // TODO: create CardVM and card form component
+        cards = user.Cards;
     }
 
-    private async void HandleValidSubmit()
+    private void HandleCreditCardSubmit()
     {
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
-        await userService.UpdateUser(updatedUser);
-        FlipEditMode();
-        StateHasChanged();
+        userService.UpdateUser(user);
     }
+
     private void FlipEditMode()
     {
         editMode = !editMode;
