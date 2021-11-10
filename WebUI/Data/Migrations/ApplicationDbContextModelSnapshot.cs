@@ -238,8 +238,10 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Game", b =>
                 {
                     b.Property<int>("GameId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("game_id");
+                        .HasColumnName("game_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -290,8 +292,10 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("order_id");
+                        .HasColumnName("order_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime")

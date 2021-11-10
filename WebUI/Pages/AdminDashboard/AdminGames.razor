@@ -1,5 +1,200 @@
 ﻿@page "/manage-games"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IGameService gameService;
+@inject IGameGenreService gameGenreService;
 
 <h1>Manage Games</h1>
 <p>CRUD tools for game creation and management.</p>
+
+<button @onclick="@ToggleAddGameForm">Add Game</button>
+<br />
+
+@* ---Add Game Section--- *@
+@if (addGame == true)
+{
+    <EditForm Model="@adminGameViewModel" OnValidSubmit="@AddGameValidSubmit">
+        <br />
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <br />
+        <h3>Create New Game</h3>
+        <br />
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><InputText id="Game_Name_Add" @bind-Value="adminGameViewModel.Name" /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><InputText id="Game_Description_Add" @bind-Value="adminGameViewModel.Description" /></td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><InputNumber id="Game_Price_Add" @bind-Value="adminGameViewModel.Price" /></td>
+            </tr>
+            <tr>
+                <td>Genre:</td>
+                <td>
+                    <InputSelect id="Game_Genre_Add" @bind-Value="adminGameViewModel.Genre">
+                        <option value="">None</option>
+                        @foreach (var genre in gameGenres)
+                            {
+                            <option value="@genre.Name">@genre.Name</option>
+                            }
+                    </InputSelect>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <button type="submit">Save</button>
+    </EditForm>
+}
+@* ---Edit Game Section--- *@
+else if (editGame == true)
+{
+    <EditForm Model="@adminGameViewModel" OnValidSubmit="@EditGameValidSubmit">
+        <br />
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <br />
+        <h3>Edit Game</h3>
+        <br />
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><InputText id="Game_Name_Edit" @bind-Value="this.adminGameViewModel.Name" />@this.adminGameViewModel.Name</td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><InputText id="Game_Description_Edit" @bind-Value="adminGameViewModel.Description" />@adminGameViewModel.Description</td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><InputNumber id="Game_Price_Edit" @bind-Value="adminGameViewModel.Price" /></td>
+            </tr>
+            <tr>
+                <td>Genre:</td>
+                <td>
+                    <InputSelect id="Game_Genre_Edit" @bind-Value="adminGameViewModel.Genre">
+                        <option value="">None</option>
+                        @foreach (var genre in gameGenres)
+                            {
+                            <option value="@genre.Name">@genre.Name</option>
+                            }
+                    </InputSelect>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn btn-secondary" @onclick="@ToggleEditGameForm">Cancel</button>
+    </EditForm>
+}
+@* ---Delete Game Section--- *@
+else if (deleteGame == true)
+{
+    <br />
+    <h3>Delete Record</h3>
+    <p>Are you sure you wish to delete this record?</p>
+    @*TODO - Add Delete functionality*@
+    <button class="btn btn-danger">Delete Record</button>
+    <button  class="btn btn-secondary" @onclick="@ToggleDeleteGameForm">Cancel</button>
+}
+@* --- Display Game List --- *@
+else if (games != null)
+{
+    <div class="row" style="padding-top: 10px">
+        @foreach (var game in games)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@game.Name</h5>
+                        <p class="card-text">@game.Description</p>
+                        <button @onclick="@ToggleEditGameForm" class="btn btn-primary">Edit Game</button>
+                        <button @onclick="@ToggleDeleteGameForm" class="btn btn-danger">Delete Game</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No games available... create a new game!</h3>
+}
+
+
+@code {
+
+    #region Declarations
+    private Game game = new Game();
+    private GameVM adminGameViewModel = new GameVM();
+    private List<Game> games;
+    private List<GameGenre> gameGenres;
+    private bool addGame = false;
+    private bool editGame = false;
+    private bool deleteGame = false;
+    #endregion
+
+    //Initializes game list and game genre list
+    protected override async Task OnInitializedAsync()
+    {
+        games = await gameService.GetGames();
+        gameGenres = await gameGenreService.GetGameGenres();
+    }
+
+    #region CRUD Opperations
+    //Adds new game to DB
+    private async void AddGameValidSubmit()
+    {
+        Game createGame = GameVM.ToModel(game, adminGameViewModel);
+        await gameService.AddGame(createGame);
+        ToggleAddGameForm();
+        StateHasChanged();
+    }
+
+    //Handles edit operations to selected game record
+    private async void EditGameValidSubmit()
+    {
+        Game updateGame = GameVM.ToModel(game, adminGameViewModel);
+        await gameService.UpdateGame(updateGame);
+        ToggleEditGameForm();
+        StateHasChanged();
+    }
+
+    //Handles delete operations to selected game record
+    private async void DeleteGameValidSubmit()
+    {
+        Game deleteGame = GameVM.ToModel(game, adminGameViewModel);
+        await gameService.DeleteGame(deleteGame);
+        ToggleDeleteGameForm();
+        StateHasChanged();
+    }
+    #endregion
+
+    #region Visibility Toggles
+    //Toggles visibility of "Add Game" form
+    private void ToggleAddGameForm()
+    {
+        addGame = !addGame;
+    }
+
+    //Toggles visibilityt of "Edit Game" form
+    private void ToggleEditGameForm()
+    {
+        editGame = !editGame;
+    }
+
+    //Toggles visibilityt of "Delete Game" form
+    private void ToggleDeleteGameForm()
+    {
+        deleteGame = !deleteGame;
+    }
+    #endregion
+}

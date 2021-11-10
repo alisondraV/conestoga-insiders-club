@@ -134,7 +134,7 @@ namespace ConestogaInsidersClub.Data
 
             modelBuilder.Entity<Game>(entity =>
             {
-                entity.Property(e => e.GameId).ValueGeneratedNever();
+                entity.Property(e => e.GameId);
 
                 entity.Property(e => e.Description).IsUnicode(false);
 
@@ -159,7 +159,7 @@ namespace ConestogaInsidersClub.Data
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId).ValueGeneratedNever();
+                entity.Property(e => e.OrderId);
 
                 entity.Property(e => e.UserId).IsUnicode(true);
 

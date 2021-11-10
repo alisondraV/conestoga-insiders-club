@@ -1,4 +1,54 @@
 ﻿@page "/"
 @layout UnauthorizedPagesLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
 
-<h1>Games List</h1>
+@inject IGameService gameService;
+
+<h1>Conestoga Insiders Club</h1>
+<p>Below you can find a selection of our available games.</p>
+
+<hr />
+
+<h3>Games</h3>
+
+@*--- Display Game List ---*@
+@if (games != null)
+{
+    <div class="row" style="padding-top: 10px">
+        @foreach (var game in games)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@game.Name</h5>
+                        <p class="card-text">@game.Description</p>
+                        @*---TODO Add functionality to display expanded game details/options---*@
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No games available... =(</h3>
+}
+
+@code {
+
+    #region Declarations
+    private Game game = new Game();
+    private GameVM GameViewModel = new GameVM();
+    private List<Game> games;
+    #endregion
+
+    //Initializes game list and game genre list
+    protected override async Task OnInitializedAsync()
+    {
+        games = await gameService.GetGames();
+    }
+}

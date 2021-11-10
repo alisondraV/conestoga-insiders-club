@@ -129,7 +129,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    order_id = table.Column<int>(type: "int", nullable: false),
+                    order_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -148,7 +149,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "games",
                 columns: table => new
                 {
-                    game_id = table.Column<int>(type: "int", nullable: false),
+                    game_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     description = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     price = table.Column<double>(type: "float", nullable: false),
