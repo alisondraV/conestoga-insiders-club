@@ -6,7 +6,7 @@
 
 <h1>Friends</h1>
 
-@if (currentUser == null || friends == null || possibleFriends == null)
+@if (friends == null || possibleFriends == null)
 {
     <h3>Loading...</h3>
 }
@@ -58,18 +58,14 @@ else
 }
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationState { get; set; }
-    private AuthenticationState authenticationState;
-    private ApplicationUser currentUser;
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser currentUser { get; set; }
     private List<ApplicationUser> friends;
     private List<ApplicationUser> possibleFriends = new List<ApplicationUser> { };
     private bool friendsTab = true;
 
     protected override async Task OnInitializedAsync()
     {
-        authenticationState = await AuthenticationState;
-        currentUser = await userService.GetUser(authenticationState.User.Identity.Name);
         await RefreshFriends();
     }
 

@@ -7,6 +7,7 @@ namespace ConestogaInsidersClub.Data
 {
     public enum Gender
     {
+        NotSet,
         Male,
         Female,
         Other

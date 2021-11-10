@@ -1,0 +1,12 @@
+﻿button, td {
+    width: 200px;
+}
+
+button, tr {
+    height: 40px;
+}
+
+.btn-delete {
+    height: 30px;
+    width: 100px;
+}
