@@ -81,13 +81,12 @@ else
     protected override void OnInitialized()
     {
         cards = user.Cards;
-        cardsVM = CreditCardVM.ToViewModel(cards.Count == 0 ? new Card() : cards.First());
+        cardsVM = new CreditCardVM(cards.Count == 0 ? new Card() : cards.First());
     }
 
     private async void HandleCreditCardSubmit()
     {
-        Card updatedCard = CreditCardVM.ToModel(cardsVM);
-        user.Cards.Add(updatedCard);
+        user.Cards.Add(cardsVM.ToModel());
         await userService.UpdateUser(user);
         FlipEditMode();
         StateHasChanged();
@@ -95,7 +94,7 @@ else
 
     private void AddNewCard()
     {
-        cardsVM = CreditCardVM.ToViewModel(new Card());
+        cardsVM = new CreditCardVM(new Card());
         FlipEditMode();
     }
 

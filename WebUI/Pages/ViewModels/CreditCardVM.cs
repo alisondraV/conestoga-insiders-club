@@ -10,6 +10,13 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 {
     public class CreditCardVM
     {
+        public CreditCardVM(Card card)
+        {
+            CardNumber = card.CardNumber;
+            ExpirationYear = card.ExpirationYear;
+            ExpirationMonth = card.ExpirationMonth;
+        }
+
         [Required]
         [StringLength(16, MinimumLength = 16, ErrorMessage = "Credit Card Number should contain exactly 16 digits")]
         public string CardNumber { get; set; }
@@ -22,23 +29,13 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [Range(1, 12, ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public int ExpirationMonth { get; set; }
 
-        public static Card ToModel(CreditCardVM cardVM)
+        public Card ToModel()
         {
             return new Card
             {
-                CardNumber = cardVM.CardNumber,
-                ExpirationYear = cardVM.ExpirationYear,
-                ExpirationMonth = cardVM.ExpirationMonth
-            };
-        }
-
-        public static CreditCardVM ToViewModel(Card card)
-        {
-            return new CreditCardVM
-            {
-                CardNumber = card.CardNumber,
-                ExpirationYear = card.ExpirationYear,
-                ExpirationMonth = card.ExpirationMonth
+                CardNumber = this.CardNumber,
+                ExpirationYear = this.ExpirationYear,
+                ExpirationMonth = this.ExpirationMonth
             };
         }
     }
