@@ -257,7 +257,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     GameId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<byte>(type: "tinyint", nullable: false),
                     Description = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: true),
-                    Approved = table.Column<bool>(type: "bit", nullable: false)
+                    Approved = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
