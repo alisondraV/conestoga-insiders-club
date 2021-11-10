@@ -29,7 +29,7 @@ namespace ConestogaInsidersClub.Pages
         protected ApplicationUser user { get; set; }
         [CascadingParameter(Name = "userViewModel")]
         public UserVM userViewModel { get; set; }
-        
+
         public Preference preference;
         public List<Game> games;
         public List<GameGenre> gameGenres;
