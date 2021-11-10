@@ -29,14 +29,13 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [Range(1, 12, ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public int ExpirationMonth { get; set; }
 
-        public Card ToModel()
+        public Card ToModel(Card card)
         {
-            return new Card
-            {
-                CardNumber = this.CardNumber,
-                ExpirationYear = this.ExpirationYear,
-                ExpirationMonth = this.ExpirationMonth
-            };
+            card.CardNumber = CardNumber;
+            card.ExpirationYear = ExpirationYear;
+            card.ExpirationMonth = ExpirationMonth;
+
+            return card;
         }
     }
 }
