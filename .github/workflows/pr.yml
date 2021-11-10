@@ -18,4 +18,4 @@ jobs:
       - name: Install formatter
         run: dotnet tool install -g dotnet-format
       - name: Format solution
-        run: dotnet format --check
+        run: dotnet format --verify-no-changes
