@@ -27,6 +27,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [EmailAddress]
         public string Email { get; set; }
 
+        [Range(typeof(DateTime), "1/1/1920", "12/31/2010", ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime BirthDay { get; set; }
 
         [Phone]
