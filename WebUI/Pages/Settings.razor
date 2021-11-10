@@ -7,6 +7,7 @@
 @inject IGameService gameService;
 @inject IGameGenreService gameGenreService;
 @inject IUserService userService;
+@inject NavigationManager NavigationManager;
 
 <h1>Settings</h1>
 <br />
@@ -54,9 +55,9 @@ else
                         <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
                             <option value="">None</option>
                             @foreach (var genre in gameGenres)
-                            {
+                                    {
                                 <option value="@genre.Name">@genre.Name</option>
-                            }
+                                    }
                         </InputSelect>
                     </td>
                 </tr>
@@ -70,9 +71,9 @@ else
                         <InputSelect id="Favourite_Game_Edit" @bind-Value="preferenceViewModel.FavouriteGameId">
                             <option value="">None</option>
                             @foreach (var game in games)
-                            {
+                                    {
                                 <option value="@game.GameId">@game.Name</option>
-                            }
+                                    }
                         </InputSelect>
                     </td>
                 </tr>
@@ -86,6 +87,8 @@ else
     }
     <AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
     <AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
+    <br />
+    <button class="btn-link rounded mb-lg-5 w-25" @onclick="GoToCreditCardPage">Update credit card info</button>
 }
 
 @code {
@@ -132,6 +135,11 @@ else
         userViewModel.ShippingAddress = newAddress;
         ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
         await userService.UpdateUser(updatedUser);
+    }
+
+    private void GoToCreditCardPage()
+    {
+        NavigationManager.NavigateTo("credit-card");
     }
 
     private void FlipEditPreferenceMode()

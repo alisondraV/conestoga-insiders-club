@@ -1,0 +1,63 @@
+﻿@page "/credit-card"
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IUserService userService;
+
+<h2>Credit Cards</h2>
+<br />
+
+@if (user == null)
+{
+    <h3>Loading...</h3>
+}
+else if (editMode != true)
+{
+}
+else
+{
+    <EditForm Model="@userViewModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h3>Edit Information</h3>
+        <br />
+        <table>
+            <tr>
+                <td>UserName:</td>
+                <td><InputText disabled="true" id="UserName_Edit" @bind-Value="userViewModel.UserName" /></td>
+            </tr>
+        </table>
+        <button class="btn-info rounded mt-2" type="submit">Save</button>
+    </EditForm>
+}
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    private AuthenticationState authenticationState;
+    private ApplicationUser user;
+    private UserVM userViewModel = new UserVM();
+    private bool editMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationState;
+        user = await userService.GetUser(authenticationState.User.Identity.Name);
+
+        userViewModel = UserVM.ToViewModel(user);
+    }
+
+    private async void HandleValidSubmit()
+    {
+        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        await userService.UpdateUser(updatedUser);
+        FlipEditMode();
+        StateHasChanged();
+    }
+    private void FlipEditMode()
+    {
+        editMode = !editMode;
+    }
+}
