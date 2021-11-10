@@ -14,49 +14,26 @@ namespace ConestogaInsidersClub.Data.Models
         public ApplicationUser()
         {
             CartItems = new HashSet<CartItem>();
-            FriendshipUserId1Navigations = new HashSet<Friendship>();
-            FriendshipUserId2Navigations = new HashSet<Friendship>();
             Orders = new HashSet<Order>();
             Reviews = new HashSet<Review>();
             WishedItems = new HashSet<WishedItem>();
             Cards = new HashSet<Card>();
         }
 
-        [Column("first_name")]
-        [StringLength(50)]
         public string FirstName { get; set; }
-
-        [Column("last_name")]
-        [StringLength(50)]
         public string LastName { get; set; }
-
-        [Column("birthday")]
         public DateTime BirthDay { get; set; }
-
         public Gender? Gender { get; set; }
-
         public int? MailingAddressId { get; set; }
-
         public int? ShippingAddressId { get; set; }
-
         public Address MailingAddress { get; set; }
-
         public Address ShippingAddress { get; set; }
-
         public Preference Preference { get; set; }
 
-        [InverseProperty(nameof(CartItem.UserIdNavigation))]
-        public virtual ICollection<CartItem> CartItems { get; set; }
-        [InverseProperty(nameof(Friendship.UserId1Navigation))]
-        public virtual ICollection<Friendship> FriendshipUserId1Navigations { get; set; }
-        [InverseProperty(nameof(Friendship.UserId2Navigation))]
-        public virtual ICollection<Friendship> FriendshipUserId2Navigations { get; set; }
-        [InverseProperty(nameof(Order.UserIdNavigation))]
-        public virtual ICollection<Order> Orders { get; set; }
-        [InverseProperty(nameof(Review.UserIdNavigation))]
-        public virtual ICollection<Review> Reviews { get; set; }
-        [InverseProperty(nameof(WishedItem.UserIdNavigation))]
-        public virtual ICollection<WishedItem> WishedItems { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<Order> Orders { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<WishedItem> WishedItems { get; set; }
         public ICollection<Card> Cards { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConestogaInsidersClub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211108025158_InitialMigration")]
+    [Migration("20211110151926_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,42 +32,36 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("Address1")
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("address1");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Address2")
                         .HasMaxLength(25)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("address2");
+                        .HasColumnType("varchar(25)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("city");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Country")
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("country");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(10)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(10)")
-                        .HasColumnName("postal_code");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Province")
                         .HasMaxLength(2)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(2)")
-                        .HasColumnName("province");
+                        .HasColumnType("varchar(2)");
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("addresses");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.ApplicationUser", b =>
@@ -79,8 +73,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("BirthDay")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("birthday");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -95,16 +88,14 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("first_name");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("last_name");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -196,19 +187,16 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("user_id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GameId")
-                        .HasColumnType("int")
-                        .HasColumnName("game_id");
+                        .HasColumnType("int");
 
-                    b.HasKey("UserId", "GameId")
-                        .HasName("PK__cart_ite__B30FD466E5616F1B");
+                    b.HasKey("UserId", "GameId");
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("cart_items");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
@@ -216,21 +204,17 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("UserId1")
                         .HasMaxLength(450)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("user_id1");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId2")
                         .HasMaxLength(450)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("user_id2");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("date")
-                        .HasColumnName("created_at");
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("UserId1", "UserId2")
-                        .HasName("PK__friendsh__2EA53AFBF202847F");
+                    b.HasKey("UserId1", "UserId2");
 
                     b.HasIndex("UserId2");
 
@@ -240,8 +224,10 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Game", b =>
                 {
                     b.Property<int>("GameId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("game_id");
+                        .HasColumnName("game_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -292,8 +278,10 @@ namespace ConestogaInsidersClub.Data.Migrations
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("order_id");
+                        .HasColumnName("order_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime")
@@ -594,37 +582,33 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "Game")
                         .WithMany("CartItems")
                         .HasForeignKey("GameId")
-                        .HasConstraintName("FK_games_TO_cart_items")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserIdNavigation")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithMany("CartItems")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_users_TO_cart_items")
                         .IsRequired();
 
                     b.Navigation("Game");
 
-                    b.Navigation("UserIdNavigation");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
                 {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserId1Navigation")
-                        .WithMany("FriendshipUserId1Navigations")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User1")
+                        .WithMany()
                         .HasForeignKey("UserId1")
-                        .HasConstraintName("FK_users_TO_friendships")
                         .IsRequired();
 
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "UserId2Navigation")
-                        .WithMany("FriendshipUserId2Navigations")
+                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User2")
+                        .WithMany()
                         .HasForeignKey("UserId2")
-                        .HasConstraintName("FK_users_TO_friendships1")
                         .IsRequired();
 
-                    b.Navigation("UserId1Navigation");
+                    b.Navigation("User1");
 
-                    b.Navigation("UserId2Navigation");
+                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Game", b =>
@@ -794,10 +778,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("CartItems");
-
-                    b.Navigation("FriendshipUserId1Navigations");
-
-                    b.Navigation("FriendshipUserId2Navigations");
 
                     b.Navigation("Orders");
 

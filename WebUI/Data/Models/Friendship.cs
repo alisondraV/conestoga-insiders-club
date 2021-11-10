@@ -11,22 +11,11 @@ namespace ConestogaInsidersClub.Data.Models
     [Table("friendships")]
     public partial class Friendship
     {
-        [Key]
-        [Column("user_id1")]
-        [StringLength(450)]
         public string UserId1 { get; set; }
-        [Key]
-        [Column("user_id2")]
-        [StringLength(450)]
         public string UserId2 { get; set; }
-        [Column("created_at", TypeName = "date")]
         public DateTime CreatedAt { get; set; }
 
-        [ForeignKey(nameof(UserId1))]
-        [InverseProperty(nameof(ApplicationUser.FriendshipUserId1Navigations))]
-        public virtual ApplicationUser UserId1Navigation { get; set; }
-        [ForeignKey(nameof(UserId2))]
-        [InverseProperty(nameof(ApplicationUser.FriendshipUserId2Navigations))]
-        public virtual ApplicationUser UserId2Navigation { get; set; }
+        public ApplicationUser User1 { get; set; }
+        public ApplicationUser User2 { get; set; }
     }
 }

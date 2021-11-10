@@ -8,12 +8,17 @@ namespace ConestogaInsidersClub.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.Property(e => e.Address1).IsUnicode(false);
-            builder.Property(e => e.Address2).IsUnicode(false);
-            builder.Property(e => e.City).IsUnicode(false);
-            builder.Property(e => e.Country).IsUnicode(false);
-            builder.Property(e => e.PostalCode).IsUnicode(false);
-            builder.Property(e => e.Province).IsUnicode(false);
+            builder.Property(e => e.Address1).HasMaxLength(50).IsUnicode(false);
+
+            builder.Property(e => e.Address2).HasMaxLength(25).IsUnicode(false);
+
+            builder.Property(e => e.PostalCode).HasMaxLength(10).IsUnicode(false);
+
+            builder.Property(e => e.City).HasMaxLength(50).IsUnicode(false);
+
+            builder.Property(e => e.Province).HasMaxLength(2).IsUnicode(false);
+
+            builder.Property(e => e.Country).HasMaxLength(50).IsUnicode(false);
         }
     }
 }

@@ -10,10 +10,31 @@ namespace ConestogaInsidersClub.Data.Migrations
             migrationBuilder.AlterDatabase(
                 collation: "SQL_Latin1_General_CP1_CI_AS");
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "BirthDay",
+                table: "AspNetUsers",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "nvarchar(50)",
+                maxLength: 50,
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Gender",
                 table: "AspNetUsers",
                 type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                type: "nvarchar(50)",
+                maxLength: 50,
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
@@ -28,43 +49,22 @@ namespace ConestogaInsidersClub.Data.Migrations
                 type: "int",
                 nullable: true);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "birthday",
-                table: "AspNetUsers",
-                type: "datetime2",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<string>(
-                name: "first_name",
-                table: "AspNetUsers",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "last_name",
-                table: "AspNetUsers",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true);
-
             migrationBuilder.CreateTable(
-                name: "addresses",
+                name: "Addresses",
                 columns: table => new
                 {
                     AddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    address1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    address2 = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: true),
-                    city = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    province = table.Column<string>(type: "varchar(2)", unicode: false, maxLength: 2, nullable: true),
-                    country = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    postal_code = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true)
+                    Address1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    Address2 = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: true),
+                    City = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    Province = table.Column<string>(type: "varchar(2)", unicode: false, maxLength: 2, nullable: true),
+                    Country = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    PostalCode = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_addresses", x => x.AddressId);
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,22 +93,22 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "friendships",
                 columns: table => new
                 {
-                    user_id1 = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    user_id2 = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    created_at = table.Column<DateTime>(type: "date", nullable: false)
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    UserId2 = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__friendsh__2EA53AFBF202847F", x => new { x.user_id1, x.user_id2 });
+                    table.PrimaryKey("PK_friendships", x => new { x.UserId1, x.UserId2 });
                     table.ForeignKey(
-                        name: "FK_users_TO_friendships",
-                        column: x => x.user_id1,
+                        name: "FK_friendships_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_users_TO_friendships1",
-                        column: x => x.user_id2,
+                        name: "FK_friendships_AspNetUsers_UserId2",
+                        column: x => x.UserId2,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -129,7 +129,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    order_id = table.Column<int>(type: "int", nullable: false),
+                    order_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -148,7 +149,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "games",
                 columns: table => new
                 {
-                    game_id = table.Column<int>(type: "int", nullable: false),
+                    game_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     description = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     price = table.Column<double>(type: "float", nullable: false),
@@ -166,26 +168,26 @@ namespace ConestogaInsidersClub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "cart_items",
+                name: "CartItems",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    game_id = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    GameId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__cart_ite__B30FD466E5616F1B", x => new { x.user_id, x.game_id });
+                    table.PrimaryKey("PK_CartItems", x => new { x.UserId, x.GameId });
                     table.ForeignKey(
-                        name: "FK_games_TO_cart_items",
-                        column: x => x.game_id,
-                        principalTable: "games",
-                        principalColumn: "game_id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_users_TO_cart_items",
-                        column: x => x.user_id,
+                        name: "FK_CartItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CartItems_games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "games",
+                        principalColumn: "game_id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -314,14 +316,14 @@ namespace ConestogaInsidersClub.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cart_items_game_id",
-                table: "cart_items",
-                column: "game_id");
+                name: "IX_CartItems_GameId",
+                table: "CartItems",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_friendships_user_id2",
+                name: "IX_friendships_UserId2",
                 table: "friendships",
-                column: "user_id2");
+                column: "UserId2");
 
             migrationBuilder.CreateIndex(
                 name: "IX_games_genre",
@@ -359,38 +361,38 @@ namespace ConestogaInsidersClub.Data.Migrations
                 column: "game_id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_addresses_MailingAddressId",
+                name: "FK_AspNetUsers_Addresses_MailingAddressId",
                 table: "AspNetUsers",
                 column: "MailingAddressId",
-                principalTable: "addresses",
+                principalTable: "Addresses",
                 principalColumn: "AddressId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_addresses_ShippingAddressId",
+                name: "FK_AspNetUsers_Addresses_ShippingAddressId",
                 table: "AspNetUsers",
                 column: "ShippingAddressId",
-                principalTable: "addresses",
+                principalTable: "Addresses",
                 principalColumn: "AddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_addresses_MailingAddressId",
+                name: "FK_AspNetUsers_Addresses_MailingAddressId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_addresses_ShippingAddressId",
+                name: "FK_AspNetUsers_Addresses_ShippingAddressId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "addresses");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "Cards");
 
             migrationBuilder.DropTable(
-                name: "cart_items");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "friendships");
@@ -425,7 +427,19 @@ namespace ConestogaInsidersClub.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
+                name: "BirthDay",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
                 name: "Gender",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -434,18 +448,6 @@ namespace ConestogaInsidersClub.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "ShippingAddressId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "birthday",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "first_name",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "last_name",
                 table: "AspNetUsers");
 
             migrationBuilder.AlterDatabase(

@@ -43,82 +43,10 @@ namespace ConestogaInsidersClub.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<ApplicationUser>(entity =>
-            {
-                entity.Property(e => e.Gender)
-                    .HasConversion<int>();
-
-                entity.HasOne(e => e.MailingAddress)
-                    .WithMany(a => a.MailingUsers)
-                    .HasForeignKey(u => u.MailingAddressId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                entity.HasOne(e => e.ShippingAddress)
-                    .WithMany(a => a.ShippingUsers)
-                    .HasForeignKey(u => u.ShippingAddressId)
-                    .OnDelete(DeleteBehavior.NoAction);
-            });
-
-            modelBuilder.Entity<Card>(entity =>
-            {
-                entity.Property(e => e.CardNumber)
-                    .HasMaxLength(16);
-
-                entity.Property(e => e.UserId)
-                    .IsUnicode(true)
-                    .HasMaxLength(450);
-
-                entity.HasOne(e => e.User)
-                    .WithMany(u => u.Cards)
-                    .HasForeignKey(u => u.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<CartItem>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.GameId })
-                    .HasName("PK__cart_ite__B30FD466E5616F1B");
-
-                entity.Property(e => e.UserId).IsUnicode(true);
-
-                entity.HasOne(d => d.Game)
-                    .WithMany(p => p.CartItems)
-                    .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_games_TO_cart_items");
-
-                entity.HasOne(d => d.UserIdNavigation)
-                    .WithMany(p => p.CartItems)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_cart_items");
-            });
-
-            modelBuilder.Entity<Friendship>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId1, e.UserId2 })
-                    .HasName("PK__friendsh__2EA53AFBF202847F");
-
-                entity.Property(e => e.UserId1).IsUnicode(true);
-
-                entity.Property(e => e.UserId2).IsUnicode(true);
-
-                entity.HasOne(d => d.UserId1Navigation)
-                    .WithMany(p => p.FriendshipUserId1Navigations)
-                    .HasForeignKey(d => d.UserId1)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_friendships");
-
-                entity.HasOne(d => d.UserId2Navigation)
-                    .WithMany(p => p.FriendshipUserId2Navigations)
-                    .HasForeignKey(d => d.UserId2)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_users_TO_friendships1");
-            });
+            // runs all configurations (classes that implement IEntityTypeConfiguration<T>)
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.Entity<Game>(entity =>
             {
