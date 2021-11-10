@@ -11,8 +11,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasKey(e => e.Name);
 
             builder.Property(e => e.Name)
-                .HasMaxLength(25)
-                .IsUnicode(false);
+                .HasMaxLength(25);
         }
     }
 }

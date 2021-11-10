@@ -12,18 +12,15 @@ namespace ConestogaInsidersClub.Data.Configurations
 
             builder.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
+                .HasMaxLength(50);
 
             builder.Property(e => e.Description)
                 .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                .HasMaxLength(100);
 
             builder.Property(e => e.GenreName)
                 .IsRequired()
-                .HasMaxLength(25)
-                .IsUnicode(false);
+                .HasMaxLength(25);
 
             builder.HasOne(d => d.Genre)
                 .WithMany(p => p.Games)

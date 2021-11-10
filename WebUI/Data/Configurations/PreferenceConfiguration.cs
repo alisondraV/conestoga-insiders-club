@@ -11,8 +11,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasKey(e => e.UserId);
 
             builder.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .IsUnicode(true);
+                .HasMaxLength(450);
 
             builder.Property(e => e.Platform)
                 .HasMaxLength(50);

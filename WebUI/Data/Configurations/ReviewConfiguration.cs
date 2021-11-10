@@ -11,12 +11,10 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasKey(e => new { e.UserId, e.GameId });
 
             builder.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .IsUnicode(true);
+                .HasMaxLength(450);
 
             builder.Property(e => e.Description)
-                .HasMaxLength(512)
-                .IsUnicode(false);
+                .HasMaxLength(512);
 
             builder.HasOne(d => d.Game)
                 .WithMany(p => p.Reviews)

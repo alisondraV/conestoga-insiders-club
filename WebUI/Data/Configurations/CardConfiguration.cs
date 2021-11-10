@@ -12,7 +12,6 @@ namespace ConestogaInsidersClub.Data.Configurations
                     .HasMaxLength(16);
 
             builder.Property(e => e.UserId)
-                .IsUnicode(true)
                 .HasMaxLength(450);
 
             builder.HasOne(e => e.User)

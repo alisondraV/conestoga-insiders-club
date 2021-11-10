@@ -29,33 +29,27 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("Address1")
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Address2")
                         .HasMaxLength(25)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Country")
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Province")
                         .HasMaxLength(2)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("nvarchar(2)");
 
                     b.HasKey("AddressId");
 
@@ -170,7 +164,6 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CardId");
@@ -184,7 +177,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GameId")
@@ -201,12 +193,10 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("UserId1")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId2")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -229,20 +219,17 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("GenreName")
                         .IsRequired()
                         .HasMaxLength(25)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -258,8 +245,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(25)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Name");
 
@@ -278,7 +264,6 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId");
@@ -312,14 +297,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("FavouriteGameId")
                         .HasColumnType("int");
 
                     b.Property<string>("GenreName")
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Platform")
                         .HasMaxLength(25)
@@ -341,7 +325,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GameId")
@@ -352,8 +335,7 @@ namespace ConestogaInsidersClub.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<byte>("Rating")
                         .HasColumnType("tinyint");
@@ -369,7 +351,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GameId")

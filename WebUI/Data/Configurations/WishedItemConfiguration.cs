@@ -11,8 +11,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasKey(e => new { e.UserId, e.GameId });
 
             builder.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .IsUnicode(true);
+                .HasMaxLength(450);
 
             builder.HasOne(d => d.Game)
                 .WithMany(p => p.WishedItems)

@@ -10,9 +10,9 @@ namespace ConestogaInsidersClub.Data.Configurations
         {
             builder.HasKey(e => new { e.UserId1, e.UserId2 });
 
-            builder.Property(e => e.UserId1).HasMaxLength(450).IsUnicode(true);
+            builder.Property(e => e.UserId1).HasMaxLength(450);
 
-            builder.Property(e => e.UserId2).HasMaxLength(450).IsUnicode(true);
+            builder.Property(e => e.UserId2).HasMaxLength(450);
 
             builder.HasOne(d => d.User1)
                 .WithMany()

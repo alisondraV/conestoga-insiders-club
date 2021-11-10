@@ -55,12 +55,12 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     AddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Address1 = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    Address2 = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: true),
-                    City = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    Province = table.Column<string>(type: "varchar(2)", unicode: false, maxLength: 2, nullable: true),
-                    Country = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    PostalCode = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true)
+                    Address1 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address2 = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Province = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,7 +118,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "GameGenres",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,10 +151,10 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     GameId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    GenreName = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
+                    GenreName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -224,7 +224,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     Platform = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
                     ReceivePromotionalEmails = table.Column<bool>(type: "bit", nullable: true),
                     FavouriteGameId = table.Column<int>(type: "int", nullable: true),
-                    GenreName = table.Column<string>(type: "varchar(25)", nullable: true)
+                    GenreName = table.Column<string>(type: "nvarchar(25)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,7 +256,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     GameId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<byte>(type: "tinyint", nullable: false),
-                    Description = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     Approved = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
