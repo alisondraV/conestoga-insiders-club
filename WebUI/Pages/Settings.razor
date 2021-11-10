@@ -104,7 +104,7 @@ else
     private Preference preference;
     private List<Game> games;
     private List<GameGenre> gameGenres;
-    private UserVM userViewModel = new UserVM();
+    private UserVM userViewModel;
     private PreferenceVM preferenceViewModel = new PreferenceVM();
     private bool editPreferenceMode = false;
 
@@ -116,7 +116,7 @@ else
         games = await gameService.GetGames();
         gameGenres = await gameGenreService.GetGameGenres();
 
-        userViewModel = UserVM.ToViewModel(user);
+        userViewModel = new UserVM(user);
         preferenceViewModel = PreferenceVM.ToViewModel(preference);
     }
 
@@ -131,14 +131,14 @@ else
     private async void HandleMailingAddressSubmit(Address newAddress)
     {
         userViewModel.MailingAddress = newAddress;
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        ApplicationUser updatedUser = userViewModel.ToModel(user);
         await userService.UpdateUser(updatedUser);
     }
 
     private async void HandleShippingAddressSubmit(Address newAddress)
     {
         userViewModel.ShippingAddress = newAddress;
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        ApplicationUser updatedUser = userViewModel.ToModel(user);
         await userService.UpdateUser(updatedUser);
     }
 

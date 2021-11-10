@@ -6,6 +6,18 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 {
     public class UserVM
     {
+        public UserVM(ApplicationUser user)
+        {
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            UserName = user.UserName;
+            Email = user.Email;
+            BirthDay = user.BirthDay;
+            PhoneNumber = user.PhoneNumber;
+            MailingAddress = user.MailingAddress;
+            ShippingAddress = user.ShippingAddress;
+        }
+
         [Required]
         [MinLength(2, ErrorMessage = "FirstName name should be at least 2 characters long")]
         [MaxLength(50, ErrorMessage = "FirstName name is too long")]
@@ -34,33 +46,18 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public Address ShippingAddress { get; set; }
 
-        public static ApplicationUser ToModel(ApplicationUser user, UserVM userVM)
+        public ApplicationUser ToModel(ApplicationUser user)
         {
-            user.UserName = userVM.UserName;
-            user.FirstName = userVM.FirstName;
-            user.LastName = userVM.LastName;
-            user.Email = userVM.Email;
-            user.BirthDay = userVM.BirthDay;
-            user.PhoneNumber = userVM.PhoneNumber;
-            user.MailingAddress = userVM.MailingAddress;
-            user.ShippingAddress = userVM.ShippingAddress;
+            user.UserName = this.UserName;
+            user.FirstName = this.FirstName;
+            user.LastName = this.LastName;
+            user.Email = this.Email;
+            user.BirthDay = this.BirthDay;
+            user.PhoneNumber = this.PhoneNumber;
+            user.MailingAddress = this.MailingAddress;
+            user.ShippingAddress = this.ShippingAddress;
 
             return user;
-        }
-
-        public static UserVM ToViewModel(ApplicationUser user)
-        {
-            return new UserVM
-            {
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                BirthDay = user.BirthDay,
-                PhoneNumber = user.PhoneNumber,
-                MailingAddress = user.MailingAddress,
-                ShippingAddress = user.ShippingAddress
-            };
         }
     }
 }
