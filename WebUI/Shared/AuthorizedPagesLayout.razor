@@ -54,7 +54,7 @@
         authenticationState = await AuthenticationState;
         if (authenticationState.User.Identity.IsAuthenticated)
         {
-            user = await userService.GetUser(authenticationState.User.Identity.Name);
+            user = await userService.GetUserWithRelatedData(authenticationState.User.Identity.Name);
             userViewModel = UserVM.ToViewModel(user);
         }
     }
