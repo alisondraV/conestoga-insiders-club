@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ConestogaInsidersClub.Data;
 using ConestogaInsidersClub.Data.Models;
 
 namespace ConestogaInsidersClub.Pages.ViewModels
@@ -34,6 +36,10 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public Address ShippingAddress { get; set; }
 
+        public Gender? GenderName { get; set; }
+
+        public ICollection<Card> Cards { get; set; }
+
         public static ApplicationUser ToModel(ApplicationUser user, UserVM userVM)
         {
             user.UserName = userVM.UserName;
@@ -44,6 +50,8 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             user.PhoneNumber = userVM.PhoneNumber;
             user.MailingAddress = userVM.MailingAddress;
             user.ShippingAddress = userVM.ShippingAddress;
+            user.Gender = userVM.GenderName == Gender.NotSet ? null : userVM.GenderName;
+            user.Cards = userVM.Cards;
 
             return user;
         }
@@ -59,7 +67,9 @@ namespace ConestogaInsidersClub.Pages.ViewModels
                 BirthDay = user.BirthDay,
                 PhoneNumber = user.PhoneNumber,
                 MailingAddress = user.MailingAddress,
-                ShippingAddress = user.ShippingAddress
+                ShippingAddress = user.ShippingAddress,
+                GenderName = user.Gender,
+                Cards = user.Cards
             };
         }
     }

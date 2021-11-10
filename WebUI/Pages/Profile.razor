@@ -2,6 +2,7 @@
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
+@using ConestogaInsidersClub.Data;
 
 @inject IUserService userService;
 
@@ -33,7 +34,11 @@ else if (editMode != true)
         </tr>
         <tr>
             <td><b>Phone Number:</b></td>
-            <td><span id="Phone_Number">@(user.PhoneNumber ?? "Not set yet")</span></td>
+            <td><span id="Phone_Number">@(user.PhoneNumber ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Gender:</b></td>
+            <td><span id="Gender">@(user.Gender == null ? "*Not set yet*" : user.Gender)</span></td>
         </tr>
     </table>
     <br />
@@ -69,8 +74,19 @@ else
                 <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
             </tr>
             <tr>
-                <td>PhoneNumber:</td>
+                <td>Phone Number:</td>
                 <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <InputSelect id="Gender_Edit" @bind-Value="userViewModel.GenderName">
+                        @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                        {
+                            <option value="@gender">@gender</option>
+                        }
+                    </InputSelect>
+                </td>
             </tr>
         </table>
         <br />
