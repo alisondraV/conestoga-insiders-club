@@ -9,11 +9,7 @@
 <h1>Profile</h1>
 <br />
 
-@if (user == null)
-{
-    <h3>Loading...</h3>
-}
-else if (editMode != true)
+@if (editMode != true)
 {
     <table>
         <tr>
@@ -81,9 +77,9 @@ else
                 <td>
                     <InputSelect id="Gender_Edit" @bind-Value="userViewModel.GenderName">
                         @foreach (var gender in Enum.GetValues(typeof(Gender)))
-                        {
+                            {
                             <option value="@gender">@gender</option>
-                        }
+                            }
                     </InputSelect>
                 </td>
             </tr>
@@ -93,22 +89,11 @@ else
 }
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationState { get; set; }
-    private AuthenticationState authenticationState;
-    private ApplicationUser user;
-    private string userName;
-    private UserVM userViewModel = new UserVM();
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+    [CascadingParameter(Name = "userViewModel")]
+    private UserVM userViewModel { get; set; }
     private bool editMode = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        authenticationState = await AuthenticationState;
-        user = await userService.GetUser(authenticationState.User.Identity.Name);
-        userName = user.UserName;
-
-        userViewModel = UserVM.ToViewModel(user);
-    }
 
     private async void HandleValidSubmit()
     {
@@ -116,11 +101,6 @@ else
         await userService.UpdateUser(updatedUser);
         FlipEditMode();
         StateHasChanged();
-
-        if (userName != updatedUser.UserName)
-        {
-            @* TODO: Log out the user when the username is updated *@
-        }
     }
 
     private void FlipEditMode()

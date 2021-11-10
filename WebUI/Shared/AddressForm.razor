@@ -1,7 +1,11 @@
 ﻿@using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
 
-@if (editAddressMode != true)
+@if (address == null)
+{
+    <h3>Loading...</h3>
+}
+else if (editAddressMode != true)
 {
     <h4>@addressType Address</h4>
     <table>
