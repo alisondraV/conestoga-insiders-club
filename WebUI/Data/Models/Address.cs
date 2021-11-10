@@ -23,7 +23,7 @@ namespace ConestogaInsidersClub.Data.Models
         public string Province { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
-        
+
         public ICollection<ApplicationUser> ShippingUsers { get; set; }
         public ICollection<ApplicationUser> MailingUsers { get; set; }
     }

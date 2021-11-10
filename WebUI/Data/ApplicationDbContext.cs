@@ -24,7 +24,7 @@ namespace ConestogaInsidersClub.Data
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<CartItem> CartItems { get; set; }
         public virtual DbSet<Friendship> Friendships { get; set; }
-        public virtual DbSet<Game> Games { get; set; } 
+        public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<GameGenre> GameGenres { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
