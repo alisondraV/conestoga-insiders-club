@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConestogaInsidersClub.Data.Models
 {
-    [Table("games")]
     public partial class Game
     {
         public Game()
@@ -20,36 +19,17 @@ namespace ConestogaInsidersClub.Data.Models
             Preferences = new HashSet<Preference>();
         }
 
-        [Key]
-        [Column("game_id")]
         public int GameId { get; set; }
-        [Required]
-        [Column("name")]
-        [StringLength(50)]
         public string Name { get; set; }
-        [Required]
-        [Column("description")]
-        [StringLength(100)]
         public string Description { get; set; }
-        [Column("price")]
         public double Price { get; set; }
-        [Required]
-        [Column("genre")]
-        [StringLength(25)]
-        public string Genre { get; set; }
+        public string GenreName { get; set; }
 
+        public GameGenre Genre { get; set; }
         public ICollection<Preference> Preferences { get; set; }
-
-        [ForeignKey(nameof(Genre))]
-        [InverseProperty(nameof(GameGenre.Games))]
-        public virtual GameGenre GenreNavigation { get; set; }
-        [InverseProperty(nameof(CartItem.Game))]
-        public virtual ICollection<CartItem> CartItems { get; set; }
-        [InverseProperty(nameof(OrderItem.Game))]
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
-        [InverseProperty(nameof(Review.Game))]
-        public virtual ICollection<Review> Reviews { get; set; }
-        [InverseProperty(nameof(WishedItem.Game))]
-        public virtual ICollection<WishedItem> WishedItems { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<WishedItem> WishedItems { get; set; }
     }
 }

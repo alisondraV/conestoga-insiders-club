@@ -90,7 +90,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "friendships",
+                name: "Friendships",
                 columns: table => new
                 {
                     UserId1 = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
@@ -99,15 +99,15 @@ namespace ConestogaInsidersClub.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_friendships", x => new { x.UserId1, x.UserId2 });
+                    table.PrimaryKey("PK_Friendships", x => new { x.UserId1, x.UserId2 });
                     table.ForeignKey(
-                        name: "FK_friendships_AspNetUsers_UserId1",
+                        name: "FK_Friendships_AspNetUsers_UserId1",
                         column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_friendships_AspNetUsers_UserId2",
+                        name: "FK_Friendships_AspNetUsers_UserId2",
                         column: x => x.UserId2,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -115,55 +115,55 @@ namespace ConestogaInsidersClub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "game_genres",
+                name: "GameGenres",
                 columns: table => new
                 {
-                    name = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
+                    Name = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__game_gen__72E12F1AB1253DCF", x => x.name);
+                    table.PrimaryKey("PK_GameGenres", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
-                name: "orders",
+                name: "Orders",
                 columns: table => new
                 {
-                    order_id = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.order_id);
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_users_TO_orders",
-                        column: x => x.user_id,
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "games",
+                name: "Games",
                 columns: table => new
                 {
-                    game_id = table.Column<int>(type: "int", nullable: false)
+                    GameId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    description = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    price = table.Column<double>(type: "float", nullable: false),
-                    genre = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
+                    Name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    GenreName = table.Column<string>(type: "varchar(25)", unicode: false, maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_games", x => x.game_id);
+                    table.PrimaryKey("PK_Games", x => x.GameId);
                     table.ForeignKey(
-                        name: "FK_game_genres_TO_games",
-                        column: x => x.genre,
-                        principalTable: "game_genres",
-                        principalColumn: "name",
+                        name: "FK_Games_GameGenres_GenreName",
+                        column: x => x.GenreName,
+                        principalTable: "GameGenres",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -184,119 +184,119 @@ namespace ConestogaInsidersClub.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CartItems_games_GameId",
+                        name: "FK_CartItems_Games_GameId",
                         column: x => x.GameId,
-                        principalTable: "games",
-                        principalColumn: "game_id",
+                        principalTable: "Games",
+                        principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "order_items",
+                name: "OrderItems",
                 columns: table => new
                 {
-                    order_id = table.Column<int>(type: "int", nullable: false),
-                    game_id = table.Column<int>(type: "int", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false, defaultValueSql: "((1))")
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    GameId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValueSql: "((1))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__order_it__A9A773D52B4E4CFD", x => new { x.order_id, x.game_id });
+                    table.PrimaryKey("PK_OrderItems", x => new { x.OrderId, x.GameId });
                     table.ForeignKey(
-                        name: "FK_games_TO_order_items",
-                        column: x => x.game_id,
-                        principalTable: "games",
-                        principalColumn: "game_id",
+                        name: "FK_OrderItems_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_orders_TO_order_items",
-                        column: x => x.order_id,
-                        principalTable: "orders",
-                        principalColumn: "order_id",
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "preferences",
+                name: "Preferences",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    platform = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    receive_promotional_emails = table.Column<bool>(type: "bit", nullable: true),
-                    favourite_game_id = table.Column<int>(type: "int", nullable: true),
-                    genre = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    Platform = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    ReceivePromotionalEmails = table.Column<bool>(type: "bit", nullable: true),
+                    FavouriteGameId = table.Column<int>(type: "int", nullable: true),
+                    GenreName = table.Column<string>(type: "varchar(25)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__preferen__5CF1C59A3E97A739", x => x.user_id);
+                    table.PrimaryKey("PK_Preferences", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_game_genres_TO_preferences",
-                        column: x => x.genre,
-                        principalTable: "game_genres",
-                        principalColumn: "name",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_game_TO_preferences",
-                        column: x => x.favourite_game_id,
-                        principalTable: "games",
-                        principalColumn: "game_id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_preferences_AspNetUsers_user_id",
-                        column: x => x.user_id,
+                        name: "FK_Preferences_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "reviews",
-                columns: table => new
-                {
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    game_id = table.Column<int>(type: "int", nullable: false),
-                    rating = table.Column<byte>(type: "tinyint", nullable: false),
-                    description = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: true),
-                    approved = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__reviews__B30FD466087C2256", x => new { x.user_id, x.game_id });
                     table.ForeignKey(
-                        name: "FK_games_TO_reviews",
-                        column: x => x.game_id,
-                        principalTable: "games",
-                        principalColumn: "game_id",
+                        name: "FK_Preferences_GameGenres_GenreName",
+                        column: x => x.GenreName,
+                        principalTable: "GameGenres",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_users_TO_reviews",
-                        column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        name: "FK_Preferences_Games_FavouriteGameId",
+                        column: x => x.FavouriteGameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "wished_items",
+                name: "Reviews",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    game_id = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    GameId = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<byte>(type: "tinyint", nullable: false),
+                    Description = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: true),
+                    Approved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__wished_i__B30FD466E0DD1830", x => new { x.user_id, x.game_id });
+                    table.PrimaryKey("PK_Reviews", x => new { x.UserId, x.GameId });
                     table.ForeignKey(
-                        name: "FK_games_TO_wished_items",
-                        column: x => x.game_id,
-                        principalTable: "games",
-                        principalColumn: "game_id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_users_TO_wished_items",
-                        column: x => x.user_id,
+                        name: "FK_Reviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WishedItems",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    GameId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WishedItems", x => new { x.UserId, x.GameId });
+                    table.ForeignKey(
+                        name: "FK_WishedItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WishedItems_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -321,44 +321,44 @@ namespace ConestogaInsidersClub.Data.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_friendships_UserId2",
-                table: "friendships",
+                name: "IX_Friendships_UserId2",
+                table: "Friendships",
                 column: "UserId2");
 
             migrationBuilder.CreateIndex(
-                name: "IX_games_genre",
-                table: "games",
-                column: "genre");
+                name: "IX_Games_GenreName",
+                table: "Games",
+                column: "GenreName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_order_items_game_id",
-                table: "order_items",
-                column: "game_id");
+                name: "IX_OrderItems_GameId",
+                table: "OrderItems",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orders_user_id",
-                table: "orders",
-                column: "user_id");
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_preferences_favourite_game_id",
-                table: "preferences",
-                column: "favourite_game_id");
+                name: "IX_Preferences_FavouriteGameId",
+                table: "Preferences",
+                column: "FavouriteGameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_preferences_genre",
-                table: "preferences",
-                column: "genre");
+                name: "IX_Preferences_GenreName",
+                table: "Preferences",
+                column: "GenreName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_reviews_game_id",
-                table: "reviews",
-                column: "game_id");
+                name: "IX_Reviews_GameId",
+                table: "Reviews",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_wished_items_game_id",
-                table: "wished_items",
-                column: "game_id");
+                name: "IX_WishedItems_GameId",
+                table: "WishedItems",
+                column: "GameId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Addresses_MailingAddressId",
@@ -395,28 +395,28 @@ namespace ConestogaInsidersClub.Data.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "friendships");
+                name: "Friendships");
 
             migrationBuilder.DropTable(
-                name: "order_items");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "preferences");
+                name: "Preferences");
 
             migrationBuilder.DropTable(
-                name: "reviews");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "wished_items");
+                name: "WishedItems");
 
             migrationBuilder.DropTable(
-                name: "orders");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "games");
+                name: "Games");
 
             migrationBuilder.DropTable(
-                name: "game_genres");
+                name: "GameGenres");
 
             migrationBuilder.DropIndex(
                 name: "IX_AspNetUsers_MailingAddressId",

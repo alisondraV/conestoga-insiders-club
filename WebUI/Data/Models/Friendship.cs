@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConestogaInsidersClub.Data.Models
 {
-    [Table("friendships")]
     public partial class Friendship
     {
         public string UserId1 { get; set; }

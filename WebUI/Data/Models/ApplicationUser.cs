@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ConestogaInsidersClub.Data.Models
 {
-    [Table("users")]
     public partial class ApplicationUser : IdentityUser
     {
         public ApplicationUser()

@@ -144,7 +144,7 @@ namespace ConestogaInsidersClub.Data
                 Name = "Portal",
                 Description = "Teleporting game",
                 Price = 12.5,
-                Genre = genre.Name
+                GenreName = genre.Name
             };
 
             context.Add(game);
