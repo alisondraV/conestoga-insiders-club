@@ -41,8 +41,7 @@ else if (editMode != true)
             <td><span id="Gender">@(user.Gender == null ? "*Not set yet*" : user.Gender)</span></td>
         </tr>
     </table>
-    <br />
-    <button class="btn-primary rounded" @onclick="@FlipEditMode">Edit</button>
+    <button class="btn-primary rounded mt-2" @onclick="@FlipEditMode">Edit</button>
 }
 else
 {
@@ -89,8 +88,7 @@ else
                 </td>
             </tr>
         </table>
-        <br />
-        <button class="btn-info rounded" type="submit">Save</button>
+        <button class="btn-info rounded mt-2" type="submit">Save</button>
     </EditForm>
 }
 

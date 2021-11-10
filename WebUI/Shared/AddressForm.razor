@@ -26,8 +26,7 @@
             <td><span id="Postal_Code">@(address.PostalCode ?? "*Not set yet*")</span></td>
         </tr>
     </table>
-    <button @onclick="@FlipEditAddressMode">Edit</button>
-    <br />
+    <button class="btn-primary rounded mb-5 mt-2" @onclick="@FlipEditAddressMode">Edit</button>
 }
 else
 {
@@ -58,10 +57,9 @@ else
                 <td><InputText id="Postal_Code_Edit" @bind-Value="address.PostalCode" /></td>
             </tr>
         </table>
-        <br />
-        <button type="submit">Save</button>
+        <button class="btn-info rounded mb-5 mt-2" type="submit">Save</button>
     </EditForm>
-    }
+}
 
 @code {
     [Parameter]

@@ -38,7 +38,7 @@ else
                 <td><span id="Recieve_Promotions">@(preference.ReceivePromotionalEmails ?? false ? "Yes" : "No")</span></td>
             </tr>
         </table>
-        <button class="btn-primary rounded" @onclick="@FlipEditPreferenceMode">Edit</button>
+        <button class="btn-primary rounded mb-5 mt-2" @onclick="@FlipEditPreferenceMode">Edit</button>
     }
     else
     {
@@ -81,18 +81,10 @@ else
                     <td><InputCheckbox id="Recieve_Promotions_Edit" @bind-Value="preferenceViewModel.ReceivePromotionalEmails" /></td>
                 </tr>
             </table>
-            <button class="btn-info  rounded" type="submit">Save</button>
+            <button class="btn-info rounded mb-5 mt-2" type="submit">Save</button>
         </EditForm>
     }
-
-    <br />
-    <br />
-
     <AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
-
-    <br />
-    <br />
-
     <AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
 }
 
