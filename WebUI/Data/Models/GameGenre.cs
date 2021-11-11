@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConestogaInsidersClub.Data.Models
 {
-    [Table("game_genres")]
     public partial class GameGenre
     {
         public GameGenre()
@@ -17,14 +16,9 @@ namespace ConestogaInsidersClub.Data.Models
             Preferences = new HashSet<Preference>();
         }
 
-        [Key]
-        [Column("name")]
-        [StringLength(25)]
         public string Name { get; set; }
 
-        [InverseProperty(nameof(Game.GenreNavigation))]
-        public virtual ICollection<Game> Games { get; set; }
-        [InverseProperty(nameof(Preference.Genre))]
-        public virtual ICollection<Preference> Preferences { get; set; }
+        public ICollection<Game> Games { get; set; }
+        public ICollection<Preference> Preferences { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace ServiceTests
 
             foreach (var game in expectedGames)
             {
-                game.Genre = genre.Name;
+                game.GenreName = genre.Name;
                 await context.Set<Game>().AddAsync(game);
             }
 
@@ -112,7 +112,7 @@ namespace ServiceTests
             {
                 Name = "qwer",
                 Description = "Some description",
-                Genre = genre.Name
+                GenreName = genre.Name
             };
 
             // Act
@@ -135,7 +135,7 @@ namespace ServiceTests
                 GameId = targetGameId,
                 Name = "qwer",
                 Description = "Some description",
-                Genre = genre.Name
+                GenreName = genre.Name
             };
 
             // Act
