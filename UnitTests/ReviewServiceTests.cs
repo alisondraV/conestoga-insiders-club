@@ -22,12 +22,18 @@ namespace ServiceTests
 
             using var context = new ApplicationDbContext(ContextOptions);
 
+            var genre = new GameGenre
+            {
+                Name = "Indie"
+            };
+
             testGame = await SeedEntities(
                 new Game
                 {
                     GameId = 1,
                     Name = "Age of Empires IV",
-                    Description = "RTS Game"
+                    Description = "RTS Game",
+                    GenreNavigation = genre
                 });
 
             users = await SeedEntities(
