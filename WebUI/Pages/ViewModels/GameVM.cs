@@ -7,7 +7,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
     public class GameVM
     {
         [StringLength(50)]
-        [Required(ErrorMessage ="Game Name is required")]
+        [Required(ErrorMessage = "Game Name is required")]
         [MinLength(3, ErrorMessage = "Game name should be at least 3 characters long")]
         [MaxLength(50, ErrorMessage = "Game name should be less than 50 characters long")]
         public string Name { get; set; }
