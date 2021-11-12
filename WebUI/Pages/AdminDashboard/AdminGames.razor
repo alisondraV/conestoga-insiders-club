@@ -94,16 +94,10 @@ else
     //Initializes game list and game genre list
     protected override async Task OnInitializedAsync()
     {
-        await FetchGames();
+        games = await gameService.GetGames();
         gameGenres = await gameGenreService.GetGameGenres();
     }
 
-    private async Task FetchGames()
-    {
-        games = await gameService.GetGames();
-    }
-
-    #region CRUD Opperations
     private async Task HandleFormSubmit()
     {
         await (isAdd ? AddGameValidSubmit() : EditGameValidSubmit());
@@ -114,7 +108,7 @@ else
     {
         Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.AddGame(createGame);
-        await FetchGames();
+        games = await gameService.GetGames();
         ToggleGameForm();
         StateHasChanged();
     }
@@ -124,7 +118,7 @@ else
     {
         Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.UpdateGame(updateGame);
-        await FetchGames();
+        games = await gameService.GetGames();
         ToggleGameForm();
         StateHasChanged();
     }
@@ -132,10 +126,9 @@ else
     private async Task HandleDelete(Game game)
     {
         await gameService.DeleteGame(game);
-        await FetchGames();
+        games = await gameService.GetGames();
         StateHasChanged();
     }
-    #endregion
 
     private void InitEdit(Game game)
     {
@@ -153,11 +146,8 @@ else
         ToggleGameForm();
     }
 
-    #region Visibility Toggles
-    //Toggles visibility of "Add Game" form
     private void ToggleGameForm()
     {
         showForm = !showForm;
     }
-    #endregion
 }

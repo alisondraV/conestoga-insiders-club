@@ -54,7 +54,7 @@ else if (games != null && games.Count != 0)
     <h3>Games</h3>
     <p>Below you can find a selection of our available games.</p>
     <br />
-    <div class="row" style="padding-top: 10px">
+    <div class="row p-1">
         @foreach (var game in games)
         {
             <div class="col-sm-6">
@@ -88,17 +88,11 @@ else
     //Initializes game list and game genre list
     protected override async Task OnInitializedAsync()
     {
-        await FetchGames();
-    }
-
-    //Fetches list of games from the DB
-    private async Task FetchGames()
-    {
         games = await gameService.GetGames();
     }
 
     //fetches game details for selected game
-    private async Task DisplayDetails(Game game)
+    private void DisplayDetails(Game game)
     {
         this.game = game;
         GameViewModel = GameVM.ToViewModel(this.game);
