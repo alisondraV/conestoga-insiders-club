@@ -32,7 +32,7 @@ namespace ServiceTests
                     GameId = 1,
                     Name = "Portal",
                     Description = "asd",
-                    GenreNavigation = new GameGenre
+                    Genre = new GameGenre
                     {
                         Name = "Indie"
                     }
@@ -45,7 +45,7 @@ namespace ServiceTests
                     GameId = 2,
                     Name = "GTA",
                     Description = "asdas",
-                    GenreNavigation = new GameGenre
+                    Genre = new GameGenre
                     {
                         Name = "Action"
                     }
@@ -56,7 +56,7 @@ namespace ServiceTests
             {
                 Name = "CS:GO",
                 Description = "asdasaa",
-                GenreNavigation = new GameGenre
+                Genre = new GameGenre
                 {
                     Name = "Shooter"
                 }
