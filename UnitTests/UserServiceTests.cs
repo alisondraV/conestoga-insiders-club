@@ -13,6 +13,7 @@ namespace ServiceTests
     public class UserServiceTests : TestBase
     {
         public List<ApplicationUser> expectedUsers;
+        public List<Card> expectedCards;
 
         [OneTimeSetUp]
         public async Task BeforeAll()
@@ -167,7 +168,7 @@ namespace ServiceTests
             var service = new UserService(context);
             var targetUser = expectedUsers.First();
 
-            var expectedCards = await SeedEntities(new Card
+            expectedCards = await SeedEntities(new Card
             {
                 UserId = targetUser.Id,
             },
@@ -182,6 +183,23 @@ namespace ServiceTests
             // Assert
             Assert.That(actualCards, Has.Count.EqualTo(expectedCards.Count));
             Assert.IsTrue(actualCards.All(c => c != null));
+        }
+
+        [Test, Order(8)]
+        public async Task DeleteCard_DeletesACreditCard()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetUser = expectedUsers.First();
+            var targetCard = expectedCards.First();
+
+            // Act
+            await service.DeleteCard(targetUser.Id, targetCard.CardId);
+            var actualCards = await context.Cards.ToListAsync();
+
+            // Assert
+            Assert.That(actualCards, Has.Count.EqualTo(expectedCards.Count - 1));
         }
     }
 }
