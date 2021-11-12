@@ -164,5 +164,40 @@ namespace ServiceTests
             var ids = allGames.Select(g => g.GameId);
             Assert.That(ids, Has.No.Member(targetGameId));
         }
+
+        [Test, Order(7)]
+        public async Task DeleteGame_DeletesAGameAndDoesNotDeletedARelatedPreference()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var targetGame = new Game
+            {
+                Name = "ASD",
+                Description = "ASDASD",
+                GenreName = genre.Name
+            };
+
+            var preference = await SeedEntities(new Preference
+            {
+                FavouriteGame = targetGame,
+                GenreName = genre.Name,
+                Platform = "Windows",
+                ReceivePromotionalEmails = true,
+                User = new ApplicationUser
+                {
+                    UserName = "Foo"
+                }
+            });
+
+            // Act
+            await service.DeleteGame(targetGame);
+            var allGames = await context.Games.ToListAsync();
+
+            // Assert
+            Assert.IsNotNull(preference);
+            Assert.IsNull(preference.FavouriteGame);
+            Assert.IsNull(preference.FavouriteGameId);
+        }
     }
 }
