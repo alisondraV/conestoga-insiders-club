@@ -2,17 +2,14 @@
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
+@using ConestogaInsidersClub.Data;
 
 @inject IUserService userService;
 
 <h1>Profile</h1>
 <br />
 
-@if (user == null)
-{
-    <h3>Loading...</h3>
-}
-else if (editMode != true)
+@if (editMode != true)
 {
     <table>
         <tr>
@@ -33,11 +30,14 @@ else if (editMode != true)
         </tr>
         <tr>
             <td><b>Phone Number:</b></td>
-            <td><span id="Phone_Number">@(user.PhoneNumber ?? "Not set yet")</span></td>
+            <td><span id="Phone_Number">@(user.PhoneNumber ?? "*Not set yet*")</span></td>
+        </tr>
+        <tr>
+            <td><b>Gender:</b></td>
+            <td><span id="Gender">@(user.Gender == null ? "*Not set yet*" : user.Gender)</span></td>
         </tr>
     </table>
-    <br />
-    <button @onclick="@FlipEditMode">Edit</button>
+    <button class="btn-primary rounded mt-2" @onclick="@FlipEditMode">Edit</button>
 }
 else
 {
@@ -69,32 +69,31 @@ else
                 <td><InputDate id="BirthDay_Edit" @bind-Value="userViewModel.BirthDay" /></td>
             </tr>
             <tr>
-                <td>PhoneNumber:</td>
+                <td>Phone Number:</td>
                 <td><InputText id="Phone_Number_Edit" @bind-Value="userViewModel.PhoneNumber" /></td>
             </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>
+                    <InputSelect id="Gender_Edit" @bind-Value="userViewModel.GenderName">
+                        @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                            {
+                            <option value="@gender">@gender</option>
+                            }
+                    </InputSelect>
+                </td>
+            </tr>
         </table>
-        <br />
-        <button type="submit">Save</button>
+        <button class="btn-info rounded mt-2" type="submit">Save</button>
     </EditForm>
 }
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationState { get; set; }
-    private AuthenticationState authenticationState;
-    private ApplicationUser user;
-    private string userName;
-    private UserVM userViewModel = new UserVM();
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+    [CascadingParameter(Name = "userViewModel")]
+    private UserVM userViewModel { get; set; }
     private bool editMode = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        authenticationState = await AuthenticationState;
-        user = await userService.GetUser(authenticationState.User.Identity.Name);
-        userName = user.UserName;
-
-        userViewModel = UserVM.ToViewModel(user);
-    }
 
     private async void HandleValidSubmit()
     {
@@ -102,11 +101,6 @@ else
         await userService.UpdateUser(updatedUser);
         FlipEditMode();
         StateHasChanged();
-
-        if (userName != updatedUser.UserName)
-        {
-            @* TODO: Log out the user when the username is updated *@
-        }
     }
 
     private void FlipEditMode()

@@ -20,14 +20,14 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         public double Price { get; set; }
 
         [Required(ErrorMessage = "Game Genre is required")]
-        public string Genre { get; set; }
+        public string GenreName { get; set; }
 
         public static Game ToModel(Game game, GameVM admingameVM)
         {
             game.Name = admingameVM.Name;
             game.Description = admingameVM.Description;
             game.Price = admingameVM.Price;
-            game.Genre = admingameVM.Genre;
+            game.GenreName = admingameVM.GenreName;
 
             return game;
         }
@@ -39,7 +39,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
                 Name = game.Name,
                 Description = game.Description,
                 Price = game.Price,
-                Genre = game.Genre
+                GenreName = game.GenreName
             };
         }
     }

@@ -27,8 +27,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
         public async Task UpdatePreference(Preference preference)
         {
             context.Preferences.Update(preference);
-            var preferences = await context.Preferences.AsNoTracking().ToListAsync();
-            var genres = await context.GameGenres.AsNoTracking().ToListAsync();
             await context.SaveChangesAsync();
         }
     }

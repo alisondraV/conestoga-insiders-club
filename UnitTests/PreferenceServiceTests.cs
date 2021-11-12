@@ -15,6 +15,7 @@ namespace ServiceTests
         Preference preference;
         ApplicationUser user;
         GameGenre otherGenre;
+        Game otherGame;
 
         [OneTimeSetUp]
         public async Task BeforeAll()
@@ -33,7 +34,16 @@ namespace ServiceTests
 
             var game = new Game
             {
-                Name = "Portal"
+                Name = "Portal",
+                Description = "blabla",
+                GenreName = genre.Name
+            };
+
+            otherGame = new Game
+            {
+                Name = "GTA",
+                Description = "blabla",
+                GenreName = otherGenre.Name
             };
 
             preference = new Preference
@@ -83,14 +93,20 @@ namespace ServiceTests
             var expectedReceivePromoEmails = true;
 
             // Act
-            preference.Genre = otherGenre;
-            preference.Platform = expectedPlatform;
-            preference.ReceivePromotionalEmails = expectedReceivePromoEmails;
-            await service.UpdatePreference(preference);
+            var updatedPreference = new Preference
+            {
+                UserId = preference.UserId,
+                Platform = expectedPlatform,
+                ReceivePromotionalEmails = expectedReceivePromoEmails,
+                GenreName = otherGenre.Name,
+                FavouriteGameId = otherGame.GameId
+            };
+            await service.UpdatePreference(updatedPreference);
             var actualPreference = await context.Preferences.AsNoTracking().Include(p => p.Genre).FirstOrDefaultAsync();
 
             // Assert
             Assert.AreEqual(otherGenre.Name, actualPreference.GenreName);
+            Assert.AreEqual(otherGame.GameId, actualPreference.FavouriteGameId);
             Assert.AreEqual(expectedPlatform, actualPreference.Platform);
             Assert.AreEqual(expectedReceivePromoEmails, actualPreference.ReceivePromotionalEmails);
         }
