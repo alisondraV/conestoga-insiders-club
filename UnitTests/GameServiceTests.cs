@@ -199,5 +199,47 @@ namespace ServiceTests
             Assert.IsNull(preference.FavouriteGame);
             Assert.IsNull(preference.FavouriteGameId);
         }
+
+        [Test, Order(8)]
+        public async Task DeleteGame_DeletesAGameAndDeletesAllRelatedWishedItemsAndCartItems()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var targetGame = new Game
+            {
+                Name = "ASD",
+                Description = "ASDASD",
+                GenreName = genre.Name
+            };
+
+            await SeedEntities(new WishedItem
+            {
+                User = new ApplicationUser
+                {
+                    UserName = "Foo"
+                },
+                Game = targetGame
+            });
+
+            var cartItem = await SeedEntities(new CartItem
+            {
+                GameId = targetGame.GameId,
+                User = new ApplicationUser
+                {
+                    UserName = "Bar"
+                }
+            });
+            targetGame.CartItems.Add(cartItem);
+
+            // Act
+            await service.DeleteGame(targetGame);
+            var wishedItems = await context.WishedItems.ToListAsync();
+            var cartItems = await context.CartItems.ToListAsync();
+
+            // Assert
+            Assert.IsEmpty(wishedItems);
+            Assert.IsEmpty(cartItems);
+        }
     }
 }

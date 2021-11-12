@@ -16,7 +16,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasOne(d => d.Game)
                 .WithMany(p => p.WishedItems)
                 .HasForeignKey(d => d.GameId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(d => d.User)
                 .WithMany(p => p.WishedItems)
