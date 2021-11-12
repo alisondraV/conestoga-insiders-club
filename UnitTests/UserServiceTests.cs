@@ -191,15 +191,31 @@ namespace ServiceTests
             // Arrange
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new UserService(context);
-            var targetUser = expectedUsers.First();
-            var targetCard = expectedCards.First();
+            var targetCard = await context.Cards.FirstOrDefaultAsync();
 
             // Act
-            await service.DeleteCard(targetUser.Id, targetCard.CardId);
+            await service.DeleteCard(targetCard);
             var actualCards = await context.Cards.ToListAsync();
 
             // Assert
             Assert.That(actualCards, Has.Count.EqualTo(expectedCards.Count - 1));
+        }
+
+        [Test, Order(9)]
+        public async Task DeleteCard_DeletesACreditCardAndDoesNotDeleteARelatedUser()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new UserService(context);
+            var targetCard = await context.Cards.FirstOrDefaultAsync();
+            var numberOfUsers = await context.Users.CountAsync();
+
+            // Act
+            await service.DeleteCard(targetCard);
+            var newNumberOfUsers = await context.Users.CountAsync();
+
+            // Assert
+            Assert.AreEqual(numberOfUsers, newNumberOfUsers);
         }
     }
 }

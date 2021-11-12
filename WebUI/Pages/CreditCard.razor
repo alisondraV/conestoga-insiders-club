@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button class="btn-danger rounded btn-delete" @onclick="@(() => DeleteCard(card.CardId))">Delete</button>
+                        <button class="btn-danger rounded btn-delete" @onclick="@(() => DeleteCard(card))">Delete</button>
                     </td>
                     <td>
                         <button class="btn-info rounded btn-delete" @onclick="@(() => EditCard(card.CardId))">Edit</button>
@@ -106,9 +106,9 @@ else
         FlipEditMode();
     }
 
-    private async void DeleteCard(int cardId)
+    private async void DeleteCard(Card card)
     {
-        await userService.DeleteCard(user.Id, cardId);
+        await userService.DeleteCard(card);
         cards = user.Cards;
         StateHasChanged();
     }
