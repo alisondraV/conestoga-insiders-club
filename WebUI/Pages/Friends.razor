@@ -1,7 +1,116 @@
 ﻿@page "/friends"
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IUserService userService;
 
 <h1>Friends</h1>
 
-@code {
+@if (friends == null || possibleFriends == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <div>
+        <button class="tab alert @(friendsTab ? "alert-primary" : "")" @onclick="() => SwitchToFriendsTab(true)">Your Friends</button>
+        <button class="tab alert @(friendsTab ? "" : "alert-primary")" @onclick="() => SwitchToFriendsTab(false)">Add a Friend</button>
+    </div>
 
+    @if (friendsTab)
+    {
+        if (friends.Count == 0)
+        {
+            <h4>You have no friends yet. Go to the "Add a Friend" tab to find new friends!</h4>
+        }
+        else
+        {
+            <div class="d-inline-flex flex-wrap">
+                @foreach (var friend in friends)
+                {
+                    <UserCard OnClick="() => RemoveFriend(friend.Id)"
+                              User="friend"
+                              ButtonText="Remove Friend" />
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <input id="Search" @onchange="@LookForUser" placeholder="Enter the username you want to search for..." />
+
+        if (possibleFriends.Count == 0)
+        {
+            <h4>There are no available friends at the moment :(</h4>
+        }
+        else
+        {
+            <div class="d-inline-flex flex-wrap">
+                @foreach (var possibleFriend in possibleFriends)
+                {
+                    <UserCard OnClick="() => AddFriend(possibleFriend.Id)"
+                              User="possibleFriend"
+                              ButtonText="Add friend" />
+                }
+            </div>
+        }
+    }
+}
+
+@code {
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser currentUser { get; set; }
+    private List<ApplicationUser> friends;
+    private List<ApplicationUser> possibleFriends = new List<ApplicationUser> { };
+    private bool friendsTab = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshFriends();
+    }
+
+    private async Task<List<ApplicationUser>> GetPossibleFriends()
+    {
+        var users = await userService.GetUsers();
+        var friendsIds = friends.Select(u => u.Id).ToList();
+
+        return users.Where(u => u.Id != currentUser.Id && !friendsIds.Contains(u.Id)).ToList();
+    }
+
+    private void SwitchToFriendsTab(bool isFriendsTab)
+    {
+        friendsTab = isFriendsTab;
+    }
+
+    private async void AddFriend(string userId)
+    {
+        await userService.CreateFriendship(currentUser.Id, userId);
+        await RefreshFriends();
+    }
+
+    private async void RemoveFriend(string userId)
+    {
+        await userService.DeleteFriendship(currentUser.Id, userId);
+        await RefreshFriends();
+    }
+
+    private async Task RefreshFriends()
+    {
+        friends = await userService.GetFriends(currentUser);
+        possibleFriends = await GetPossibleFriends();
+        StateHasChanged();
+    }
+
+    private async void LookForUser(ChangeEventArgs args)
+    {
+        string searchQuery = (string)args.Value;
+
+        possibleFriends = await GetPossibleFriends();
+        if (searchQuery != "")
+        {
+            possibleFriends = possibleFriends
+                .FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
+        }
+        StateHasChanged();
+    }
 }

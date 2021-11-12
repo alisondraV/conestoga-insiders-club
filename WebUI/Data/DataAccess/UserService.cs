@@ -76,5 +76,12 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .FirstOrDefaultAsync(u => u.Id == userId);
             return user.Cards.ToList();
         }
+        public async Task DeleteCard(string userId, int cardId)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var card = await context.Cards.FirstOrDefaultAsync(c => c.CardId == cardId);
+            user.Cards.Remove(card);
+            await context.SaveChangesAsync();
+        }
     }
 }
