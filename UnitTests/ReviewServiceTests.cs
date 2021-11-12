@@ -33,7 +33,7 @@ namespace ServiceTests
                     GameId = 1,
                     Name = "Age of Empires IV",
                     Description = "RTS Game",
-                    GenreNavigation = genre
+                    Genre = genre
                 });
 
             users = await SeedEntities(
