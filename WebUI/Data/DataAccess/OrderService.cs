@@ -28,7 +28,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .ToListAsync();
         }
 
-        public async Task CreateOrderFromCartItems(List<CartItem> cartItems)
+        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems)
         {
             var order = new Order
             {
@@ -46,6 +46,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
             }
 
             await context.SaveChangesAsync();
+            return order;
         }
     }
 }
