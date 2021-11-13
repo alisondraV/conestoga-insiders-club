@@ -20,7 +20,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasOne(d => d.User)
                 .WithMany(p => p.CartItems)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

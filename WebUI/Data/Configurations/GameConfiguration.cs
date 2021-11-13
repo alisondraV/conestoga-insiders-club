@@ -17,7 +17,6 @@ namespace ConestogaInsidersClub.Data.Configurations
                 .HasMaxLength(100);
 
             builder.Property(e => e.GenreName)
-                .IsRequired()
                 .HasMaxLength(25);
 
             builder.HasOne(d => d.Genre)

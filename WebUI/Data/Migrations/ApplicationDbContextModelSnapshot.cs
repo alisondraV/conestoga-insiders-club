@@ -222,7 +222,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("GenreName")
-                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
@@ -530,11 +529,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "Game")
                         .WithMany("CartItems")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithMany("CartItems")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -547,11 +548,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User1")
                         .WithMany()
                         .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User2")
                         .WithMany()
                         .HasForeignKey("UserId2")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User1");
@@ -564,7 +567,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.GameGenre", "Genre")
                         .WithMany("Games")
                         .HasForeignKey("GenreName")
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Genre");
                 });
@@ -573,7 +576,8 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });
@@ -583,11 +587,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "Game")
                         .WithMany("OrderItems")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -599,11 +605,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                 {
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "FavouriteGame")
                         .WithMany("Preferences")
-                        .HasForeignKey("FavouriteGameId");
+                        .HasForeignKey("FavouriteGameId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.GameGenre", "Genre")
                         .WithMany("Preferences")
-                        .HasForeignKey("GenreName");
+                        .HasForeignKey("GenreName")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithOne("Preference")
@@ -623,11 +631,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "Game")
                         .WithMany("Reviews")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -640,11 +650,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasOne("ConestogaInsidersClub.Data.Models.Game", "Game")
                         .WithMany("WishedItems")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", "User")
                         .WithMany("WishedItems")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
