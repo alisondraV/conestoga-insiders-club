@@ -36,14 +36,14 @@ namespace ServiceTests
             {
                 Name = "Portal",
                 Description = "blabla",
-                Genre = genre.Name
+                GenreName = genre.Name
             };
 
             otherGame = new Game
             {
                 Name = "GTA",
                 Description = "blabla",
-                Genre = otherGenre.Name
+                GenreName = otherGenre.Name
             };
 
             preference = new Preference

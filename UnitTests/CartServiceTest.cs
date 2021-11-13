@@ -32,14 +32,14 @@ namespace ServiceTests
                     GameId = 1,
                     Name = "Age of Empires IV",
                     Description = "RTS Game",
-                    Genre = genre.Name
+                    GenreName = genre.Name
                 },
                 new Game()
                 {
                     GameId = 2,
                     Name = "Assassin's Creed Unity",
                     Description = "Action game",
-                    Genre = genre.Name
+                    GenreName = genre.Name
 
                 });
 

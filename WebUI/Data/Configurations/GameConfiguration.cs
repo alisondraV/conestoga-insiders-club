@@ -23,7 +23,7 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasOne(d => d.Genre)
                 .WithMany(p => p.Games)
                 .HasForeignKey(d => d.GenreName)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
