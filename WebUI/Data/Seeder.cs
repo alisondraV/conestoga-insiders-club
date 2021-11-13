@@ -216,6 +216,7 @@ namespace ConestogaInsidersClub.Data
             context.RemoveRange(context.Friendships);
             context.RemoveRange(context.UserRoles);
             context.RemoveRange(context.Addresses);
+            context.RemoveRange(context.CartItems);
             context.RemoveRange(context.Users);
             context.RemoveRange(context.Roles);
         }

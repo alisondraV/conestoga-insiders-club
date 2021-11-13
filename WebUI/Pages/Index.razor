@@ -5,46 +5,14 @@
 @using ConestogaInsidersClub.Pages.ViewModels;
 
 @inject IGameService gameService;
+@inject ICartService cartService;
+@inject NavigationManager NavigationManager;
 
 <h1>Conestoga Insiders Club</h1>
 <p>Your source of the latest games and events</p>
 <hr />
 
-@if (showDetails)
-{
-    <br />
-    <h3>Game Details</h3>
-    <br />
-    <table>
-        <tr>
-            <td>Name: </td>
-            <td class="align-content-end"><span id="Game_Name">@game.Name</span></td>
-        </tr>
-        <tr>
-            <td>Description: </td>
-            <td><span id="Game_Name">@game.Description</span></td>
-        </tr>
-        <tr>
-            <td>Price: </td>
-            <td><span id="Game_Name">@game.Price.ToString("C")</span></td>
-        </tr>
-        <tr>
-            <td>Genre: </td>
-            <td><span id="Game_Name">@game.Genre</span></td>
-        </tr>
-    </table>
-    <br />
-    <AuthorizeView>
-        <Authorized>
-            @*TODO - Hook up game purchase and wishlist features*@
-            <button class="btn btn-primary">Buy Game</button>
-            <button class="btn btn-primary">Add To Wishlist</button>
-            <button class="btn btn-primary">Leave Rating</button>
-        </Authorized>
-    </AuthorizeView>
-    <button class="btn btn-secondary" @onclick="ToggleDetailsVisibility">Go Back</button>
-}
-else if (games != null && games.Count != 0)
+@if (games != null && games.Count != 0)
 {
     <h3 class="mt-2">Games</h3>
     <p>Below you can find a selection of our available games.</p>
@@ -57,7 +25,7 @@ else if (games != null && games.Count != 0)
                         <p class="card-text float-right">Price: @game.Price.ToString("C")</p>
                         <h5 class="card-title">@game.Name</h5>
                         <p class="card-text">@game.Description</p>
-                        <button class="btn btn-primary" @onclick="() => DisplayDetails(game)">View Details</button>
+                        <button class="btn btn-primary" @onclick="() => GoToDetails(game)">View Details</button>
                     </div>
                 </div>
             </div>
@@ -72,7 +40,6 @@ else
 
 @code {
     #region Declarations
-    private Game game = new Game();
     private List<Game> games;
     private bool showDetails = false;
     #endregion
@@ -82,14 +49,8 @@ else
         games = await gameService.GetGames();
     }
 
-    private void DisplayDetails(Game game)
+    private void GoToDetails(Game game)
     {
-        this.game = game;
-        ToggleDetailsVisibility();
-    }
-
-    private void ToggleDetailsVisibility()
-    {
-        showDetails = !showDetails;
+        NavigationManager.NavigateTo("/game/" + game.GameId);
     }
 }
