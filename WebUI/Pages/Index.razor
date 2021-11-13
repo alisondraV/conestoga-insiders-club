@@ -73,7 +73,6 @@ else
 @code {
     #region Declarations
     private Game game = new Game();
-    private GameVM GameViewModel = new GameVM();
     private List<Game> games;
     private bool showDetails = false;
     #endregion
@@ -86,7 +85,6 @@ else
     private void DisplayDetails(Game game)
     {
         this.game = game;
-        GameViewModel = GameVM.ToViewModel(this.game);
         ToggleDetailsVisibility();
     }
 

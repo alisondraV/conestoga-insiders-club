@@ -54,7 +54,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         public Gender? GenderName { get; set; }
 
         public ICollection<Card> Cards { get; set; }
-        
+
         public ApplicationUser ToModel(ApplicationUser user)
         {
             user.UserName = UserName;
@@ -64,7 +64,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             user.BirthDay = BirthDay;
             user.PhoneNumber = PhoneNumber;
             user.MailingAddress = MailingAddress;
-            user.ShippingAddress = ShippingAddress; 
+            user.ShippingAddress = ShippingAddress;
             user.Gender = GenderName == Gender.NotSet ? null : GenderName;
             user.Cards = Cards;
 
