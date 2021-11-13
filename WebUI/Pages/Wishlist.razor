@@ -1,0 +1,60 @@
+﻿@page "/wishlist"
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IGameService gameService;
+@inject IWishedItemService wishedItemService;
+@inject NavigationManager NavigationManager;
+
+<h3>Wishlist</h3>
+<p>Below is a list of all the games on your wishlist.</p>
+<hr />
+
+@if (wishlistGames != null && wishlistGames.Count != 0)
+{
+    <div class="row p-1 mt-2">
+        @foreach (var game in wishlistGames)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text float-right">Price: @game.Price.ToString("C")</p>
+                        <h5 class="card-title">@game.Name</h5>
+                        <p class="card-text">@game.Description</p>
+                        <button class="btn btn-primary" @onclick="() => GoToDetails(game)">View Details</button>
+                        <button class="btn btn-danger" @onclick="() => RemoveFromWishlist(game)">Remove From Wishlist</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No games in wishlist... =(</h3>
+}
+
+@code {
+    private List<Game> wishlistGames;
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        wishlistGames = await wishedItemService.GetWishedGamesForUser(user.Id);
+    }
+
+    private async void RemoveFromWishlist(Game game)
+    {
+        await wishedItemService.RemoveFromWishlist(game, user.Id);
+        wishlistGames = await wishedItemService.GetWishedGamesForUser(user.Id);
+        StateHasChanged();
+    }
+
+    private void GoToDetails(Game game)
+    {
+        NavigationManager.NavigateTo("/game/" + game.GameId);
+    }
+}
