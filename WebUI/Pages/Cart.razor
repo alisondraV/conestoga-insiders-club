@@ -1,0 +1,126 @@
+﻿@page "/cart"
+@layout AuthorizedPagesLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IGameService gameService;
+@inject ICartService cartService;
+@inject IOrderService orderService;
+
+<h1 class="mb-4">@title</h1>
+
+@if (cartItems == null)
+{
+    <h3>Loading...</h3>
+}
+else if (message != null)
+{
+    <h3 class="mb-5">@message</h3>
+    <a href="/" class="btn-primary rounded p-3">Go Back to the Games List</a>
+}
+else if (cartItems.Count() == 0)
+{
+    <h4>There are no games in your cart yet. Go to the <a href="/">home page</a> to discover the games we have to offer!</h4>
+}
+else
+{
+    if (!checkOutState)
+    {
+        foreach (var cartItem in cartItems)
+        {
+            <GameCard Game="cartItem.Game"
+                      ButtonText="Remove from Cart"
+                      ButtonClass="btn-danger"
+                      OnClick="() => RemoveFromCart(cartItem)" />
+            <br />
+        }
+        if (creditCards.Count == 0)
+        {
+            <h5><a href="/credit-card">Add a credit card</a> to your record in order to proceed</h5>
+        }
+        else
+        {
+            <button class="rounded btn-primary mt-5 ml-3" @onclick="ToggleCheckOut">Proceed to check out</button>
+        }
+    }
+    else
+    {
+        foreach (var cartItem in cartItems)
+        {
+            <div class="col-4">
+                <div class="d-flex justify-content-between">
+                    <span>@cartItem.Game.Name</span>
+                    <span>@cartItem.Game.Price</span>
+                </div>
+                <hr />
+            </div>
+        }
+        <div class="col-4 mt-4">
+            <div class="d-flex justify-content-between">
+                <span><b>Total:</b></span>
+                <span>@cartTotal</span>
+            </div>
+        </div>
+
+        <h4 class="mt-5">Credit cards</h4>
+        foreach (var card in creditCards)
+        {
+            <label class="d-block mt-3">
+                <input type="radio" name="card" @bind-value="card.CardId" checked />
+                Ending in @card.CardNumber.Substring(12)
+            </label>
+        }
+        <button class="rounded btn-primary mt-5 mr-2" @onclick="CreateOrder">Confirm order</button>
+        <button class="rounded btn-secondary mt-5" @onclick="ToggleCheckOut">Back to the Cart</button>
+    }
+}
+
+@code {
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+    private List<CartItem> cartItems;
+    private ICollection<Card> creditCards;
+    private Card selectedCard;
+    private string message;
+    private string title = "Cart";
+    private bool checkOutState = false;
+    private double cartTotal = 0.0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cartItems = await cartService.GetCartItems(user.Id);
+        cartItems.ForEach(ci => cartTotal += ci.Game.Price);
+
+        creditCards = user.Cards;
+    }
+
+    private async void RemoveFromCart(CartItem cartItem)
+    {
+        await cartService.RemoveCartItem(cartItem);
+
+        cartItems = await cartService.GetCartItems(user.Id);
+        StateHasChanged();
+    }
+
+    private async void CreateOrder()
+    {
+        Order order = await orderService.CreateOrderFromCartItems(cartItems);
+        // TODO: set selected credit card for the order
+        foreach (var ci in cartItems)
+        {
+            await cartService.RemoveCartItem(ci);
+        }
+        cartItems = await cartService.GetCartItems(user.Id);
+
+        message = "You've successfully confirmed your order!";
+        StateHasChanged();
+    }
+
+    private void ToggleCheckOut()
+    {
+        title = title == "Cart" ? "Checkout" : "Cart";
+        checkOutState = !checkOutState;
+        StateHasChanged();
+    }
+}
