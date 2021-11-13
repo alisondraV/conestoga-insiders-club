@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ConestogaInsidersClub.Data;
 using ConestogaInsidersClub.Data.Models;
 
 namespace ConestogaInsidersClub.Pages.ViewModels
@@ -16,6 +18,8 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             PhoneNumber = user.PhoneNumber;
             MailingAddress = user.MailingAddress;
             ShippingAddress = user.ShippingAddress;
+            GenderName = user.Gender;
+            Cards = user.Cards;
         }
 
         [Required]
@@ -37,6 +41,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [EmailAddress]
         public string Email { get; set; }
 
+        [Range(typeof(DateTime), "1/1/1920", "12/31/2010", ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime BirthDay { get; set; }
 
         [Phone]
@@ -46,6 +51,10 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public Address ShippingAddress { get; set; }
 
+        public Gender? GenderName { get; set; }
+
+        public ICollection<Card> Cards { get; set; }
+        
         public ApplicationUser ToModel(ApplicationUser user)
         {
             user.UserName = UserName;
@@ -55,7 +64,9 @@ namespace ConestogaInsidersClub.Pages.ViewModels
             user.BirthDay = BirthDay;
             user.PhoneNumber = PhoneNumber;
             user.MailingAddress = MailingAddress;
-            user.ShippingAddress = ShippingAddress;
+            user.ShippingAddress = ShippingAddress; 
+            user.Gender = GenderName == Gender.NotSet ? null : GenderName;
+            user.Cards = Cards;
 
             return user;
         }

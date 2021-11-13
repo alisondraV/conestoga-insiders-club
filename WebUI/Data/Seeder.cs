@@ -14,6 +14,7 @@ namespace ConestogaInsidersClub.Data
         static IdentityRole adminRole;
         static IdentityRole userRole;
         static ApplicationUser user;
+        static ApplicationUser secondUser;
         static ApplicationUser admin;
 
         public static void Seed(ApplicationDbContext context)
@@ -73,7 +74,7 @@ namespace ConestogaInsidersClub.Data
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
-            var secondUser = new ApplicationUser
+            secondUser = new ApplicationUser
             {
                 Id = secondUserId,
                 UserName = "JaD",
@@ -103,6 +104,8 @@ namespace ConestogaInsidersClub.Data
                 EmailConfirmed = true,
                 PhoneNumber = "1299947890",
                 PhoneNumberConfirmed = true,
+                MailingAddressId = mailingAddress.AddressId,
+                ShippingAddressId = shippingAddress.AddressId,
             };
             admin.PasswordHash = hasher.HashPassword(admin, "Qweqwe1!");
 
@@ -151,8 +154,13 @@ namespace ConestogaInsidersClub.Data
             {
                 Name = "Indie"
             };
+            var anotherGenre = new GameGenre
+            {
+                Name = "Adventure"
+            };
 
             context.Add(genre);
+            context.Add(anotherGenre);
             context.SaveChanges();
         }
 
@@ -164,7 +172,7 @@ namespace ConestogaInsidersClub.Data
                 Name = "Portal",
                 Description = "Teleporting game",
                 Price = 12.5,
-                Genre = genre.Name
+                GenreName = genre.Name
             };
 
             context.Add(game);
@@ -178,8 +186,24 @@ namespace ConestogaInsidersClub.Data
                 Genre = genre,
                 Platform = "Windows",
                 ReceivePromotionalEmails = false,
-                FavouriteGame = game,
+                //FavouriteGame = game,
                 UserId = user.Id
+            });
+            context.Add(new Preference
+            {
+                Genre = genre,
+                Platform = "IOS",
+                ReceivePromotionalEmails = false,
+                FavouriteGame = game,
+                UserId = admin.Id
+            });
+            context.Add(new Preference
+            {
+                Genre = genre,
+                Platform = "Android",
+                ReceivePromotionalEmails = true,
+                FavouriteGame = game,
+                UserId = secondUser.Id
             });
             context.SaveChanges();
         }

@@ -1,5 +1,147 @@
 ﻿@page "/manage-games"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IGameService gameService;
+@inject IGameGenreService gameGenreService;
 
 <h1>Manage Games</h1>
 <p>CRUD tools for game creation and management.</p>
+
+<button class="btn-info rounded" @onclick="@InitAdd">Add Game</button>
+<br />
+
+@if (showForm)
+{
+    <EditForm Model="@adminGameViewModel" OnValidSubmit="@HandleFormSubmit">
+        <br />
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <br />
+        <h3>Edit Game</h3>
+        <br />
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><InputText id="Game_Name_Edit" @bind-Value="adminGameViewModel.Name" /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><InputText id="Game_Description_Edit" @bind-Value="adminGameViewModel.Description" /></td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><InputNumber id="Game_Price_Edit" @bind-Value="adminGameViewModel.Price" /></td>
+            </tr>
+            <tr>
+                <td>Genre:</td>
+                <td>
+                    <InputSelect id="Game_Genre_Edit" @bind-Value="adminGameViewModel.GenreName">
+                        <option value="">None</option>
+                        @foreach (var genre in gameGenres)
+                            {
+                            <option value="@genre.Name">@genre.Name</option>
+                            }
+                    </InputSelect>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <button class="btn btn-primary" type="submit">Save</button>
+    </EditForm>
+    <button class="btn btn-secondary mt-1" @onclick="ToggleGameFormVisibility">Cancel</button>
+}
+@* --- Display Game List --- *@
+else if (games != null && games.Count != 0)
+{
+    <div class="row" style="padding-top: 10px">
+        @foreach (var game in games)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@game.Name</h5>
+                        <p class="card-text">@game.Description</p>
+                        <button @onclick="() => InitEdit(game)" class="btn btn-primary">Edit Game</button>
+                        <button @onclick="() => HandleDelete(game)" class="btn btn-danger">Delete Game</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No games available... create a new game!</h3>
+}
+
+@code {
+    #region Declarations
+    private Game selectedGame = new Game();
+    private GameVM adminGameViewModel = new GameVM();
+    private List<Game> games;
+    private List<GameGenre> gameGenres;
+    private bool showForm = false;
+    private bool isAdd = true;
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        games = await gameService.GetGames();
+        gameGenres = await gameGenreService.GetGameGenres();
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        await (isAdd ? AddGameValidSubmit() : EditGameValidSubmit());
+    }
+
+    private async Task AddGameValidSubmit()
+    {
+        Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
+        await gameService.AddGame(createGame);
+        games = await gameService.GetGames();
+        ToggleGameFormVisibility();
+        StateHasChanged();
+    }
+
+    private async Task EditGameValidSubmit()
+    {
+        Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
+        await gameService.UpdateGame(updateGame);
+        games = await gameService.GetGames();
+        ToggleGameFormVisibility();
+        StateHasChanged();
+    }
+
+    private async Task HandleDelete(Game game)
+    {
+        await gameService.DeleteGame(game);
+        games = await gameService.GetGames();
+        StateHasChanged();
+    }
+
+    private void InitEdit(Game game)
+    {
+        isAdd = false;
+        selectedGame = game;
+        adminGameViewModel = GameVM.ToViewModel(game);
+        ToggleGameFormVisibility();
+    }
+
+    private void InitAdd()
+    {
+        isAdd = true;
+        selectedGame = new Game();
+        adminGameViewModel = GameVM.ToViewModel(selectedGame);
+        ToggleGameFormVisibility();
+    }
+
+    private void ToggleGameFormVisibility()
+    {
+        showForm = !showForm;
+    }
+}
