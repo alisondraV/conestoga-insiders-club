@@ -17,6 +17,7 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Game Price is required")]
+        [Range(1, 500, ErrorMessage = "Game Price should be within 1 to 500$")]
         public double Price { get; set; }
 
         [Required(ErrorMessage = "Game Genre is required")]
