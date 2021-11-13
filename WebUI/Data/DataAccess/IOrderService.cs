@@ -8,6 +8,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
     {
         Task AddOrderItem(OrderItem item);
         Task<List<OrderItem>> GetOrderItems(string userId);
-        Task CreateOrderFromCartItems(List<CartItem> cartItems);
+        Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems);
     }
 }

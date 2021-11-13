@@ -21,8 +21,9 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return context.OrderItems.Where(a => a.Order.UserId == userId).ToListAsync();
         }
 
-        public async Task CreateOrderFromCartItems(List<CartItem> cartItems)
+        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems)
         {
+            return new Order();
         }
     }
 }
