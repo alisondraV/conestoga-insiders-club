@@ -10,10 +10,9 @@
 <h1>Manage Games</h1>
 <p>CRUD tools for game creation and management.</p>
 
-<button @onclick="@InitAdd">Add Game</button>
+<button class="btn-info rounded" @onclick="@InitAdd">Add Game</button>
 <br />
 
-@* ---Game Form--- *@
 @if (showForm)
 {
     <EditForm Model="@adminGameViewModel" OnValidSubmit="@HandleFormSubmit">
@@ -51,8 +50,8 @@
         </table>
         <br />
         <button class="btn btn-primary" type="submit">Save</button>
-        <button class="btn btn-secondary" @onclick="@ToggleGameForm">Cancel</button>
     </EditForm>
+    <button class="btn btn-secondary mt-1" @onclick="ToggleGameFormVisibility">Cancel</button>
 }
 @* --- Display Game List --- *@
 else if (games != null && games.Count != 0)
@@ -79,9 +78,7 @@ else
     <h3>No games available... create a new game!</h3>
 }
 
-
 @code {
-
     #region Declarations
     private Game selectedGame = new Game();
     private GameVM adminGameViewModel = new GameVM();
@@ -91,7 +88,6 @@ else
     private bool isAdd = true;
     #endregion
 
-    //Initializes game list and game genre list
     protected override async Task OnInitializedAsync()
     {
         games = await gameService.GetGames();
@@ -103,23 +99,21 @@ else
         await (isAdd ? AddGameValidSubmit() : EditGameValidSubmit());
     }
 
-    //Adds new game to DB
     private async Task AddGameValidSubmit()
     {
         Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.AddGame(createGame);
         games = await gameService.GetGames();
-        ToggleGameForm();
+        ToggleGameFormVisibility();
         StateHasChanged();
     }
 
-    //Handles edit operations to selected game record
     private async Task EditGameValidSubmit()
     {
         Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
         await gameService.UpdateGame(updateGame);
         games = await gameService.GetGames();
-        ToggleGameForm();
+        ToggleGameFormVisibility();
         StateHasChanged();
     }
 
@@ -135,7 +129,7 @@ else
         isAdd = false;
         selectedGame = game;
         adminGameViewModel = GameVM.ToViewModel(game);
-        ToggleGameForm();
+        ToggleGameFormVisibility();
     }
 
     private void InitAdd()
@@ -143,10 +137,10 @@ else
         isAdd = true;
         selectedGame = new Game();
         adminGameViewModel = GameVM.ToViewModel(selectedGame);
-        ToggleGameForm();
+        ToggleGameFormVisibility();
     }
 
-    private void ToggleGameForm()
+    private void ToggleGameFormVisibility()
     {
         showForm = !showForm;
     }
