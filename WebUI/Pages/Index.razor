@@ -1,10 +1,11 @@
 ﻿@page "/"
-@layout UnauthorizedPagesLayout
+@layout AuthorizedPagesLayout
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
 
 @inject IGameService gameService;
+@inject ICartService cartService;
 
 <h1>Conestoga Insiders Club</h1>
 <p>Your source of the latest games and events</p>
@@ -34,14 +35,12 @@
         </tr>
     </table>
     <br />
-    <AuthorizeView>
-        <Authorized>
-            @*TODO - Hook up game purchase and wishlist features*@
-            <button class="btn btn-primary">Buy Game</button>
-            <button class="btn btn-primary">Add To Wishlist</button>
-            <button class="btn btn-primary">Leave Rating</button>
-        </Authorized>
-    </AuthorizeView>
+    @if (!IsGameInCart(game.GameId))
+    {
+        <button class="btn btn-primary mr-1" @onclick="@(() => AddToCart(game.GameId))">Add To Cart</button>
+    }
+    <button class="btn btn-primary">Add To Wishlist</button>
+    <button class="btn btn-primary">Leave Review</button>
     <button class="btn btn-secondary" @onclick="ToggleDetailsVisibility">Go Back</button>
 }
 else if (games != null && games.Count != 0)
@@ -72,13 +71,17 @@ else
 
 @code {
     #region Declarations
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
     private Game game = new Game();
     private List<Game> games;
+    private List<CartItem> cartItems;
     private bool showDetails = false;
     #endregion
 
     protected override async Task OnInitializedAsync()
     {
+        cartItems = await cartService.GetCartItems(user.Id);
         games = await gameService.GetGames();
     }
 
@@ -86,6 +89,17 @@ else
     {
         this.game = game;
         ToggleDetailsVisibility();
+    }
+
+    private bool IsGameInCart(int gameId)
+    {
+        return cartItems.FirstOrDefault(g => g.GameId == gameId) == null ? false : true;
+    }
+
+    private async void AddToCart(int gameId)
+    {
+        CartItem cartItem = new CartItem { UserId = user.Id, GameId = gameId };
+        await cartService.AddCartItem(cartItem);
     }
 
     private void ToggleDetailsVisibility()
