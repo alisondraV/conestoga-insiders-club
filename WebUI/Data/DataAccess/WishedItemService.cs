@@ -10,6 +10,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
     public class WishedItemService : IWishedItemService
     {
         private ApplicationDbContext context;
+
         public WishedItemService(ApplicationDbContext context)
         {
             this.context = context;

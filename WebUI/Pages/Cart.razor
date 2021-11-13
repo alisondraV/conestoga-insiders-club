@@ -6,6 +6,7 @@
 
 @inject IGameService gameService;
 @inject ICartService cartService;
+@inject IOrderService orderService;
 
 <h1 class="mb-4">Cart</h1>
 
@@ -49,7 +50,7 @@ else
                 <span>@cartTotal</span>
             </div>
         </div>
-        <button class="rounded btn-primary mt-5 mr-2" @onclick="ToggleCheckOut">Confirm order</button>
+        <button class="rounded btn-primary mt-5 mr-2" @onclick="CreateOrder">Confirm order</button>
         <button class="rounded btn-secondary mt-5" @onclick="ToggleCheckOut">Back to the Cart</button>
     }
 }
@@ -72,6 +73,13 @@ else
         await cartService.RemoveCartItem(cartItem);
 
         cartItems = await cartService.GetCartItems(user.Id);
+        StateHasChanged();
+    }
+
+    private async void CreateOrder()
+    {
+        await orderService.CreateOrderFromCartItems(cartItems);
+        ToggleCheckOut();
         StateHasChanged();
     }
 
