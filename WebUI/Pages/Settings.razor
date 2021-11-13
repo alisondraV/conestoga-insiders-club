@@ -44,9 +44,9 @@ else
                     <InputSelect id="Genre_Edit" @bind-Value="preferenceViewModel.GenreName">
                         <option value="">None</option>
                         @foreach (var genre in gameGenres)
-                            {
+                        {
                             <option value="@genre.Name">@genre.Name</option>
-                            }
+                        }
                     </InputSelect>
                 </td>
             </tr>

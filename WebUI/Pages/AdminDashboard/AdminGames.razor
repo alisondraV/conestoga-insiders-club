@@ -10,8 +10,7 @@
 <h1>Manage Games</h1>
 <p>CRUD tools for game creation and management.</p>
 
-<button class="btn-info rounded" @onclick="@InitAdd">Add Game</button>
-<br />
+<button class="btn-info rounded mb-2" @onclick="@InitAdd">Add Game</button>
 
 @if (showForm)
 {
@@ -53,7 +52,6 @@
     </EditForm>
     <button class="btn btn-secondary mt-1" @onclick="ToggleGameFormVisibility">Cancel</button>
 }
-@* --- Display Game List --- *@
 else if (games != null && games.Count != 0)
 {
     <div class="row" style="padding-top: 10px">
@@ -81,7 +79,7 @@ else
 @code {
     #region Declarations
     private Game selectedGame = new Game();
-    private GameVM adminGameViewModel = new GameVM();
+    private GameVM adminGameViewModel;
     private List<Game> games;
     private List<GameGenre> gameGenres;
     private bool showForm = false;
@@ -101,7 +99,7 @@ else
 
     private async Task AddGameValidSubmit()
     {
-        Game createGame = GameVM.ToModel(selectedGame, adminGameViewModel);
+        Game createGame = adminGameViewModel.ToModel(selectedGame);
         await gameService.AddGame(createGame);
         games = await gameService.GetGames();
         ToggleGameFormVisibility();
@@ -110,7 +108,7 @@ else
 
     private async Task EditGameValidSubmit()
     {
-        Game updateGame = GameVM.ToModel(selectedGame, adminGameViewModel);
+        Game updateGame = adminGameViewModel.ToModel(selectedGame);
         await gameService.UpdateGame(updateGame);
         games = await gameService.GetGames();
         ToggleGameFormVisibility();
@@ -128,7 +126,7 @@ else
     {
         isAdd = false;
         selectedGame = game;
-        adminGameViewModel = GameVM.ToViewModel(game);
+        adminGameViewModel = new GameVM(game);
         ToggleGameFormVisibility();
     }
 
@@ -136,7 +134,7 @@ else
     {
         isAdd = true;
         selectedGame = new Game();
-        adminGameViewModel = GameVM.ToViewModel(selectedGame);
+        adminGameViewModel = new GameVM(selectedGame);
         ToggleGameFormVisibility();
     }
 

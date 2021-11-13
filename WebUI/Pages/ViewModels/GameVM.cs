@@ -6,6 +6,14 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 {
     public class GameVM
     {
+        public GameVM(Game game)
+        {
+            Name = game.Name;
+            Description = game.Description;
+            Price = game.Price;
+            GenreName = game.GenreName;
+        }
+
         [StringLength(50)]
         [Required(ErrorMessage = "Game Name is required")]
         [MinLength(3, ErrorMessage = "Game name should be at least 3 characters long")]
@@ -23,25 +31,14 @@ namespace ConestogaInsidersClub.Pages.ViewModels
         [Required(ErrorMessage = "Game Genre is required")]
         public string GenreName { get; set; }
 
-        public static Game ToModel(Game game, GameVM admingameVM)
+        public Game ToModel(Game game)
         {
-            game.Name = admingameVM.Name;
-            game.Description = admingameVM.Description;
-            game.Price = admingameVM.Price;
-            game.GenreName = admingameVM.GenreName;
+            game.Name = Name;
+            game.Description = Description;
+            game.Price = Price;
+            game.GenreName = GenreName;
 
             return game;
-        }
-
-        public static GameVM ToViewModel(Game game)
-        {
-            return new GameVM
-            {
-                Name = game.Name,
-                Description = game.Description,
-                Price = game.Price,
-                GenreName = game.GenreName
-            };
         }
     }
 }

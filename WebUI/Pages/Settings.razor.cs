@@ -27,13 +27,14 @@ namespace ConestogaInsidersClub.Pages
 
         [CascadingParameter(Name = "user")]
         protected ApplicationUser user { get; set; }
+
         [CascadingParameter(Name = "userViewModel")]
         public UserVM userViewModel { get; set; }
 
         public Preference preference;
         public List<Game> games;
         public List<GameGenre> gameGenres;
-        public PreferenceVM preferenceViewModel = new PreferenceVM();
+        public PreferenceVM preferenceViewModel;
         public bool editPreferenceMode = false;
 
         protected override async Task OnInitializedAsync()
@@ -42,12 +43,12 @@ namespace ConestogaInsidersClub.Pages
             games = await gameService.GetGames();
             gameGenres = await gameGenreService.GetGameGenres();
 
-            preferenceViewModel = PreferenceVM.ToViewModel(preference);
+            preferenceViewModel = new PreferenceVM(preference);
         }
 
         public async void HandlePreferenceSubmit()
         {
-            Preference updatedPreference = PreferenceVM.ToModel(preference, preferenceViewModel);
+            Preference updatedPreference = preferenceViewModel.ToModel(preference);
             await preferenceService.UpdatePreference(updatedPreference);
             FlipEditPreferenceMode();
             StateHasChanged();
@@ -56,14 +57,14 @@ namespace ConestogaInsidersClub.Pages
         public async void HandleMailingAddressSubmit(Address newAddress)
         {
             userViewModel.MailingAddress = newAddress;
-            ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
             await userService.UpdateUser(updatedUser);
         }
 
         public async void HandleShippingAddressSubmit(Address newAddress)
         {
             userViewModel.ShippingAddress = newAddress;
-            ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
             await userService.UpdateUser(updatedUser);
         }
 

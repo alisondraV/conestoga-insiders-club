@@ -8,6 +8,20 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 {
     public class UserVM
     {
+        public UserVM(ApplicationUser user)
+        {
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            UserName = user.UserName;
+            Email = user.Email;
+            BirthDay = user.BirthDay;
+            PhoneNumber = user.PhoneNumber;
+            MailingAddress = user.MailingAddress;
+            ShippingAddress = user.ShippingAddress;
+            GenderName = user.Gender;
+            Cards = user.Cards;
+        }
+
         [Required]
         [MinLength(2, ErrorMessage = "FirstName name should be at least 2 characters long")]
         [MaxLength(50, ErrorMessage = "FirstName name is too long")]
@@ -41,37 +55,20 @@ namespace ConestogaInsidersClub.Pages.ViewModels
 
         public ICollection<Card> Cards { get; set; }
 
-        public static ApplicationUser ToModel(ApplicationUser user, UserVM userVM)
+        public ApplicationUser ToModel(ApplicationUser user)
         {
-            user.UserName = userVM.UserName;
-            user.FirstName = userVM.FirstName;
-            user.LastName = userVM.LastName;
-            user.Email = userVM.Email;
-            user.BirthDay = userVM.BirthDay;
-            user.PhoneNumber = userVM.PhoneNumber;
-            user.MailingAddress = userVM.MailingAddress;
-            user.ShippingAddress = userVM.ShippingAddress;
-            user.Gender = userVM.GenderName == Gender.NotSet ? null : userVM.GenderName;
-            user.Cards = userVM.Cards;
+            user.UserName = UserName;
+            user.FirstName = FirstName;
+            user.LastName = LastName;
+            user.Email = Email;
+            user.BirthDay = BirthDay;
+            user.PhoneNumber = PhoneNumber;
+            user.MailingAddress = MailingAddress;
+            user.ShippingAddress = ShippingAddress;
+            user.Gender = GenderName == Gender.NotSet ? null : GenderName;
+            user.Cards = Cards;
 
             return user;
-        }
-
-        public static UserVM ToViewModel(ApplicationUser user)
-        {
-            return new UserVM
-            {
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                BirthDay = user.BirthDay,
-                PhoneNumber = user.PhoneNumber,
-                MailingAddress = user.MailingAddress,
-                ShippingAddress = user.ShippingAddress,
-                GenderName = user.Gender,
-                Cards = user.Cards
-            };
         }
     }
 }

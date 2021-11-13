@@ -97,7 +97,7 @@ else
 
     private async void HandleValidSubmit()
     {
-        ApplicationUser updatedUser = UserVM.ToModel(user, userViewModel);
+        ApplicationUser updatedUser = userViewModel.ToModel(user);
         await userService.UpdateUser(updatedUser);
         FlipEditMode();
         StateHasChanged();
