@@ -1,0 +1,26 @@
+﻿@using ConestogaInsidersClub.Data.Models;
+
+<div class="col-sm-6">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text float-right">Price: @Game.Price.ToString("C")</p>
+            <h5 class="card-title">@Game.Name</h5>
+            <p class="card-text">@Game.Description</p>
+            <button class="btn @ButtonClass" @onclick="OnClick">@ButtonText</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; }
+
+    [Parameter]
+    public string ButtonClass { get; set; }
+
+    [Parameter]
+    public Game Game { get; set; }
+
+    [Parameter]
+    public Action OnClick { get; set; }
+}

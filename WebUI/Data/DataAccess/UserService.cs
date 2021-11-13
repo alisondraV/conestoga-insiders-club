@@ -35,6 +35,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .ThenInclude(p => p.FavouriteGame)
                 .Include(u => u.MailingAddress)
                 .Include(u => u.ShippingAddress)
+                .Include(u => u.Cards)
                 .SingleAsync();
         }
 
