@@ -22,12 +22,12 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasOne(d => d.Genre)
                 .WithMany(p => p.Preferences)
                 .HasForeignKey(d => d.GenreName)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(d => d.FavouriteGame)
                 .WithMany(g => g.Preferences)
                 .HasForeignKey(d => d.FavouriteGameId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

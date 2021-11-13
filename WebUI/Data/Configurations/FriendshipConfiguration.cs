@@ -17,12 +17,12 @@ namespace ConestogaInsidersClub.Data.Configurations
             builder.HasOne(d => d.User1)
                 .WithMany()
                 .HasForeignKey(d => d.UserId1)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(d => d.User2)
                 .WithMany()
                 .HasForeignKey(d => d.UserId2)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

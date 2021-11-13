@@ -104,14 +104,12 @@ namespace ConestogaInsidersClub.Data.Migrations
                         name: "FK_Friendships_AspNetUsers_UserId1",
                         column: x => x.UserId1,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Friendships_AspNetUsers_UserId2",
                         column: x => x.UserId2,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -142,7 +140,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,7 +152,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    GenreName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                    GenreName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -164,7 +162,7 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.GenreName,
                         principalTable: "GameGenres",
                         principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,13 +180,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CartItems_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,14 +204,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                         name: "FK_OrderItems_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
-                        principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "GameId");
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,13 +237,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.GenreName,
                         principalTable: "GameGenres",
                         principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Preferences_Games_FavouriteGameId",
                         column: x => x.FavouriteGameId,
                         principalTable: "Games",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,13 +264,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -291,13 +288,13 @@ namespace ConestogaInsidersClub.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WishedItems_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
