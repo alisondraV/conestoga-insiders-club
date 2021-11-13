@@ -1,6 +1,7 @@
 ﻿using ConestogaInsidersClub.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace ConestogaInsidersClub.Data
 {
@@ -56,6 +57,10 @@ namespace ConestogaInsidersClub.Data
             var secondUserId = "a789434c-de0e-495e-c67e-c1b215a11abc";
             var adminId = "e0e5e08e-96be-4927-9fc1-c1b355a11abc";
 
+            List<Card> cards = new List<Card> {
+                new Card { CardNumber = "9876543210129344", ExpirationMonth = 2, ExpirationYear = 2025 }
+            };
+
             user = new ApplicationUser
             {
                 Id = userId,
@@ -71,6 +76,7 @@ namespace ConestogaInsidersClub.Data
                 BirthDay = System.DateTime.Now.AddYears(-25),
                 MailingAddressId = mailingAddress.AddressId,
                 ShippingAddressId = shippingAddress.AddressId,
+                Cards = cards,
             };
             user.PasswordHash = hasher.HashPassword(user, "Qweqwe1!");
 
@@ -217,6 +223,8 @@ namespace ConestogaInsidersClub.Data
             context.RemoveRange(context.UserRoles);
             context.RemoveRange(context.Addresses);
             context.RemoveRange(context.CartItems);
+            context.RemoveRange(context.OrderItems);
+            context.RemoveRange(context.Orders);
             context.RemoveRange(context.Users);
             context.RemoveRange(context.Roles);
         }

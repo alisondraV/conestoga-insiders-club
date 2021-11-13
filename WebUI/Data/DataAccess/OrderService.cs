@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConestogaInsidersClub.Data.Models;
@@ -33,6 +34,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
             var order = new Order
             {
                 UserId = cartItems.First().UserId,
+                CreatedAt = DateTime.Now
             };
             await context.AddAsync(order);
 

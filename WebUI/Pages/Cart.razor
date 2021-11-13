@@ -8,11 +8,16 @@
 @inject ICartService cartService;
 @inject IOrderService orderService;
 
-<h1 class="mb-4">Cart</h1>
+<h1 class="mb-4">@title</h1>
 
 @if (cartItems == null)
 {
     <h3>Loading...</h3>
+}
+else if (message != null)
+{
+    <h3 class="mb-5">@message</h3>
+    <a href="/" class="btn-primary rounded p-3">Go Back to the Games List</a>
 }
 else if (cartItems.Count() == 0)
 {
@@ -20,9 +25,9 @@ else if (cartItems.Count() == 0)
 }
 else
 {
-    @if (!checkOutState)
+    if (!checkOutState)
     {
-        @foreach (var cartItem in cartItems)
+        foreach (var cartItem in cartItems)
         {
             <GameCard Game="cartItem.Game"
                       ButtonText="Remove from Cart"
@@ -30,11 +35,18 @@ else
                       OnClick="() => RemoveFromCart(cartItem)" />
             <br />
         }
-        <button class="rounded btn-primary mt-5 ml-3" @onclick="ToggleCheckOut">Proceed to check out</button>
+        if (creditCards.Count == 0)
+        {
+            <h5><a href="/credit-card">Add a credit card</a> to your record in order to proceed</h5>
+        }
+        else
+        {
+            <button class="rounded btn-primary mt-5 ml-3" @onclick="ToggleCheckOut">Proceed to check out</button>
+        }
     }
     else
     {
-        @foreach (var cartItem in cartItems)
+        foreach (var cartItem in cartItems)
         {
             <div class="col-4">
                 <div class="d-flex justify-content-between">
@@ -50,6 +62,15 @@ else
                 <span>@cartTotal</span>
             </div>
         </div>
+
+        <h4 class="mt-5">Credit cards</h4>
+        foreach (var card in creditCards)
+        {
+            <label class="d-block mt-3">
+                <input type="radio" name="card" @bind-value="card.CardId" checked />
+                Ending in @card.CardNumber.Substring(12)
+            </label>
+        }
         <button class="rounded btn-primary mt-5 mr-2" @onclick="CreateOrder">Confirm order</button>
         <button class="rounded btn-secondary mt-5" @onclick="ToggleCheckOut">Back to the Cart</button>
     }
@@ -59,6 +80,10 @@ else
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
     private List<CartItem> cartItems;
+    private ICollection<Card> creditCards;
+    private Card selectedCard;
+    private string message;
+    private string title = "Cart";
     private bool checkOutState = false;
     private double cartTotal = 0.0;
 
@@ -66,6 +91,8 @@ else
     {
         cartItems = await cartService.GetCartItems(user.Id);
         cartItems.ForEach(ci => cartTotal += ci.Game.Price);
+
+        creditCards = user.Cards;
     }
 
     private async void RemoveFromCart(CartItem cartItem)
@@ -78,13 +105,22 @@ else
 
     private async void CreateOrder()
     {
-        await orderService.CreateOrderFromCartItems(cartItems);
-        ToggleCheckOut();
+        Order order = await orderService.CreateOrderFromCartItems(cartItems);
+        // TODO: set selected credit card for the order
+        foreach (var ci in cartItems)
+        {
+            await cartService.RemoveCartItem(ci);
+        }
+        cartItems = await cartService.GetCartItems(user.Id);
+
+        message = "You've successfully confirmed your order!";
         StateHasChanged();
     }
 
     private void ToggleCheckOut()
     {
+        title = title == "Cart" ? "Checkout" : "Cart";
         checkOutState = !checkOutState;
+        StateHasChanged();
     }
 }
