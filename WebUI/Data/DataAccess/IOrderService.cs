@@ -7,7 +7,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
     public interface IOrderService
     {
         Task AddOrderItem(OrderItem item);
-        Task<List<OrderItem>> GetOrderItems(string userId);
+        Task<List<Order>> GetOrders(string userId);
         Task CreateOrderFromCartItems(List<CartItem> cartItems);
     }
 }
