@@ -1,7 +1,40 @@
-﻿@page "/cart" 
+﻿@page "/cart"
+@layout AuthorizedPagesLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
 
-<h3>Cart</h3>
+@inject IGameService gameService;
+@inject ICartService cartService;
+
+<h1>Cart</h1>
+
+@if (cartItems == null)
+{
+    <h3>Loading...</h3>
+}
+else if (cartItems.Count() == 0)
+{
+    <h4 class="mt-2">There are no games in your cart yet. Go to the <a href="/">home page</a> to discover the games we have to offer!</h4>
+}
+else
+{
+    @foreach(var cartItem in cartItems)
+    {
+        <div class="col-sm-3 card">
+            <h4>@cartItem.Game.Name</h4>
+            <p>@cartItem.Game.Price</p>
+        </div>
+    }
+}
 
 @code {
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+    private List<CartItem> cartItems;
 
+    protected override async Task OnInitializedAsync()
+    {
+        cartItems = await cartService.GetCartItems(user.Id);
+    }
 }
