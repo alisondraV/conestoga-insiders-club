@@ -5,6 +5,7 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<p style="color:red">@ViewData["error"]</p>
 
 <div class="row">
     <div class="col-md-6">
@@ -47,11 +48,15 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6LfOQDIdAAAAAO9cVU1PBC-_55rfJ10HVKsjOm3o"></div>
+            </div>
             <button type="submit" class="btn btn-primary" id="Register_Button">Register</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }

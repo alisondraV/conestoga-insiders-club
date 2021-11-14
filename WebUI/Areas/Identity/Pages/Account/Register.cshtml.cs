@@ -15,6 +15,9 @@ using Microsoft.Extensions.Logging;
 using ConestogaInsidersClub.Data.Models;
 using ConestogaInsidersClub.Data;
 using System;
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
 {
@@ -87,6 +90,18 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
+        /* 
+            Retrieves and validates the JSON response from google's api
+         */
+        public static async Task<CaptchaResponse> ValidateCaptcha(string response)
+        {
+            string secret = "6LfOQDIdAAAAAF4kmbWmPn21YoipCZaEocBuY23i";
+            var client = new HttpClient();
+            var jsonResult = await client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}", new StringContent(""));
+            var jsonResultString = jsonResult.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CaptchaResponse>(jsonResultString.Result);
+        }
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -99,6 +114,14 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
+                var captcha = Request.Form["g-recaptcha-response"].ToString();
+                var validation = await ValidateCaptcha(captcha);
+                if (!validation.Success)
+                {
+                    ViewData["error"] = "Error: Please complete reCAPTCHA and try again";
+                    return Page();
+                }
                 var user = new ApplicationUser
                 {
                     Email = Input.Email,
