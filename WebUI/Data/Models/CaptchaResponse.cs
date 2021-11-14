@@ -6,7 +6,7 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
     public class CaptchaResponse
     {
         [JsonProperty("success")]
-        public bool Success{ get; set; }
+        public bool Success { get; set; }
         [JsonProperty("error-codes")]
         public List<string> ErrorMessage { get; set; }
     }
