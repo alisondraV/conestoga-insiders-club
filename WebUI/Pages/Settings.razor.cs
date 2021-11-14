@@ -68,6 +68,13 @@ namespace ConestogaInsidersClub.Pages
             await userService.UpdateUser(updatedUser);
         }
 
+        public async Task HandleShippingSameAsMailing(object isChecked)
+        {
+            userViewModel.ShippingAddress = (bool)isChecked ? userViewModel.MailingAddress : new Address();
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
+            await userService.UpdateUser(updatedUser);
+        }
+
         public void GoToCreditCardPage()
         {
             NavigationManager.NavigateTo("credit-card");

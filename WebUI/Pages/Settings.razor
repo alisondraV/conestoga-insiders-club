@@ -77,5 +77,10 @@ else
 
 <AddressForm addressType="Mailing" address="@user.MailingAddress" onSave="@HandleMailingAddressSubmit" />
 <AddressForm addressType="Shipping" address="@user.ShippingAddress" onSave="@HandleShippingAddressSubmit" />
+<label style="display: block;">
+    Is your shipping address same as mailing?
+    <input type="checkbox" id="Same_Mailing_And_Shipping" @onchange="async (e) => { await HandleShippingSameAsMailing(e.Value); }" />
+</label>
+
 <br />
 <button class="btn-link rounded mb-lg-5 w-25 credit" @onclick="GoToCreditCardPage">Update credit card info</button>
