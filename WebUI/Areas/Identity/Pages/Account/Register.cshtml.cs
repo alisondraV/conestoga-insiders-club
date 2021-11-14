@@ -116,10 +116,10 @@ namespace ConestogaInsidersClub.Areas.Identity.Pages.Account
             {
                 if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
                 var captcha = Request.Form["g-recaptcha-response"].ToString();
-                var validation = await ValidateCaptcha(captcha);
+                CaptchaResponse validation = await ValidateCaptcha(captcha);
                 if (!validation.Success)
                 {
-                    ViewData["error"] = "Error: Please complete reCAPTCHA and try again";
+                    ViewData["error"] = "reCAPTCHA couldn't be verified please complete reCAPTCHA and try again";
                     return Page();
                 }
                 var user = new ApplicationUser
