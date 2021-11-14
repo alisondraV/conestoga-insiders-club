@@ -4,8 +4,10 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
 
+
 @inject IGameService gameService;
 @inject ICartService cartService;
+@inject IWishedItemService wishedItemService;
 @inject NavigationManager NavigationManager;
 
 @if (game == null)
@@ -39,7 +41,7 @@ else
     {
         <button class="btn btn-primary mr-1" @onclick="@(() => AddToCart(game.GameId))">Add To Cart</button>
     }
-    <button class="btn btn-primary">Add To Wishlist</button>
+    <button class="btn btn-primary" @onclick="@(() => AddToWishlist(game.GameId))">Add To Wishlist</button>
     <button class="btn btn-primary">Leave Review</button>
 }
 
@@ -67,5 +69,10 @@ else
 
         game = await gameService.GetGame(GameId);
         StateHasChanged();
+    }
+
+    private async void AddToWishlist(int gameId)
+    {
+        await wishedItemService.AddToWishlist(game, user.Id);
     }
 }

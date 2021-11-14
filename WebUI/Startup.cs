@@ -48,7 +48,7 @@ namespace ConestogaInsidersClub
             services.AddTransient<IPreferenceService, PreferenceService>();
             services.AddTransient<IGameGenreService, GameGenreService>();
             services.AddTransient<ICartService, CartService>();
-            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IWishedItemService, WishedItemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
