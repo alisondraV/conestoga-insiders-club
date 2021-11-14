@@ -16,12 +16,14 @@
 {
     <h3 class="mt-2">Games</h3>
     <p>Below you can find a selection of our available games.</p>
+
+    <input id="Search" @onchange="@LookForGame" placeholder="Enter the game you want to search for..." />
     <div class="row p-1 mt-2">
         @foreach (var game in games)
         {
-            <GameCard Game="game" 
-                      ButtonText="View Details" 
-                      ButtonClass="btn-primary" 
+            <GameCard Game="game"
+                      ButtonText="View Details"
+                      ButtonClass="btn-primary"
                       OnClick="() => GoToDetails(game)" />
         }
     </div>
@@ -46,5 +48,18 @@ else
     private void GoToDetails(Game game)
     {
         NavigationManager.NavigateTo("/game/" + game.GameId);
+    }
+
+    private async void LookForGame(ChangeEventArgs args)
+    {
+        string searchQuery = (string)args.Value;
+
+        games = await gameService.GetGames();
+        if (searchQuery != "")
+        {
+            games = games
+                .FindAll(pf => pf.Name.ToLower().Contains(searchQuery.ToLower()));
+        }
+        StateHasChanged();
     }
 }
