@@ -51,7 +51,7 @@ else
             <div class="col-4">
                 <div class="d-flex justify-content-between">
                     <span>@cartItem.Game.Name</span>
-                    <span>@cartItem.Game.Price</span>
+                    <span>@cartItem.Game.Price.ToString("C")</span>
                 </div>
                 <hr />
             </div>
@@ -59,7 +59,7 @@ else
         <div class="col-4 mt-4">
             <div class="d-flex justify-content-between">
                 <span><b>Total:</b></span>
-                <span>@cartTotal</span>
+                <span>@cartTotal.ToString("C")</span>
             </div>
         </div>
 
