@@ -18,7 +18,7 @@
     <p>Below you can find a selection of our available games.</p>
 
     <input id="Search" @onchange="@LookForGame" placeholder="Enter the game you want to search for..." />
-    <div class="row p-1 mt-2">
+    <div class="row p-1">
         @foreach (var game in games)
         {
             <GameCard Game="game"
@@ -37,7 +37,6 @@ else
 @code {
     #region Declarations
     private List<Game> games;
-    private bool showDetails = false;
     #endregion
 
     protected override async Task OnInitializedAsync()
