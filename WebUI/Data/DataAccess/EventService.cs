@@ -40,7 +40,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
         {
             var _event = context.Events.Include(a => a.Attendees).Where(e => e.EventId == eventId).FirstOrDefaultAsync();
             _event.Result.Attendees.Add(user);
-            context.Update(_event);
+            context.Users.Attach(user);
+            context.Update(_event.Result);
             await context.SaveChangesAsync();
         }
 
