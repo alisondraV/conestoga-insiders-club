@@ -1,4 +1,5 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,34 +9,45 @@ namespace ConestogaInsidersClub.Data.DataAccess
 {
     public class EventService : IEventService
     {
-        public Task AddEvent(Event @event)
+        private readonly ApplicationDbContext context;
+        public EventService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
+        }
+        public async Task AddEvent(Event @event)
+        {
+            await context.Events.AddAsync(@event);
+            await context.SaveChangesAsync();
         }
 
-        public Task DeleteEvent(Event @event)
+        public async Task DeleteEvent(Event @event)
         {
-            throw new NotImplementedException();
+            context.Events.Remove(@event);
+            await context.SaveChangesAsync();
         }
 
         public Task<Event> GetEvent(int eventId)
         {
-            throw new NotImplementedException();
+            return context.Events.Include(a => a.Attendees).Where(e => e.EventId == eventId).FirstOrDefaultAsync();
         }
 
         public Task<List<Event>> GetEvents()
         {
-            throw new NotImplementedException();
+            return context.Events.Include(a => a.Attendees).ToListAsync();
         }
 
-        public Task JoinEvent(Event @event, ApplicationUser user)
+        public async Task JoinEvent(int eventId, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            var _event = context.Events.Include(a => a.Attendees).Where(e => e.EventId == eventId).FirstOrDefaultAsync();
+            _event.Result.Attendees.Add(user);
+            context.Update(_event);
+            await context.SaveChangesAsync();
         }
 
-        public Task UpdateEvent(Event @event)
+        public async Task UpdateEvent(Event @event)
         {
-            throw new NotImplementedException();
+            context.Events.Update(@event);
+            await context.SaveChangesAsync();
         }
     }
 }

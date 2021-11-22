@@ -13,7 +13,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task UpdateEvent(Event @event);
         Task<Event> GetEvent(int eventId);
         Task<List<Event>> GetEvents();
-        Task JoinEvent(Event @event, ApplicationUser user);
+        Task JoinEvent(int eventId, ApplicationUser user);
 
     }
 }
