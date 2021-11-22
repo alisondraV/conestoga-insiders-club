@@ -12,7 +12,6 @@ namespace ServiceTests
 {
     class EventServiceTests : TestBase
     {
-        private List<Event> testEvents;
         private Event testEvent;
         private ApplicationUser testUser;
 
@@ -41,9 +40,6 @@ namespace ServiceTests
                 }
             );
         }
-
-
-        //Task DeleteEvent(Event @event);
 
 
         [Test, Order(1)]
