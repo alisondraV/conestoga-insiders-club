@@ -57,7 +57,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context);
+            var service = new OrderService(context, new UserService(context));
             var expectedOrderItem = new OrderItem
             {
                 GameId = testGame.GameId,
@@ -75,11 +75,11 @@ namespace ServiceTests
         }
 
         [Test, Order(2)]
-        public async Task GetOrders_ShouldGetAllOrdersForUser()
+        public async Task GetOrders_ShouldGetAllOrdersOrGetAllOrdersForUser()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context);
+            var service = new OrderService(context, new UserService(context));
             var otherOrder = await SeedEntities(new Order
             {
                 User = new ApplicationUser
@@ -91,11 +91,13 @@ namespace ServiceTests
             });
 
             //Act
-            var orders = await service.GetOrders(user.Id);
+            var allOrders = await service.GetOrders();
+            var userOrders = await service.GetOrders(user.Id);
 
             //Assert
-            Assert.That(orders, Has.Count.EqualTo(1));
-            Assert.IsFalse(orders.Any(o => o.OrderId == otherOrder.OrderId));
+            Assert.That(allOrders, Has.Count.EqualTo(2));
+            Assert.That(userOrders, Has.Count.EqualTo(1));
+            Assert.IsFalse(userOrders.Any(o => o.OrderId == otherOrder.OrderId));
         }
 
         [Test, Order(3)]
@@ -103,7 +105,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context);
+            var service = new OrderService(context, new UserService(context));
             var cartItems = await SeedEntities(
                 new CartItem
                 {
@@ -130,6 +132,39 @@ namespace ServiceTests
             
             //Assert
             Assert.That(order.OrderItems, Has.Count.EqualTo(cartItems.Count));
+        }
+
+        [Test, Order(4)]
+        public async Task MarkAsProcessed_ShouldChangeTheStateOfTheOrder()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new OrderService(context, new UserService(context));
+
+            //Act
+            await service.MarkAsProcessed(testOrder);
+
+            //Assert
+            Assert.AreEqual(OrderStatus.Processed, testOrder.OrderStatus);
+        }
+
+        [Test, Order(5)]
+        public async Task GetOrderedGames_RetrievesAllGamesEverOrderedByAUser()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new OrderService(context, new UserService(context));
+            testOrder.OrderItems.Add(new OrderItem
+            {
+                GameId = testGame.GameId,
+                OrderId = testOrder.OrderId,
+            });
+
+            //Act
+            var games = await service.GetOrderedGames(user.Id);
+
+            //Assert
+            Assert.That(games, Has.Count.EqualTo(3));
         }
     }
 }
