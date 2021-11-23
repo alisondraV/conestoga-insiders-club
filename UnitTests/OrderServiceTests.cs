@@ -14,6 +14,7 @@ namespace ServiceTests
     class OrderServiceTests : TestBase
     {
         private Game testGame;
+        private GameGenre testGenre;
         private Order testOrder;
         private ApplicationUser user;
 
@@ -22,7 +23,7 @@ namespace ServiceTests
         {
             using var context = new ApplicationDbContext(ContextOptions);
 
-            var genre = new GameGenre
+            testGenre = new GameGenre
             {
                 Name = "Indie"
             };
@@ -33,15 +34,12 @@ namespace ServiceTests
                     GameId = 1,
                     Name = "Age of Empires IV",
                     Description = "RTS Game",
-                    Genre = genre
+                    Genre = testGenre
                 });
 
             user = new ApplicationUser()
             {
-                Id = "d123",
                 UserName = "test",
-                NormalizedUserName = "TEST",
-                Email = "test@user.com"
             };
 
             testOrder = await SeedEntities<Order>(
@@ -77,132 +75,61 @@ namespace ServiceTests
         }
 
         [Test, Order(2)]
-        public async Task AddReviews_ShouldAddNewReview()
+        public async Task GetOrders_ShouldGetAllOrdersForUser()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            Review review = new Review()
+            var service = new OrderService(context);
+            var otherOrder = await SeedEntities(new Order
             {
-                GameId = testGame.GameId,
-                UserId = users[1].Id,
-                Rating = 3,
-                Description = "decent game",
-                Approved = null
-            };
+                User = new ApplicationUser
+                {
+                    UserName = "Bar"
+                },
+                OrderStatus = OrderStatus.Pending,
+                OrderType = OrderType.Online
+            });
+
             //Act
-            await service.AddReview(review);
-            var reviews = await service.GetReviewsAwaitingApproval();
+            var orders = await service.GetOrders(user.Id);
+
             //Assert
-            Assert.IsNotNull(reviews);
-            Assert.That(reviews, Has.Count.EqualTo(2));
+            Assert.That(orders, Has.Count.EqualTo(1));
+            Assert.IsFalse(orders.Any(o => o.OrderId == otherOrder.OrderId));
         }
 
         [Test, Order(3)]
-        public async Task ApproveReview_ShouldApproveTheReview()
+        public async Task CreateOrderFromCartItems_CreatesAnOrderFromCartItems()
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            var reviews = await service.GetReviewsAwaitingApproval();
-            var review = reviews[1];
-            //Act
-            await service.ApproveReview(review);
-            var approvedReview = context.Reviews.Where(a => a.Approved == true).ToList();
-            //Assert
-            Assert.IsNotNull(approvedReview);
-            Assert.That(approvedReview, Has.Count.EqualTo(1));
-        }
+            var service = new OrderService(context);
+            var cartItems = await SeedEntities(
+                new CartItem
+                {
+                    Game = new Game
+                    {
+                        GenreName = testGenre.Name,
+                        Name = "foo"
+                    },
+                    UserId = user.Id
+                },
+                new CartItem
+                {
+                    Game = new Game
+                    {
+                        GenreName = testGenre.Name,
+                        Name = "bar"
+                    },
+                    UserId = user.Id
+                }
+            );
 
-        [Test, Order(4)]
-        public async Task RejectReview_ShouldRejectTheOtherReview()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            var reviews = await service.GetReviewsAwaitingApproval();
-            var review = reviews[0];
             //Act
-            await service.RejectReview(review);
-            var approvedReview = context.Reviews.Where(a => a.Approved == false).ToList();
+            var order = await service.CreateOrderFromCartItems(cartItems);
+            
             //Assert
-            Assert.IsNotNull(approvedReview);
-            Assert.That(approvedReview, Has.Count.EqualTo(1));
-        }
-
-        [Test, Order(5)]
-        public async Task GetRejectedReviews_ShouldGetListOfRejectedReviews()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            //Act
-            var rejectedReviews = await service.GetRejectedReviews();
-            //Assert
-            Assert.IsNotNull(rejectedReviews);
-            Assert.That(rejectedReviews, Has.Count.EqualTo(1));
-        }
-
-        [Test, Order(6)]
-        public async Task GetApprovedReviews_ShouldGetAListOfApprovedReviews()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            //Act
-            var approvedReviews = await service.GetApprovedGameReviews(testGame.GameId);
-            //Assert
-            Assert.IsNotNull(approvedReviews);
-            Assert.That(approvedReviews, Has.Count.EqualTo(1));
-        }
-
-        [Test, Order(7)]
-        public async Task GetReviewsByUser_ShouldGetTheReviewsMadeByUser()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            //Act
-            var userReviews = await service.GetReviewsByUser(users[0].Id);
-            //Assert
-            Assert.IsNotNull(userReviews);
-            Assert.That(userReviews, Has.Count.EqualTo(1));
-        }
-
-        [Test, Order(8)]
-        public async Task GetAverage_GetTheAverageRatingOfTheGame()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            //Act
-            var average = await service.GetAverageRating(testGame.GameId);
-            //Assert
-            Assert.IsNotNull(average);
-            Assert.That(average, Is.EqualTo(3).Within(0.5));
-        }
-
-        [Test, Order(9)]
-        public async Task RemoveReviews_ShouldRemoveTheReviews()
-        {
-            //Arrange
-            using var context = new ApplicationDbContext(ContextOptions);
-            var service = new ReviewService(context);
-            Review review = new Review()
-            {
-                GameId = testGame.GameId,
-                UserId = users[1].Id,
-                Rating = 3,
-                Description = "decent game",
-                Approved = true
-            };
-            //Act
-            await service.DeleteReview(review);
-            await service.DeleteReview(testReview);
-            var reviews = context.Reviews.ToList();
-            //Assert
-            Assert.NotNull(reviews);
-            Assert.False(reviews.Any());
+            Assert.That(order.OrderItems, Has.Count.EqualTo(cartItems.Count));
         }
     }
 }
