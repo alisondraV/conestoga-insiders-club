@@ -29,6 +29,12 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .ToListAsync();
         }
 
+        public Task<List<Order>> GetOrders()
+        {
+            return context.Orders.Include(o => o.OrderItems)
+                .ToListAsync();
+        }
+
         public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems)
         {
             var order = new Order
@@ -49,6 +55,20 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
             await context.SaveChangesAsync();
             return order;
+        }
+
+        public async Task MarkAsProcessed(Order order)
+        {
+            order.OrderStatus = OrderStatus.Processed;
+            await context.SaveChangesAsync();
+        }
+
+        public Task<List<Game>> GetOrderedGames(string userId)
+        {
+            return context.OrderItems
+                .Where(oi => oi.Order.UserId == userId)
+                .Select(oi => oi.Game)
+                .ToListAsync();
         }
     }
 }

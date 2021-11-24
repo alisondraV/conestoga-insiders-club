@@ -47,5 +47,10 @@ namespace ConestogaInsidersClub.Data.DataAccess
             context.Games.Remove(game);
             await context.SaveChangesAsync();
         }
+
+        public bool IsOwnedBy(Game game, string userId)
+        {
+            return game.OrderItems.Any(oi => oi.Order.UserId == userId);
+        }
     }
 }
