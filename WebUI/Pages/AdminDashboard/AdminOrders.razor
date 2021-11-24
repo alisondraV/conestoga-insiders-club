@@ -14,15 +14,17 @@
 } 
 else
 {
-    <table>
+    <table class="table">
         <thead>
-            <th scope="col">Id</th>
-            <th scope="col">Username</th>
-            <th scope="col"># of items</th>
-            <th scope="col">Date Created</th>
-            <th scope="col">Physical Copy Required</th>
-            <th scope="col">Status</th>
-            <th scope="col"></th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col"># of items</th>
+                <th scope="col">Date Created</th>
+                <th scope="col">Physical Copy Required</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+            </tr>
         </thead>
         <tbody>
             @foreach (var order in orders)
