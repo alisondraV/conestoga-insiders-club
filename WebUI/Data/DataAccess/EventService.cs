@@ -36,12 +36,18 @@ namespace ConestogaInsidersClub.Data.DataAccess
             return context.Events.Include(a => a.Attendees).ToListAsync();
         }
 
-        public async Task JoinEvent(int eventId, ApplicationUser user)
+        public async Task JoinEvent(Event @event, ApplicationUser user)
         {
-            var _event = context.Events.Include(a => a.Attendees).Where(e => e.EventId == eventId).FirstOrDefaultAsync();
-            _event.Result.Attendees.Add(user);
+            @event.Attendees.Add(user);
             context.Users.Attach(user);
-            context.Update(_event.Result);
+            context.Update(@event);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task LeaveEvent(Event @event, ApplicationUser user)
+        {
+            @event.Attendees.Remove(user);
+            context.Update(@event);
             await context.SaveChangesAsync();
         }
 

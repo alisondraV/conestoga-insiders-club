@@ -24,6 +24,7 @@ namespace ServiceTests
             testEvent = await SeedEntities(
                 new Event()
                 {
+                    EventId = 1,
                     EventName = "Smash Bros Tournament",
                     Description = "Prize of $1",
                     Location = "Somewhere",
@@ -119,7 +120,7 @@ namespace ServiceTests
             var service = new EventService(context);
 
             // Act
-            await service.JoinEvent(1, testUser);
+            await service.JoinEvent(testEvent, testUser);
             var events = await service.GetEvent(1);
 
             // Assert
@@ -128,6 +129,22 @@ namespace ServiceTests
         }
 
         [Test, Order(6)]
+        public async Task LeaveEvent_ShouldRemoveUserToEvent()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new EventService(context);
+
+            // Act
+            await service.LeaveEvent(testEvent, testUser);
+            var events = await service.GetEvent(1);
+
+            // Assert
+            Assert.NotNull(events);
+            Assert.That(events.Attendees, Has.Count.EqualTo(0));
+        }
+
+        [Test, Order(7)]
         public async Task DeleteEvents_ShouldDeleteAllEvents()
         {
             // Arrange
