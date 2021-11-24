@@ -1,5 +1,6 @@
 ﻿@page "/manage-orders"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data;
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
 
@@ -15,20 +16,34 @@ else
 {
     <table>
         <thead>
-            <td>Id</td>
-            <td>Username</td>
-            <td># of items</td>
-            <td>Date Created</td>
+            <th scope="col">Id</th>
+            <th scope="col">Username</th>
+            <th scope="col"># of items</th>
+            <th scope="col">Date Created</th>
+            <th scope="col">Physical Copy Required</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
         </thead>
-        @foreach (var order in orders)
-        {
-        <tr>
-            <td>@order.OrderId</td>
-            <td>@order.User.UserName</td>
-            <td>@order.OrderItems.Count</td>
-            <td>@order.CreatedAt</td>
-        </tr>
-        }    
+        <tbody>
+            @foreach (var order in orders)
+            {
+            <tr>
+                <td scope="row">@order.OrderId</td>
+                <td>@order.User.UserName</td>
+                <td>@order.OrderItems.Count</td>
+                <td>@GetCreatedAt(order)</td>
+                <td>
+                    @(PhysicalCopyRequired(order) ? "Yes" : "No")
+                </td>
+                <td>@order.OrderStatus.ToString()</td>
+                <td>
+                    @if (PhysicalCopyRequired(order) && order.OrderStatus == OrderStatus.Pending){
+                        <button class="btn btn-primary" @onclick="() => MarkAsProcessed(order)">Mark as processed</button>
+                    }
+                </td>
+            </tr>
+            }    
+        </tbody>
     </table>
 }
 
@@ -39,12 +54,20 @@ else
     {
         orders = await orderService.GetOrders();
     }
-}
 
-<style>
-    thead > td {
-        font-weight: bold;
-        border-bottom: 1px solid black;
+    async Task MarkAsProcessed(Order order)
+    {
+        await orderService.MarkAsProcessed(order);
+        StateHasChanged();
     }
-</style>
 
+    bool PhysicalCopyRequired(Order order)
+    {
+        return order.OrderType == OrderType.Physical;
+    }
+
+    string GetCreatedAt(Order order)
+    {
+        return $"{order.CreatedAt:dd MMM yyyy, hh:mm:ss tt}";
+    }
+}
