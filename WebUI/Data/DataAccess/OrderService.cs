@@ -10,12 +10,10 @@ namespace ConestogaInsidersClub.Data.DataAccess
     public class OrderService : IOrderService
     {
         private ApplicationDbContext context;
-        private IUserService userService;
 
-        public OrderService(ApplicationDbContext context, IUserService userService)
+        public OrderService(ApplicationDbContext context)
         {
             this.context = context;
-            this.userService=userService;
         }
 
         public async Task AddOrderItem(OrderItem item)

@@ -255,7 +255,7 @@ namespace ServiceTests
             };
             var user = new ApplicationUser
             {
-                UserName= "Foo"
+                UserName = "Foo"
             };
             await SeedEntities(new Order
             {

@@ -57,7 +57,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context, new UserService(context));
+            var service = new OrderService(context);
             var expectedOrderItem = new OrderItem
             {
                 GameId = testGame.GameId,
@@ -67,7 +67,7 @@ namespace ServiceTests
             //Act
             await service.AddOrderItem(expectedOrderItem);
             var actualOrderItem = await context.OrderItems.FirstOrDefaultAsync();
-            
+
             //Assert
             Assert.IsNotNull(actualOrderItem);
             Assert.AreEqual(expectedOrderItem.GameId, actualOrderItem.GameId);
@@ -79,7 +79,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context, new UserService(context));
+            var service = new OrderService(context);
             var otherOrder = await SeedEntities(new Order
             {
                 User = new ApplicationUser
@@ -105,7 +105,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context, new UserService(context));
+            var service = new OrderService(context);
             var cartItems = await SeedEntities(
                 new CartItem
                 {
@@ -129,7 +129,7 @@ namespace ServiceTests
 
             //Act
             var order = await service.CreateOrderFromCartItems(cartItems);
-            
+
             //Assert
             Assert.That(order.OrderItems, Has.Count.EqualTo(cartItems.Count));
         }
@@ -139,7 +139,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context, new UserService(context));
+            var service = new OrderService(context);
 
             //Act
             await service.MarkAsProcessed(testOrder);
@@ -153,7 +153,7 @@ namespace ServiceTests
         {
             //Arrange
             using var context = new ApplicationDbContext(ContextOptions);
-            var service = new OrderService(context, new UserService(context));
+            var service = new OrderService(context);
             testOrder.OrderItems.Add(new OrderItem
             {
                 GameId = testGame.GameId,
