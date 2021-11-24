@@ -16,7 +16,7 @@ namespace ConestogaInsidersClub.Pages.Shared
         public DownloadModel(IGameService gameService, IUserService userService)
         {
             this.gameService = gameService;
-            this.userService=userService;
+            this.userService = userService;
         }
 
         public async Task<IActionResult> OnGet(string gameId)
