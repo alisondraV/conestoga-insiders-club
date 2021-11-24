@@ -24,34 +24,37 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<List<Order>> GetOrders(string userId)
         {
-            return context.Orders.Include(o => o.OrderItems)
-                .Where(a => a.UserId == userId)
+            return context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.UserId == userId)
                 .ToListAsync();
         }
 
         public Task<List<Order>> GetOrders()
         {
-            return context.Orders.Include(o => o.OrderItems)
+            return context.Orders
+                .Include(o => o.OrderItems)
+                .Include(o => o.User)
                 .ToListAsync();
         }
 
-        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems)
+        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems, OrderType orderType = OrderType.Online)
         {
             var order = new Order
             {
                 UserId = cartItems.First().UserId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                OrderType = orderType
             };
             await context.AddAsync(order);
 
-            foreach (var cartItem in cartItems)
-            {
-                var orderItem = new OrderItem
-                {
-                    GameId = cartItem.GameId,
-                };
-                order.OrderItems.Add(orderItem);
-            }
+            order.OrderStatus = order.OrderType == OrderType.Online
+                ? OrderStatus.Processed
+                : OrderStatus.Pending;
+
+            order.OrderItems = cartItems
+                .Select(c => new OrderItem { GameId = c.GameId })
+                .ToList();
 
             await context.SaveChangesAsync();
             return order;
