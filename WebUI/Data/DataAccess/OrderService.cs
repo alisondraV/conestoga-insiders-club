@@ -48,8 +48,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
             };
             await context.AddAsync(order);
 
-            order.OrderStatus = order.OrderType == OrderType.Online 
-                ? OrderStatus.Processed 
+            order.OrderStatus = order.OrderType == OrderType.Online
+                ? OrderStatus.Processed
                 : OrderStatus.Pending;
 
             order.OrderItems = cartItems
