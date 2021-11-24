@@ -46,6 +46,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task LeaveEvent(Event @event, ApplicationUser user)
         {
+            context.Events.Attach(@event);
+            context.Users.Attach(user);
             @event.Attendees.Remove(user);
             context.Update(@event);
             await context.SaveChangesAsync();
