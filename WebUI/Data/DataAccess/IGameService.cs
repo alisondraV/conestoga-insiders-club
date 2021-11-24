@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    interface IGameService
+    public interface IGameService
     {
         Task<List<Game>> GetGames();
         Task<Game> GetGame(int gameId);

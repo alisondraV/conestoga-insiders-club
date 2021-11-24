@@ -44,7 +44,7 @@ else
     }
     else if (gameService.IsOwnedBy(game, user.Id))
     {
-        <a class="btn btn-success rounded mr-1" href="/download?name=test.txt" target="_blank">
+        <a class="btn btn-success rounded mr-1" href="@downloadLink" target="_blank">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
         </a>
         <button class="btn btn-primary">Leave Review</button>
@@ -57,10 +57,12 @@ else
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
     private Game game;
+    private string downloadLink;
 
     protected override async Task OnInitializedAsync()
     {
         game = await gameService.GetGame(GameId);
+        downloadLink = $"/download?gameId={GameId}";
     }
 
     private bool IsGameInCart(int gameId)
