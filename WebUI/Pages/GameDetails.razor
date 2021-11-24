@@ -37,12 +37,21 @@ else
         </tr>
     </table>
     <br />
-    @if (!IsGameInCart(game.GameId))
+    @if (!IsGameInCart(game.GameId) && !gameService.IsOwnedBy(game, user.Id))
     {
         <button class="btn btn-primary mr-1" @onclick="@(() => AddToCart(game.GameId))">Add To Cart</button>
     }
-    <button class="btn btn-primary" @onclick="@(() => AddToWishlist(game.GameId))">Add To Wishlist</button>
-    <button class="btn btn-primary">Leave Review</button>
+    else if (IsGameInCart(game.GameId))
+    {
+        <button class="btn btn-primary" @onclick="@(() => AddToWishlist(game.GameId))">Add To Wishlist</button>
+    }
+    else if (gameService.IsOwnedBy(game, user.Id))
+    {
+        <button class="btn btn-success rounded mr-1" @onclick="@(() => Download(game))">
+            <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
+        </button>
+        <button class="btn btn-primary">Leave Review</button>
+    }
 }
 
 @code {
@@ -74,5 +83,10 @@ else
     private async void AddToWishlist(int gameId)
     {
         await wishedItemService.AddToWishlist(game, user.Id);
+    }
+
+    private void Download(Game game)
+    {
+        // TODO: donwload the game
     }
 }
