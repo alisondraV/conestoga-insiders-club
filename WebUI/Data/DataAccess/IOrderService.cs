@@ -9,7 +9,7 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task AddOrderItem(OrderItem item);
         Task<List<Order>> GetOrders(string userId);
         Task<List<Order>> GetOrders();
-        Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems);
+        Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems, OrderType orderType = OrderType.Online);
         Task MarkAsProcessed(Order order);
         Task<List<Game>> GetOrderedGames(string userId);
     }

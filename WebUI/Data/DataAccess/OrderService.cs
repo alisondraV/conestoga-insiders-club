@@ -38,23 +38,23 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .ToListAsync();
         }
 
-        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems)
+        public async Task<Order> CreateOrderFromCartItems(List<CartItem> cartItems, OrderType orderType = OrderType.Online)
         {
             var order = new Order
             {
                 UserId = cartItems.First().UserId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                OrderType = orderType
             };
             await context.AddAsync(order);
 
-            foreach (var cartItem in cartItems)
-            {
-                var orderItem = new OrderItem
-                {
-                    GameId = cartItem.GameId,
-                };
-                order.OrderItems.Add(orderItem);
-            }
+            order.OrderStatus = order.OrderType == OrderType.Online 
+                ? OrderStatus.Processed 
+                : OrderStatus.Pending;
+
+            order.OrderItems = cartItems
+                .Select(c => new OrderItem { GameId = c.GameId })
+                .ToList();
 
             await context.SaveChangesAsync();
             return order;
