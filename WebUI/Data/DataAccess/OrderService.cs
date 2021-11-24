@@ -24,14 +24,17 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<List<Order>> GetOrders(string userId)
         {
-            return context.Orders.Include(o => o.OrderItems)
-                .Where(a => a.UserId == userId)
+            return context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.UserId == userId)
                 .ToListAsync();
         }
 
         public Task<List<Order>> GetOrders()
         {
-            return context.Orders.Include(o => o.OrderItems)
+            return context.Orders
+                .Include(o => o.OrderItems)
+                .Include(o => o.User)
                 .ToListAsync();
         }
 

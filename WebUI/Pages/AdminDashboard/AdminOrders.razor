@@ -1,4 +1,50 @@
 ﻿@page "/manage-orders"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IOrderService orderService;
 
 <h1>Manage Orders</h1>
+
+@if(orders == null)
+{
+    <h3>Loading...</h3>
+} 
+else
+{
+    <table>
+        <thead>
+            <td>Id</td>
+            <td>Username</td>
+            <td># of items</td>
+            <td>Date Created</td>
+        </thead>
+        @foreach (var order in orders)
+        {
+        <tr>
+            <td>@order.OrderId</td>
+            <td>@order.User.UserName</td>
+            <td>@order.OrderItems.Count</td>
+            <td>@order.CreatedAt</td>
+        </tr>
+        }    
+    </table>
+}
+
+@code {
+    List<Order> orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await orderService.GetOrders();
+    }
+}
+
+<style>
+    thead > td {
+        font-weight: bold;
+        border-bottom: 1px solid black;
+    }
+</style>
+

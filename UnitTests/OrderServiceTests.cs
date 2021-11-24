@@ -96,6 +96,7 @@ namespace ServiceTests
 
             //Assert
             Assert.That(allOrders, Has.Count.EqualTo(2));
+            Assert.IsTrue(allOrders.All(o => o.User != null));
             Assert.That(userOrders, Has.Count.EqualTo(1));
             Assert.IsFalse(userOrders.Any(o => o.OrderId == otherOrder.OrderId));
         }
