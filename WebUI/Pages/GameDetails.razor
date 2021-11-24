@@ -44,9 +44,9 @@ else
     }
     else if (gameService.IsOwnedBy(game, user.Id))
     {
-        <button class="btn btn-success rounded mr-1" @onclick="@(() => Download(game))">
+        <a class="btn btn-success rounded mr-1" href="/download?name=test.txt" target="_blank">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
-        </button>
+        </a>
         <button class="btn btn-primary">Leave Review</button>
     }
 }
@@ -80,10 +80,5 @@ else
     private async void AddToWishlist(int gameId)
     {
         await wishedItemService.AddToWishlist(game, user.Id);
-    }
-
-    private void Download(Game game)
-    {
-        // TODO: donwload the game
     }
 }
