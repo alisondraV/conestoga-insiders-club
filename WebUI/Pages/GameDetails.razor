@@ -40,9 +40,6 @@ else
     @if (!IsGameInCart(game.GameId) && !gameService.IsOwnedBy(game, user.Id))
     {
         <button class="btn btn-primary mr-1" @onclick="@(() => AddToCart(game.GameId))">Add To Cart</button>
-    }
-    else if (IsGameInCart(game.GameId))
-    {
         <button class="btn btn-primary" @onclick="@(() => AddToWishlist(game.GameId))">Add To Wishlist</button>
     }
     else if (gameService.IsOwnedBy(game, user.Id))
