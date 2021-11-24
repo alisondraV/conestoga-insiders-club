@@ -1,5 +1,238 @@
 ﻿@page "/manage-reports"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IReportService reportService;
 
 <h1>Manage Reports</h1>
 <p>Tools for generating and viewing reports.</p>
+
+@if (!showReport)
+{
+    <h3>Games Report</h3>
+    <button class="btn-info rounded mb-2" @onclick="() => GenerateReport(1)">View Games Report</button>
+    <h3>Games Report</h3>
+    <button class="btn-info rounded mb-2" @onclick="() => GenerateReport(2)">View Wishlist Report</button>
+    <h3>Todays Orders Report</h3>
+    <button class="btn-info rounded mb-2" @onclick="() => GenerateReport(3)">View Todays Orders Report</button>
+    <h3>Customer Info Report</h3>
+    <button class="btn-info rounded mb-2" @onclick="() => GenerateReport(4)">View Customer Info Report</button>
+    <h3>Platform Report</h3>
+    <button class="btn-info rounded mb-2" @onclick="() => GenerateReport(5)">View Platform Report</button>
+}
+else
+{
+    if (gamesReport != null)
+    {
+        <h3>Games Report</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var game in gamesReport)
+                {
+                    <tr>
+
+                        <td scope="row">@game.Name</td>
+                        <td>@game.Description</td>
+                        <td>@game.Price</td>
+                        <td>@game.GenreName</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(1)">Back</button>
+    }
+    else if (wishlistReport != null)
+    {
+        <h3>Wishlist Report</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount Wishlisted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var game in wishlistReport)
+                {
+                    <tr>
+
+                        <td scope="row">@game.Name</td>
+                        <td>@game.Price</td>
+                        <td>@game.GenreName</td>
+                        <td>@game.WishedItems.Count</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(2)">Back</button>
+    }
+    else if (ordersData != null)
+    {
+        <h3>Today's Orders</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">OrderId</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Game</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var order in ordersData)
+                {
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr>
+                            <td scope="row">@order.OrderId</td>
+                            <td>@order.User.UserName</td>
+                            <td>@item.Game.Name</td>
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(3)">Back</button>
+    }
+    else if (usersReport != null)
+    {
+        <h3>Today's Orders</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Province</th>
+                    <th scope="col">Postal Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in usersReport)
+                {
+                    <tr>
+                        <td scope="row">@user.FirstName @user.LastName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.MailingAddress.Address1 @user.MailingAddress.Address2</td>
+                        <td>@user.MailingAddress.City</td>
+                        <td>@user.MailingAddress.Province</td>
+                        <td>@user.MailingAddress.PostalCode</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(4)">Back</button>
+    }
+    else if (preferenceReport != null)
+    {
+        <h3>Prefered Platforms</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Platform</th>
+                    <th scope="col"># of Users</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var preferece in preferenceReport)
+                {
+                    <tr>
+                        <td scope="row">@preferece.Key</td>
+                        <td>@preferece.Value</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(5)">Back</button>
+    }
+
+}
+
+@code{
+    bool showReport = false;
+    List<Order> ordersData = null;
+    List<Game> gamesReport = null;
+    List<Game> wishlistReport = null;
+    List<ApplicationUser> usersReport = null;
+    Dictionary<string, int> preferenceReport = null;
+
+
+    public async Task GenerateReport(int reportId)
+    {
+
+        switch (reportId)
+        {
+            case 1:
+                gamesReport = await reportService.GamesAndWishlistReport();
+                break;
+            case 2:
+                wishlistReport = await reportService.GamesAndWishlistReport();
+                break;
+            case 3:
+                ordersData = await reportService.OrdersReport();
+                break;
+            case 4:
+                usersReport = await reportService.CustomerInfoReport();
+                break;
+            case 5:
+                preferenceReport = await reportService.PlatformReport();
+                break;
+            default:
+                break;
+        }
+        ChangeShowReport();
+        StateHasChanged();
+    }
+
+    public void ClearReport(int reportId)
+    {
+        switch (reportId)
+        {
+            case 1:
+                gamesReport = null;
+                break;
+            case 2:
+                wishlistReport = null;
+                break;
+            case 3:
+                ordersData = null;
+                break;
+            case 4:
+                usersReport = null;
+                break;
+            case 5:
+                preferenceReport = null;
+                break;
+            default:
+                break;
+        }
+        ChangeShowReport();
+        StateHasChanged();
+    }
+
+    private void ChangeShowReport()
+    {
+        showReport = !showReport;
+    }
+}
