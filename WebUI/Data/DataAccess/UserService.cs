@@ -36,6 +36,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
                 .Include(u => u.MailingAddress)
                 .Include(u => u.ShippingAddress)
                 .Include(u => u.Cards)
+                .Include(u => u.Orders)
+                .ThenInclude(o => o.OrderItems)
                 .SingleAsync();
         }
 

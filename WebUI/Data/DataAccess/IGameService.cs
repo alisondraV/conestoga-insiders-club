@@ -12,5 +12,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task AddGame(Game game);
         Task UpdateGame(Game game);
         Task DeleteGame(Game game);
+        bool IsOwnedBy(Game game, string userId);
     }
 }
