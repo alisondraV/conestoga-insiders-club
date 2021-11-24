@@ -12,7 +12,6 @@ namespace ConestogaInsidersClub.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Event> builder)
         {
-            builder.HasKey(e => e.EventId);
 
             builder.HasMany(a => a.Attendees)
                 .WithMany(u => u.Events)
