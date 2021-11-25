@@ -8,6 +8,7 @@
 @inject IGameService gameService;
 @inject ICartService cartService;
 @inject IWishedItemService wishedItemService;
+@inject IReviewService reviewService;
 @inject NavigationManager NavigationManager;
 
 @if (game == null)
@@ -47,8 +48,40 @@ else
         <button class="btn btn-success rounded mr-1" @onclick="@(() => Download(game))">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
         </button>
-        <button class="btn btn-primary">Leave Review</button>
+        <button class="btn btn-primary" @onclick="@ToggleReviewVisibility">Leave Review</button>
     }
+    @if (showReviewForm)
+    {
+        <br />
+        <div class="bg-white rounded shadow-sm p-4 mb-5 rating-review-select-page">
+            <h5 class="mb-4">Leave Review</h5>
+                <form>
+                    <div class="form-group pb-4">
+                        <span class="rating">
+                            <input type="radio" name="starRating" id="rating5">
+                            <label for="rating5">5</label>
+                            <input type="radio" name="starRating" id="rating4">
+                            <label for="rating4">4</label>
+                            <input type="radio" name="starRating" id="rating3">
+                            <label for="rating3">3</label>
+                            <input type="radio" name="starRating" id="rating2">
+                            <label for="rating2">2</label>
+                            <input type="radio" name="starRating" id="rating1">
+                            <label for="rating1">1</label>
+                        </span>
+                    </div>
+                    <div class="form-group pt-4">
+                        <h6 class="mb-4">Comments:</h6>
+                        <textarea class="form-control" id="comments"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm" type="submit">Submit Review</button>
+                    </div>
+                </form>
+        </div>
+        <br />
+    }
+
 }
 
 @code {
@@ -56,7 +89,10 @@ else
     public int GameId { get; set; }
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
+    private ReviewVM reviewGameModel;
     private Game game;
+    private Review review;
+    private bool showReviewForm = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -82,8 +118,18 @@ else
         await wishedItemService.AddToWishlist(game, user.Id);
     }
 
+    private async void SubmitReview() 
+    {
+        await reviewService.AddReview(review);
+    }
+
     private void Download(Game game)
     {
         // TODO: donwload the game
+    }
+
+    private void ToggleReviewVisibility()
+    {
+        showReviewForm = !showReviewForm;
     }
 }
