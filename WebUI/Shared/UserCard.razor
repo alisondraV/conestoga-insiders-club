@@ -5,18 +5,28 @@
     <br />
     <span>@User.FirstName @User.LastName</span>
     <br />
-    <button onclick="@OnClick">@ButtonText</button>
+    <button class="btn rounded btn-primary mt-1" onclick="@OnClick">@ButtonText</button>
+    @if (SecondButtonText != null)
+    {
+        <button class="btn rounded btn-danger mt-1 ml-2" onclick="@OnSecondButtonClick">@SecondButtonText</button>
+    }
 </div>
 
 @code {
-    [Parameter]
-    public string ButtonText { get; set; }
+    #nullable enable
 
     [Parameter]
-    public ApplicationUser User { get; set; }
-}
+    public ApplicationUser User { get; set; } = new ApplicationUser();
 
-@functions {
     [Parameter]
-    public Action OnClick { get; set; }
+    public string ButtonText { get; set; } = "";
+
+    [Parameter]
+    public Action OnClick { get; set; } = () => { };
+
+    [Parameter]
+    public string? SecondButtonText { get; set; }
+
+    [Parameter]
+    public Action? OnSecondButtonClick { get; set; }
 }
