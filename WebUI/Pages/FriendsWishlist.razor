@@ -7,13 +7,13 @@
 @inject IWishedItemService wishedItemService;
 @inject NavigationManager NavigationManager;
 
-@if (user == null)
+@if (friend == null)
 {
     <h4>Loading...</h4>
 }
 else if (wishlistGames != null && wishlistGames.Count != 0)
 {
-    <h3>@user.FirstName's Wishlist</h3>
+    <h3>@friend.FirstName's Wishlist</h3>
     <p>Below is a list of all the games from your friend's wishlist.</p>
     <hr />
     <div class="row p-1 mt-2">
@@ -36,12 +36,12 @@ else
     [Parameter]
     public string UserName { get; set; }
     private List<Game> wishlistGames;
-    protected ApplicationUser user;
+    protected ApplicationUser friend;
 
     protected override async Task OnInitializedAsync()
     {
-        user = await userService.GetUser(UserName);
-        wishlistGames = await wishedItemService.GetWishedGamesForUser(user.Id);
+        friend = await userService.GetUser(UserName);
+        wishlistGames = await wishedItemService.GetWishedGamesForUser(friend.Id);
     }
 
     private void GoToDetails(Game game)
