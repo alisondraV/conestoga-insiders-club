@@ -7,20 +7,32 @@
             <h5 class="card-title">@Game.Name</h5>
             <p class="card-text">@Game.Description</p>
             <button class="btn @ButtonClass" @onclick="OnClick">@ButtonText</button>
+            @if (SecondButtonText != null)
+            {
+                <button class="btn rounded btn-danger ml-2" onclick="@OnSecondButtonClick">@SecondButtonText</button>
+            }
         </div>
     </div>
 </div>
 
 @code {
-    [Parameter]
-    public string ButtonText { get; set; }
+#nullable enable
 
     [Parameter]
-    public string ButtonClass { get; set; }
+    public string ButtonText { get; set; } = "";
 
     [Parameter]
-    public Game Game { get; set; }
+    public string ButtonClass { get; set; } = "";
 
     [Parameter]
-    public Action OnClick { get; set; }
+    public Game Game { get; set; } = new Game();
+
+    [Parameter]
+    public Action OnClick { get; set; } = () => { };
+
+    [Parameter]
+    public string? SecondButtonText { get; set; }
+
+    [Parameter]
+    public Action? OnSecondButtonClick { get; set; }
 }

@@ -1,7 +1,6 @@
 ﻿@page "/wishlist"
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
-@using ConestogaInsidersClub.Pages.ViewModels;
 
 @inject IGameService gameService;
 @inject IWishedItemService wishedItemService;
@@ -16,17 +15,12 @@
     <div class="row p-1 mt-2">
         @foreach (var game in wishlistGames)
         {
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-text float-right">Price: @game.Price.ToString("C")</p>
-                        <h5 class="card-title">@game.Name</h5>
-                        <p class="card-text">@game.Description</p>
-                        <button class="btn btn-primary" @onclick="() => GoToDetails(game)">View Details</button>
-                        <button class="btn btn-danger" @onclick="() => RemoveFromWishlist(game)">Remove From Wishlist</button>
-                    </div>
-                </div>
-            </div>
+            <GameCard Game="game"
+                      ButtonText="View Details"
+                      ButtonClass="btn-primary"
+                      OnClick="() => GoToDetails(game)"
+                      SecondButtonText="Remove From Wishlist"
+                      OnSecondButtonClick="() => RemoveFromWishlist(game)" />
         }
     </div>
 }
