@@ -48,7 +48,7 @@ else
     {
         <a class="btn btn-success rounded mr-1" href="@downloadLink" target="_blank">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
-        </button>
+        </a>
         <button class="btn btn-primary" @onclick="@ToggleReviewVisibility">Leave Review</button>
     }
     @if (showReviewForm)
@@ -56,29 +56,29 @@ else
         <br />
         <div class="bg-white rounded shadow-sm p-4 mb-5 rating-review-select-page">
             <h5 class="mb-4">Leave Review</h5>
-                <form>
-                    <div class="form-group pb-4">
-                        <span class="rating">
-                            <input type="radio" name="starRating" id="rating5">
-                            <label for="rating5">5</label>
-                            <input type="radio" name="starRating" id="rating4">
-                            <label for="rating4">4</label>
-                            <input type="radio" name="starRating" id="rating3">
-                            <label for="rating3">3</label>
-                            <input type="radio" name="starRating" id="rating2">
-                            <label for="rating2">2</label>
-                            <input type="radio" name="starRating" id="rating1">
-                            <label for="rating1">1</label>
-                        </span>
-                    </div>
-                    <div class="form-group pt-4">
-                        <h6 class="mb-4">Comments:</h6>
-                        <textarea class="form-control" id="comments"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-sm" type="submit">Submit Review</button>
-                    </div>
-                </form>
+            <form>
+                <div class="form-group pb-4">
+                    <span class="rating">
+                        <input type="radio" name="starRating" id="rating5">
+                        <label for="rating5">5</label>
+                        <input type="radio" name="starRating" id="rating4">
+                        <label for="rating4">4</label>
+                        <input type="radio" name="starRating" id="rating3">
+                        <label for="rating3">3</label>
+                        <input type="radio" name="starRating" id="rating2">
+                        <label for="rating2">2</label>
+                        <input type="radio" name="starRating" id="rating1">
+                        <label for="rating1">1</label>
+                    </span>
+                </div>
+                <div class="form-group pt-4">
+                    <h6 class="mb-4">Comments:</h6>
+                    <textarea class="form-control" id="comments"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-sm" type="submit">Submit Review</button>
+                </div>
+            </form>
         </div>
         <br />
     }
@@ -125,12 +125,12 @@ else
         StateHasChanged();
     }
 
-    private async void SubmitReview() 
+    private async void SubmitReview()
     {
         await reviewService.AddReview(review);
     }
 
-    private void Download(Game game)
+    private async Task CheckIfGameInWishlist()
     {
         var userWishedItems = await wishedItemService.GetWishedGamesForUser(user.Id);
         isGameInWishlist = userWishedItems.Contains(game);
