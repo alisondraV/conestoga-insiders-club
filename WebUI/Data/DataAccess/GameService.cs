@@ -22,7 +22,10 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public Task<Game> GetGame(int gameId)
         {
-            return context.Games.FindAsync(gameId).AsTask();
+            return context.Games
+                .Include(g => g.OrderItems)
+                .ThenInclude(oi => oi.Order)
+                .FirstOrDefaultAsync(g => g.GameId == gameId);
         }
 
         public Task<List<Game>> SearchGames(string name)

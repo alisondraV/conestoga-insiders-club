@@ -96,6 +96,7 @@ namespace ServiceTests
 
             //Assert
             Assert.That(allOrders, Has.Count.EqualTo(2));
+            Assert.IsTrue(allOrders.All(o => o.User != null));
             Assert.That(userOrders, Has.Count.EqualTo(1));
             Assert.IsFalse(userOrders.Any(o => o.OrderId == otherOrder.OrderId));
         }
@@ -128,7 +129,42 @@ namespace ServiceTests
             );
 
             //Act
-            var order = await service.CreateOrderFromCartItems(cartItems);
+            var order = await service.CreateOrderFromCartItems(cartItems, OrderType.Physical);
+
+            //Assert
+            Assert.That(order.OrderItems, Has.Count.EqualTo(cartItems.Count));
+            Assert.AreEqual(OrderStatus.Pending, order.OrderStatus);
+        }
+
+        [Test, Order(3)]
+        public async Task CreateOrderFromCartItems_MarksOnlineOrderAsProcessed()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new OrderService(context);
+            var cartItems = await SeedEntities(
+                new CartItem
+                {
+                    Game = new Game
+                    {
+                        GenreName = testGenre.Name,
+                        Name = "foo"
+                    },
+                    UserId = user.Id
+                },
+                new CartItem
+                {
+                    Game = new Game
+                    {
+                        GenreName = testGenre.Name,
+                        Name = "bar"
+                    },
+                    UserId = user.Id
+                }
+            );
+
+            //Act
+            var order = await service.CreateOrderFromCartItems(cartItems, OrderType.Online);
 
             //Assert
             Assert.That(order.OrderItems, Has.Count.EqualTo(cartItems.Count));
@@ -164,7 +200,7 @@ namespace ServiceTests
             var games = await service.GetOrderedGames(user.Id);
 
             //Assert
-            Assert.That(games, Has.Count.EqualTo(3));
+            Assert.That(games, Has.Count.EqualTo(5));
         }
     }
 }
