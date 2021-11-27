@@ -59,15 +59,15 @@ else
             <form>
                 <div class="form-group pb-4">
                     <span class="rating">
-                        <input type="radio" name="starRating" id="rating5">
+                        <input type="radio" name="starRating" id="rating5" value="5">
                         <label for="rating5">5</label>
-                        <input type="radio" name="starRating" id="rating4">
+                        <input type="radio" name="starRating" id="rating4" value="4">
                         <label for="rating4">4</label>
-                        <input type="radio" name="starRating" id="rating3">
+                        <input type="radio" name="starRating" id="rating3" value="3">
                         <label for="rating3">3</label>
-                        <input type="radio" name="starRating" id="rating2">
+                        <input type="radio" name="starRating" id="rating2" value="2">
                         <label for="rating2">2</label>
-                        <input type="radio" name="starRating" id="rating1">
+                        <input type="radio" name="starRating" id="rating1" value="1">
                         <label for="rating1">1</label>
                     </span>
                 </div>
@@ -90,7 +90,6 @@ else
     public int GameId { get; set; }
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
-    private ReviewVM reviewGameModel;
     private Game game;
     private Review review;
     private bool showReviewForm = false;
