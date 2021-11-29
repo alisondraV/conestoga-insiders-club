@@ -25,7 +25,7 @@ namespace ConestogaInsidersClub.OutsideServices
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("Joe@contoso.com", "Password Recovery"),
+                From = new EmailAddress("andrey2850@gmail.com", "Andrii"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

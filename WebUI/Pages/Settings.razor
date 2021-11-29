@@ -1,5 +1,15 @@
 ﻿@page "/settings"
 
+@using ConestogaInsidersClub.Data.DataAccess
+@using ConestogaInsidersClub.Data.Models
+@using ConestogaInsidersClub.Pages.ViewModels
+
+@inject IGameService gameService;
+@inject IPreferenceService preferenceService;
+@inject IGameGenreService gameGenreService;
+@inject IUserService userService;
+@inject NavigationManager NavigationManager;
+
 <h1>Settings</h1>
 <br />
 
@@ -84,3 +94,65 @@ else
 
 <br />
 <button class="btn-link rounded mb-lg-5 w-25 credit" @onclick="GoToCreditCardPage">Update credit card info</button>
+
+@code {
+        [CascadingParameter(Name = "user")]
+        protected ApplicationUser user { get; set; }
+
+        [CascadingParameter(Name = "userViewModel")]
+        public UserVM userViewModel { get; set; }
+
+        public Preference preference;
+        public List<Game> games;
+        public List<GameGenre> gameGenres;
+        public PreferenceVM preferenceViewModel;
+        public bool editPreferenceMode = false;
+
+        protected override async Task OnInitializedAsync()
+        {
+            preference = await preferenceService.GetPreference(user.UserName);
+            games = await gameService.GetGames();
+            gameGenres = await gameGenreService.GetGameGenres();
+
+            preferenceViewModel = new PreferenceVM(preference);
+        }
+
+        public async void HandlePreferenceSubmit()
+        {
+            Preference updatedPreference = preferenceViewModel.ToModel(preference);
+            await preferenceService.UpdatePreference(updatedPreference);
+            FlipEditPreferenceMode();
+            StateHasChanged();
+        }
+
+        public async void HandleMailingAddressSubmit(Address newAddress)
+        {
+            userViewModel.MailingAddress = newAddress;
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
+            await userService.UpdateUser(updatedUser);
+        }
+
+        public async void HandleShippingAddressSubmit(Address newAddress)
+        {
+            userViewModel.ShippingAddress = newAddress;
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
+            await userService.UpdateUser(updatedUser);
+        }
+
+        public async Task HandleShippingSameAsMailing(object isChecked)
+        {
+            userViewModel.ShippingAddress = (bool)isChecked ? userViewModel.MailingAddress : new Address();
+            ApplicationUser updatedUser = userViewModel.ToModel(user);
+            await userService.UpdateUser(updatedUser);
+        }
+
+        public void GoToCreditCardPage()
+        {
+            NavigationManager.NavigateTo("credit-card");
+        }
+
+        public void FlipEditPreferenceMode()
+        {
+            editPreferenceMode = !editPreferenceMode;
+        }
+}
