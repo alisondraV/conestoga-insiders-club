@@ -1,5 +1,53 @@
 ﻿@page "/manage-reviews"
 @layout DashboardLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IReviewService reviewService;
 
 <h1>Manage Reviews</h1>
-<p>Tools for verifying posted reviews.</p>
+<p>Tool for verifying posted reviews.</p>
+
+@if (reviews == null)
+{
+    <h3>Loading...</h3>
+}
+else if (reviews.Count() == 0)
+{
+    <h3>There no pending reviews at the moment.</h3>
+}
+else
+{
+    foreach (var review in reviews)
+    {
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Review left by <b>@review.User.FirstName @review.User.LastName</b> for the game @review.Game.Name</h4>
+                    <p>@review.Description</p>
+                    <button class="btn btn-success rounded" @onclick="() => ApproveReview(review)">Approve</button>
+                    <button class="btn btn-danger rounded" @onclick="() => DisapproveReview(review)">Disapprove</button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    List<Review> reviews;
+
+    protected override async Task OnInitializedAsync()
+    {
+        reviews = await reviewService.GetReviewsAwaitingApproval();
+    }
+
+    private async void ApproveReview(Review review)
+    {
+        await reviewService.ApproveReview(review);
+    }
+
+    private async void DisapproveReview(Review review)
+    {
+        await reviewService.RejectReview(review);
+    }
+}
