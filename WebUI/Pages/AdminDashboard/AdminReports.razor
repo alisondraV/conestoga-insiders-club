@@ -1,8 +1,15 @@
 ﻿@page "/manage-reports"
 @layout DashboardLayout
+@using Syncfusion.Pdf
+@using Syncfusion.Pdf.Grid;
+@using Syncfusion.Drawing;
+@using Syncfusion.Pdf.Graphics;
+@using System.IO;
 @using ConestogaInsidersClub.Data.Models;
 @using ConestogaInsidersClub.Data.DataAccess;
+@using Data
 
+@inject Microsoft.JSInterop.IJSRuntime JS
 @inject IReportService reportService;
 
 <h1>Manage Reports</h1>
@@ -49,7 +56,11 @@ else
                 }
             </tbody>
         </table>
-        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(1)">Back</button>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(1)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(1)">Save As PDF</button>
+        </div>
+
     }
     else if (wishlistReport != null)
     {
@@ -77,7 +88,10 @@ else
                 }
             </tbody>
         </table>
-        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(2)">Back</button>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(2)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(2)">Save As PDF</button>
+        </div>
     }
     else if (ordersData != null)
     {
@@ -107,7 +121,10 @@ else
 
             </tbody>
         </table>
-        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(3)">Back</button>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(3)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(3)">Save As PDF</button>
+        </div>
     }
     else if (usersReport != null)
     {
@@ -140,7 +157,10 @@ else
 
             </tbody>
         </table>
-        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(4)">Back</button>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(4)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(4)">Save As PDF</button>
+        </div>
     }
     else if (preferenceReport != null)
     {
@@ -164,7 +184,10 @@ else
 
             </tbody>
         </table>
-        <button class="btn-info rounded mb-2" @onclick="() => ClearReport(5)">Back</button>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(5)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(5)">Save As PDF</button>
+        </div>
     }
 
 }
@@ -203,6 +226,161 @@ else
         }
         ChangeShowReport();
         StateHasChanged();
+    }
+
+    void ExportToPdf(int reportId)
+    {
+        int paragraphAfterSpacing = 8;
+        int cellMargin = 8;
+        PdfDocument pdfDocument = new PdfDocument();
+        //Add Page to the PDF document.
+        PdfPage page = pdfDocument.Pages.Add();
+
+        //Create a new font.
+        PdfStandardFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 16);
+        PdfStandardFont sideFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 10);
+
+        //Create a text element to draw a text in PDF page.
+        PdfTextElement company = new PdfTextElement("Conestoga Insiders Club", sideFont, PdfBrushes.Black);
+        PdfTextElement title = new PdfTextElement();
+        switch (reportId)
+        {
+            case 1:
+                title = new PdfTextElement("Games Report",font,PdfBrushes.Black);
+                break;
+            case 2:
+                title = new PdfTextElement("Wishlist Report", font, PdfBrushes.Black);
+                break;
+            case 3:
+                title = new PdfTextElement("Todays Orders", font, PdfBrushes.Black);
+                break;
+            case 4:
+                title = new PdfTextElement("Customer Info Report", font, PdfBrushes.Black);
+                break;
+            case 5:
+                title = new PdfTextElement("Platform Report", font, PdfBrushes.Black);
+                break;
+            default:
+                break;
+        }
+        PdfTextElement date = new PdfTextElement(DateTime.Now.Date.ToShortDateString(), sideFont, PdfBrushes.Black);
+        PdfLayoutResult result = company.Draw(page, new PointF(0, 0));
+        result = title.Draw(page, new PointF(230, 0));
+        result = date.Draw(page, new PointF(460, 0));
+
+
+        PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+        PdfLayoutFormat format = new PdfLayoutFormat();
+        format.Layout = PdfLayoutType.Paginate;
+
+        //Create a PdfGrid.
+        PdfGrid pdfGrid = new PdfGrid();
+        pdfGrid.Style.CellPadding.Left = cellMargin;
+        pdfGrid.Style.CellPadding.Right = cellMargin;
+
+        //Applying built-in style to the PDF grid
+        pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+
+        List<object> data = new List<object>();
+        if (reportId == 1)
+        {
+            foreach (var game in gamesReport)
+            {
+                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price, Genre = game.GenreName };
+                data.Add(row);
+            }
+        }
+        else if (reportId == 2)
+        {
+            foreach (var game in wishlistReport)
+            {
+                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price, AmountWishlisted = game.WishedItems.Count };
+                data.Add(row);
+            }
+        }
+        else if (reportId == 3)
+        {
+            foreach (var order in ordersData)
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    Object row = new { OrderId = item.OrderId, Username = order.User.UserName, Game = item.Game.Name };
+                    data.Add(row);
+                }
+            }
+        }
+        else if (reportId == 4)
+        {
+            foreach (var user in usersReport)
+            {
+                Object row = new { Name = user.FirstName + " " + user.LastName, Username = user.UserName, Email = user.Email,
+                    Address = user.MailingAddress.Address1 + " " + user.MailingAddress.Address2, City = user.MailingAddress.City,
+                    Province = user.MailingAddress.Province, PostalCode = user.MailingAddress.PostalCode};
+                data.Add(row);
+            }
+        }
+        else if (reportId == 5)
+        {
+            foreach (var preference in preferenceReport)
+            {
+                Object row = new { Platform = preference.Key, AmountOfUsers = preference.Value };
+                data.Add(row);
+            }
+        }
+
+
+        IEnumerable<object> table = data;
+
+        pdfGrid.DataSource = table;
+
+        pdfGrid.Style.Font = contentFont;
+
+        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, result.Bounds.Bottom + paragraphAfterSpacing));
+
+        RectangleF bounds = new RectangleF(0, 0, pdfDocument.Pages[0].GetClientSize().Width, 50);
+
+        PdfPageTemplateElement footer = new PdfPageTemplateElement(bounds);
+
+        PdfFont font2 = new PdfStandardFont(PdfFontFamily.Helvetica, 7);
+
+        PdfBrush brush = new PdfSolidBrush(Color.Black);
+
+        PdfPageNumberField pageNumber = new PdfPageNumberField(font, brush);
+
+        PdfPageCountField count = new PdfPageCountField(font, brush);
+
+        PdfCompositeField compositeField = new PdfCompositeField(font2, brush, "Page {0} of {1}", pageNumber, count);
+
+        compositeField.Bounds = footer.Bounds;
+
+        compositeField.Draw(footer.Graphics, new PointF(470, 40));
+
+        pdfDocument.Template.Bottom = footer;
+
+        MemoryStream memoryStream = new MemoryStream();
+        pdfDocument.Save(memoryStream);
+        switch (reportId)
+        {
+            case 1:
+                JS.SaveAs("GameReport.pdf", memoryStream.ToArray());
+                break;
+            case 2:
+                JS.SaveAs("WishlistReport.pdf", memoryStream.ToArray());
+                break;
+            case 3:
+                JS.SaveAs("OrdersReport.pdf", memoryStream.ToArray());
+                break;
+            case 4:
+                JS.SaveAs("UsersReport.pdf", memoryStream.ToArray());
+                break;
+            case 5:
+                JS.SaveAs("PlatformReport.pdf", memoryStream.ToArray());
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     public void ClearReport(int reportId)
