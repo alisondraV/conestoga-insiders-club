@@ -35,6 +35,10 @@ else
             <td>Genre: </td>
             <td><span id="Game_Name">@game.GenreName</span></td>
         </tr>
+        <tr>
+            <td>★ Rating: </td>
+            <td><span id="Average_Rating">@averageRating/5 Stars</span></td>
+        </tr>
     </table>
     <br />
     @if (!IsGameInCart(game.GameId) && !gameService.IsOwnedBy(game, user.Id))
@@ -59,24 +63,24 @@ else
             <form>
                 <div class="form-group pb-4">
                     <span class="rating">
-                        <input type="radio" name="starRating" id="rating5" value="5">
+                        <input type="radio" name="starRating" id="rating5" checked="@(rating == 5)">
                         <label for="rating5">5</label>
-                        <input type="radio" name="starRating" id="rating4" value="4">
+                        <input type="radio" name="starRating" id="rating4" checked="@(rating == 4)">
                         <label for="rating4">4</label>
-                        <input type="radio" name="starRating" id="rating3" value="3">
+                        <input type="radio" name="starRating" id="rating3" checked="@(rating == 3)">
                         <label for="rating3">3</label>
-                        <input type="radio" name="starRating" id="rating2" value="2">
+                        <input type="radio" name="starRating" id="rating2" checked="@(rating == 2)">
                         <label for="rating2">2</label>
-                        <input type="radio" name="starRating" id="rating1" value="1">
+                        <input type="radio" name="starRating" id="rating1" checked="@(rating == 1)">
                         <label for="rating1">1</label>
                     </span>
                 </div>
                 <div class="form-group pt-4">
                     <h6 class="mb-4">Comments:</h6>
-                    <textarea class="form-control" id="comments"></textarea>
+                    <textarea class="form-control" id="comments" @bind="description"></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary btn-sm" type="submit">Submit Review</button>
+                    <button class="btn btn-primary btn-sm" type="submit" @onclick="(() => SubmitReview())">Submit Review</button>
                 </div>
             </form>
         </div>
@@ -91,14 +95,18 @@ else
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
     private Game game;
-    private Review review;
+    private Review review = new Review();
     private bool showReviewForm = false;
+    private string description = "";
+    private byte rating = 0;
+    private double averageRating;
     private string downloadLink;
     private bool isGameInWishlist;
 
     protected override async Task OnInitializedAsync()
     {
         game = await gameService.GetGame(GameId);
+        averageRating = await reviewService.GetAverageRating(GameId);
         downloadLink = $"/download?gameId={GameId}";
         await CheckIfGameInWishlist();
     }
@@ -126,6 +134,18 @@ else
 
     private async void SubmitReview()
     {
+        review.GameId = GameId;
+        review.UserId = user.Id;
+        review.Rating = rating;
+        review.Description = description;
+        if (description == "")
+        {
+            review.Approved = true;
+        }
+        else
+        {
+            review.Approved = false;
+        }
         await reviewService.AddReview(review);
     }
 
