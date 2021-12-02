@@ -21,11 +21,13 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text float-right">Capacity: @_event.Attendees.Count/@_event.Capacity</p>
-                        <h5 class="card-title">@_event.EventName</h5>
-                        <p class="card-text">@_event.Description</p>
+                        <h5 class="card-title font-weight-bold">@_event.EventName</h5>
+                        <p class="card-text">Description: @_event.Description</p>
+                        <p class="card-text">Location: @_event.Location</p>
                         @if (_event.Attendees.Count == _event.Capacity)
                         {
                             <p class="card-text bg-warning">Event Is Fully Booked.</p>
+                            <button class="btn btn-primary" @onclick="@(() => LeaveEvent(_event))">Leave Event</button>
                         }
                         else if (!IsUserAttendee(_event))
                         {

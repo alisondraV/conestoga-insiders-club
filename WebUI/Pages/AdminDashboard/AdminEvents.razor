@@ -53,9 +53,9 @@ else if (eventsList != null && eventsList.Count != 0)
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@_event.EventName</h5>
-                        <p class="card-text">@_event.Description</p>
-                        <p class="card-text">@_event.Location</p>
-                        <p class="card-text">@_event.Capacity</p>
+                        <p class="card-text">Description: @_event.Description</p>
+                        <p class="card-text">Location: @_event.Location</p>
+                        <p class="card-text">Capacity: @_event.Capacity</p>
                         <button @onclick="() => InitEdit(_event)" class="btn btn-primary">Edit Event</button>
                         <button @onclick="() => HandleDelete(_event)" class="btn btn-danger">Delete Event</button>
                     </div>
