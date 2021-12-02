@@ -53,7 +53,10 @@ else
         <a class="btn btn-success rounded mr-1" href="@downloadLink" target="_blank">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
         </a>
-        <button class="btn btn-primary" @onclick="@ToggleReviewVisibility">Leave Review</button>
+        @if (!isGameReviewedByUser)
+        {
+            <button class="btn btn-primary" @onclick="@ToggleReviewVisibility">Leave Review</button>
+        }
     }
     @if (showReviewForm)
     {
@@ -98,10 +101,11 @@ else
     private Review review = new Review();
     private bool showReviewForm = false;
     private string description = "";
-    private byte rating = 0;
+    private byte rating;
     private double averageRating;
     private string downloadLink;
     private bool isGameInWishlist;
+    private bool isGameReviewedByUser;
 
     protected override async Task OnInitializedAsync()
     {
@@ -109,6 +113,7 @@ else
         averageRating = await reviewService.GetAverageRating(GameId);
         downloadLink = $"/download?gameId={GameId}";
         await CheckIfGameInWishlist();
+        await CheckIfUserReviewedGame();
     }
 
     private bool IsGameInCart(int gameId)
@@ -153,6 +158,23 @@ else
     {
         var userWishedItems = await wishedItemService.GetWishedGamesForUser(user.Id);
         isGameInWishlist = userWishedItems.Contains(game);
+    }
+
+    private async Task CheckIfUserReviewedGame()
+    {
+        var userReviews = await reviewService.GetReviewsByUser(user.Id);
+        foreach (var review in userReviews)
+        {
+            if (review.GameId == this.GameId)
+            {
+                isGameReviewedByUser = true;
+                break;
+            }
+            else
+            {
+                isGameReviewedByUser = false;
+            }
+        }
     }
 
     private void RatingSelectionChanged(ChangeEventArgs args)
