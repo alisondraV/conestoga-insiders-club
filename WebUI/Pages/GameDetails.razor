@@ -63,15 +63,15 @@ else
             <form>
                 <div class="form-group pb-4">
                     <span class="rating">
-                        <input type="radio" name="starRating" id="rating5" checked="@(rating == 5)">
+                        <input type="radio" name="starRating" id="rating5" value="5" @onchange="RatingSelectionChanged" checked="@(rating == 5)">
                         <label for="rating5">5</label>
-                        <input type="radio" name="starRating" id="rating4" checked="@(rating == 4)">
+                        <input type="radio" name="starRating" id="rating4" value="4" @onchange="RatingSelectionChanged" checked="@(rating == 4)">
                         <label for="rating4">4</label>
-                        <input type="radio" name="starRating" id="rating3" checked="@(rating == 3)">
+                        <input type="radio" name="starRating" id="rating3" value="3" @onchange="RatingSelectionChanged" checked="@(rating == 3)">
                         <label for="rating3">3</label>
-                        <input type="radio" name="starRating" id="rating2" checked="@(rating == 2)">
+                        <input type="radio" name="starRating" id="rating2" value="2" @onchange="RatingSelectionChanged" checked="@(rating == 2)">
                         <label for="rating2">2</label>
-                        <input type="radio" name="starRating" id="rating1" checked="@(rating == 1)">
+                        <input type="radio" name="starRating" id="rating1" value="1" @onchange="RatingSelectionChanged" checked="@(rating == 1)">
                         <label for="rating1">1</label>
                     </span>
                 </div>
@@ -154,6 +154,12 @@ else
         var userWishedItems = await wishedItemService.GetWishedGamesForUser(user.Id);
         isGameInWishlist = userWishedItems.Contains(game);
     }
+
+    private void RatingSelectionChanged(ChangeEventArgs args)
+    {
+        rating = byte.Parse(args.Value.ToString());
+    }
+
 
     private void ToggleReviewVisibility()
     {
