@@ -69,16 +69,16 @@ namespace ServiceTests
                     UserId = testUser.Id
                 });
 
-            var orderItem = new List<OrderItem> 
-            { 
+            var orderItem = new List<OrderItem>
+            {
                 new OrderItem
                 {
                     GameId = testGames[0].GameId
                 },
-                new OrderItem 
-                { 
-                    GameId = testGames[1].GameId 
-                } 
+                new OrderItem
+                {
+                    GameId = testGames[1].GameId
+                }
             };
 
             Order order1 = await SeedEntities(
@@ -119,7 +119,7 @@ namespace ServiceTests
             Assert.That(games, Has.Count.EqualTo(2));
             Assert.That(games[0].WishedItems, Has.Count.EqualTo(0));
             Assert.That(games[1].WishedItems, Has.Count.EqualTo(0));
-            
+
         }
 
         [Test, Order(3)]
