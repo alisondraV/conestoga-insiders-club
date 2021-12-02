@@ -46,7 +46,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task<List<Review>> GetReviewsAwaitingApproval()
         {
-            return await context.Reviews.Where(a => a.Approved == null).ToListAsync();
+            return await context.Reviews.Where(a => a.Approved == null)
+                .Include(r => r.User).Include(r => r.Game).ToListAsync();
         }
 
         public async Task<List<Review>> GetRejectedReviews()

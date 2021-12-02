@@ -14,17 +14,17 @@
 }
 else if (reviews.Count() == 0)
 {
-    <h3>There no pending reviews at the moment.</h3>
+    <h3>There are no pending reviews at the moment.</h3>
 }
 else
 {
     foreach (var review in reviews)
     {
-        <div class="col-sm-6">
+        <div class="col-sm-6 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h4>Review left by <b>@review.User.FirstName @review.User.LastName</b> for the game @review.Game.Name</h4>
-                    <p>@review.Description</p>
+                    <h5>Review left by <b>@review.User.FirstName @review.User.LastName</b> for the game <b>@review.Game.Name</b></h5>
+                    <p><i>"@review.Description"</i></p>
                     <button class="btn btn-success rounded" @onclick="() => ApproveReview(review)">Approve</button>
                     <button class="btn btn-danger rounded" @onclick="() => DisapproveReview(review)">Disapprove</button>
                 </div>
@@ -44,10 +44,18 @@ else
     private async void ApproveReview(Review review)
     {
         await reviewService.ApproveReview(review);
+        await UpdateReviews();
     }
 
     private async void DisapproveReview(Review review)
     {
         await reviewService.RejectReview(review);
+        await UpdateReviews();
+    }
+
+    private async Task UpdateReviews()
+    {
+        reviews = await reviewService.GetReviewsAwaitingApproval();
+        StateHasChanged();
     }
 }
