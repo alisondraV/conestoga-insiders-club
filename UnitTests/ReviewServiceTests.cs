@@ -183,7 +183,7 @@ namespace ServiceTests
             var average = await service.GetAverageRating(testGame.GameId);
             //Assert
             Assert.IsNotNull(average);
-            Assert.That(average, Is.EqualTo(3).Within(0.5));
+            Assert.That(average, Is.EqualTo(4).Within(0.5));
         }
 
         [Test, Order(9)]
