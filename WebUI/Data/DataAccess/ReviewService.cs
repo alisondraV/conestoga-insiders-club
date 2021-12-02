@@ -41,7 +41,8 @@ namespace ConestogaInsidersClub.Data.DataAccess
 
         public async Task<double> GetAverageRating(int gameId)
         {
-            return await context.Reviews.Where(a => a.GameId == gameId && a.Approved == true).AverageAsync(a => a.Rating);
+            var reviews = await context.Reviews.Where(a => a.GameId == gameId && a.Approved == true).ToArrayAsync();
+            return reviews.Count() == 0 ? 0 : reviews.Average(a => a.Rating);
         }
 
         public async Task<List<Review>> GetReviewsAwaitingApproval()
