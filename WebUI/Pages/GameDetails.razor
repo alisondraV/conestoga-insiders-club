@@ -89,7 +89,74 @@ else
         </div>
         <br />
     }
-
+    @if (approvedReviews.Count == 0)
+    {
+        <h3 class="my-3">No reviews available... ;-;</h3>
+    }
+    else
+    {
+        @foreach (var review in approvedReviews)
+        {
+            <div class="border border-secondary rounded mr-3 my-3 p-3 bg-light d-flex-column">
+                <span class="rating">
+                    @if (review.Rating == 5)
+                    {
+                        <input type="radio" name="starRating" id="rating5" checked disabled>
+                        <label for="rating5">5</label>
+                    }
+                    else
+                    {
+                        <input type="radio" name="starRating" id="rating5" disabled>
+                        <label for="rating5">5</label>
+                    }
+                    @if (review.Rating == 4)
+                    {
+                        <input type="radio" name="starRating" id="rating4" checked disabled>
+                        <label for="rating4">4</label>
+                    }
+                    else
+                    {
+                        <input type="radio" name="starRating" id="rating4" disabled>
+                        <label for="rating4">4</label>
+                    }
+                    @if (review.Rating == 3)
+                    {
+                        <input type="radio" name="starRating" id="rating3" checked disabled>
+                        <label for="rating3">3</label>
+                    }
+                    else
+                    {
+                        <input type="radio" name="starRating" id="rating3" disabled>
+                        <label for="rating3">3</label>
+                    }
+                    @if (review.Rating == 2)
+                    {
+                        <input type="radio" name="starRating" id="rating2" checked disabled>
+                        <label for="rating2">2</label>
+                    }
+                    else
+                    {
+                        <input type="radio" name="starRating" id="rating2" disabled>
+                        <label for="rating2">2</label>
+                    }
+                    @if (review.Rating == 1)
+                    {
+                        <input type="radio" name="starRating" id="rating1" value="1" checked disabled>
+                        <label for="rating1">1</label>
+                    }
+                    else
+                    {
+                        <input type="radio" name="starRating" id="rating1" value="1" disabled>
+                        <label for="rating1">1</label>
+                    }
+                </span>
+                <div class="my-4 pt-4">
+                    <h6 class="">Comments:</h6>
+                    <textarea class="form-control" id="comments" disabled>@review.Description</textarea>
+                </div>
+            </div>
+         }
+    }
 }
 
 @code {
@@ -99,11 +166,12 @@ else
     protected ApplicationUser user { get; set; }
     private Game game;
     private Review review = new Review();
-    private bool showReviewForm = false;
+    private List<Review> approvedReviews;
     private string description = "";
     private byte rating;
     private double averageRating;
     private string downloadLink;
+    private bool showReviewForm = false;
     private bool isGameInWishlist;
     private bool isGameReviewedByUser;
 
@@ -111,6 +179,7 @@ else
     {
         game = await gameService.GetGame(GameId);
         averageRating = await reviewService.GetAverageRating(GameId);
+        approvedReviews = await reviewService.GetApprovedGameReviews(GameId);
         downloadLink = $"/download?gameId={GameId}";
         await CheckIfGameInWishlist();
         await CheckIfUserReviewedGame();
