@@ -99,7 +99,7 @@ namespace ServiceTests
             using var context = new ApplicationDbContext(ContextOptions);
             var service = new ReportService(context);
             //Act
-            var orders = await service.OrdersReport();
+            var orders = await service.OrdersReport(DateTime.Now);
             //Assert
             Assert.IsNotNull(orders);
             Assert.That(orders, Has.Count.EqualTo(1));

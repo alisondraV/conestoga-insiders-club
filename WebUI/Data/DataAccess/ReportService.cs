@@ -15,9 +15,9 @@ namespace ConestogaInsidersClub.Data.DataAccess
         {
             this.context = context;
         }
-        public async Task<List<Order>> OrdersReport()
+        public async Task<List<Order>> OrdersReport(DateTime date)
         {
-            return await context.Orders.Include(U => U.User).Include(i => i.OrderItems).ThenInclude(g => g.Game).Where(o => o.CreatedAt.Date == DateTime.Today.Date).ToListAsync();
+            return await context.Orders.Include(U => U.User).Include(i => i.OrderItems).ThenInclude(g => g.Game).Where(o => o.CreatedAt.Date == date.Date).ToListAsync();
         }
         public async Task<List<Game>> GamesAndWishlistReport()
         {
