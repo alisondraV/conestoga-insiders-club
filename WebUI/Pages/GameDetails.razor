@@ -93,38 +93,33 @@ else
     }
     @if (approvedReviews.Count == 0)
     {
-        <h3 class="my-3">No reviews available... ;-;</h3>
+        <h4 class="my-4">No reviews available... ;-;</h4>
     }
     else
     {
         @foreach (var review in approvedReviews)
         {
-            <div class="border border-secondary rounded mr-3 my-3 p-3 bg-light d-flex-column">
-                <div class="my-2 pt-4">
-                    <h6 class=""><b>@review.User.FirstName @review.User.LastName</b></h6>
-                </div>
+            <div class="border border-secondary rounded mr-3 my-4 p-3 bg-light d-flex-column">
+                <div class="py-2 pl-2"><b>@review.User.FirstName @review.User.LastName</b></div>
                 <span class="rating">
                     @for (int i = 5; i > 0; i--)
                     {
-                        @if (review.Rating == i)
-                        {
-                            <input type="radio" name="starRating" id=@($"rating{i}") checked disabled>
-                        }
-                        else
-                        {
-                            <input type="radio" name="starRating" id=@($"rating{i}") disabled>
-                        }
+                        <input type="radio" name="starRating" id=@($"rating{i}") checked="@(review.Rating == i)" disabled>
                         <label for=@($"rating{i}")>@i</label>
                     }
                 </span>
                 @if (review.Description != "")
                 {
-                    <div class="my-4 pt-4">
-                        <h6 class="">Comments:</h6>
+                    <div class="mt-4 mb-2 pt-4">
+                        <h6 class="pl-2">Comments:</h6>
                         <textarea class="form-control" id="comments" disabled>@review.Description</textarea>
                     </div>
                 }
-            <br />
+                else
+                {
+                    <br />
+                    <br />
+                }
             </div>
          }
     }
