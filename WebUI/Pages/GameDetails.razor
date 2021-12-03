@@ -7,6 +7,7 @@
 @inject IGameService gameService;
 @inject ICartService cartService;
 @inject IWishedItemService wishedItemService;
+@inject IReviewService reviewService;
 @inject NavigationManager NavigationManager;
 
 @if (game == null)
@@ -34,6 +35,17 @@ else
             <td>Genre: </td>
             <td><span id="Game_Name">@game.GenreName</span></td>
         </tr>
+        <tr>
+            <td>★ Rating: </td>
+            @if (averageRating == 0)
+            {
+                <td><span id="Average_Rating">No Rating Recorded</span></td>
+            }
+            else
+            {
+                <td><span id="Average_Rating">@averageRating/5 Stars</span></td>
+            }
+        </tr>
     </table>
     <br />
     @if (!IsGameInCart(game.GameId) && !gameService.IsOwnedBy(game, user.Id))
@@ -48,7 +60,68 @@ else
         <a class="btn btn-success rounded mr-1" href="@downloadLink" target="_blank">
             <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
         </a>
-        <button class="btn btn-primary">Leave Review</button>
+        @if (!isGameReviewedByUser)
+        {
+            <button class="btn btn-primary" @onclick="@ToggleReviewVisibility">Leave Review</button>
+        }
+    }
+    @if (showReviewForm)
+    {
+        <br />
+        <div class="bg-white rounded shadow-sm p-4 mb-5 rating-review-select-page">
+            <h5 class="mb-4">Leave Review</h5>
+            <form>
+                <div class="form-group pb-4">
+                    <span class="rating">
+                        @for (int i = 5; i > 0; i--)
+                        {
+                            <input type="radio" name="starRating" id=@($"rating{i}") value="@i" @onchange="RatingSelectionChanged">
+                            <label for=@($"rating{i}")>@i</label>
+                        }
+                    </span>
+                </div>
+                <div class="form-group pt-4">
+                    <h6 class="mb-4">Comments:</h6>
+                    <textarea class="form-control" id="comments" @bind="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-sm" type="submit" @onclick="(() => SubmitReview())">Submit Review</button>
+                </div>
+            </form>
+        </div>
+        <br />
+    }
+    @if (approvedReviews.Count == 0)
+    {
+        <h4 class="my-4">No reviews available... ;-;</h4>
+    }
+    else
+    {
+        @foreach (var review in approvedReviews)
+        {
+            <div class="border border-secondary rounded mr-3 my-4 p-3 bg-light d-flex-column">
+                <div class="py-2 pl-2"><b>@review.User.FirstName @review.User.LastName</b></div>
+                <span class="rating">
+                    @for (int i = 5; i > 0; i--)
+                    {
+                        <input type="radio" name="@($"rating-{review.GameId}-{review.UserId}")" id=@($"rating{i}") checked="@(review.Rating == i)" disabled>
+                        <label for=@($"rating{i}")>@i</label>
+                    }
+                </span>
+                @if (review.Description != "")
+                {
+                    <div class="mt-4 mb-2 pt-4">
+                        <h6 class="pl-2">Comments:</h6>
+                        <textarea class="form-control" id="comments" disabled>@review.Description</textarea>
+                    </div>
+                }
+                else
+                {
+                    <br />
+                    <br />
+                }
+            </div>
+         }
     }
 }
 
@@ -58,14 +131,24 @@ else
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
     private Game game;
+    private Review review = new Review();
+    private List<Review> approvedReviews;
+    private string description = "";
+    private byte rating;
+    private double averageRating;
     private string downloadLink;
+    private bool showReviewForm = false;
     private bool isGameInWishlist;
+    private bool isGameReviewedByUser;
 
     protected override async Task OnInitializedAsync()
     {
         game = await gameService.GetGame(GameId);
+        averageRating = await reviewService.GetAverageRating(GameId);
+        approvedReviews = await reviewService.GetApprovedGameReviews(GameId);
         downloadLink = $"/download?gameId={GameId}";
         await CheckIfGameInWishlist();
+        await CheckIfUserReviewedGame();
     }
 
     private bool IsGameInCart(int gameId)
@@ -89,9 +172,47 @@ else
         StateHasChanged();
     }
 
+    private async void SubmitReview()
+    {
+        review.GameId = GameId;
+        review.UserId = user.Id;
+        review.Rating = rating;
+        review.Description = description;
+        review.Approved = description == "" ? true : null;
+        await reviewService.AddReview(review);
+    }
+
     private async Task CheckIfGameInWishlist()
     {
         var userWishedItems = await wishedItemService.GetWishedGamesForUser(user.Id);
         isGameInWishlist = userWishedItems.Contains(game);
+    }
+
+    private async Task CheckIfUserReviewedGame()
+    {
+        var userReviews = await reviewService.GetReviewsByUser(user.Id);
+        foreach (var review in userReviews)
+        {
+            if (review.GameId == this.GameId)
+            {
+                isGameReviewedByUser = true;
+                break;
+            }
+            else
+            {
+                isGameReviewedByUser = true;
+            }
+        }
+    }
+
+    private void RatingSelectionChanged(ChangeEventArgs args)
+    {
+        rating = byte.Parse(args.Value.ToString());
+    }
+
+
+    private void ToggleReviewVisibility()
+    {
+        showReviewForm = !showReviewForm;
     }
 }
