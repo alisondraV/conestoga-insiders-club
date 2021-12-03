@@ -73,9 +73,9 @@ else
             <form>
                 <div class="form-group pb-4">
                     <span class="rating">
-                        @for (int i = 0; i < 5; i++)
+                        @for (int i = 5; i > 0; i--)
                         {
-                            <input type="radio" name="starRating" id=@($"rating{i}") value="{i}" @onchange="RatingSelectionChanged" checked="@(rating == i)">
+                            <input type="radio" name="starRating" id=@($"rating{i}") value="@i" @onchange="RatingSelectionChanged">
                             <label for=@($"rating{i}")>@i</label>
                         }
                     </span>
@@ -100,11 +100,11 @@ else
         @foreach (var review in approvedReviews)
         {
             <div class="border border-secondary rounded mr-3 my-3 p-3 bg-light d-flex-column">
-                <div class="my-4 pt-4">
+                <div class="my-2 pt-4">
                     <h6 class=""><b>@review.User.FirstName @review.User.LastName</b></h6>
                 </div>
                 <span class="rating">
-                    @for (int i = 0; i < 5; i++)
+                    @for (int i = 5; i > 0; i--)
                     {
                         @if (review.Rating == i)
                         {
@@ -124,7 +124,7 @@ else
                         <textarea class="form-control" id="comments" disabled>@review.Description</textarea>
                     </div>
                 }
-
+            <br />
             </div>
          }
     }
