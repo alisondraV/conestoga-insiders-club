@@ -1,5 +1,439 @@
 ﻿@page "/manage-reports"
 @layout DashboardLayout
+@using Syncfusion.Pdf
+@using Syncfusion.Pdf.Grid;
+@using Syncfusion.Drawing;
+@using Syncfusion.Pdf.Graphics;
+@using System.IO;
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using Data
+
+@inject Microsoft.JSInterop.IJSRuntime JS
+@inject IReportService reportService;
 
 <h1>Manage Reports</h1>
 <p>Tools for generating and viewing reports.</p>
+
+@if (!showReport)
+{
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">Games Report</h5>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(1)">View Games Report</button>
+        </div>
+    </div>
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">Wishlist Report</h5>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(2)">View Wishlist Report</button>
+        </div>
+        
+    </div>
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">Todays Orders Report</h5>
+            <div>
+                <p class="card-text" style="display:inline-block">Enter Date:</p>
+                <input style="width:150px; display:inline-block" @bind="reportDate" type="date" /><br />
+            </div>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(3)">View Orders Report</button>
+        </div>
+        
+    </div>
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">Customer Info Report</h5>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(4)">View Customer Info Report</button>
+        </div>
+        
+    </div>
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">Platform Report</h5>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(5)">View Platform Report</button>
+        </div>
+    </div>
+    
+}
+else
+{
+    if (gamesReport != null)
+    {
+        <h3>Games Report</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var game in gamesReport)
+                {
+                    <tr>
+
+                        <td scope="row">@game.Name</td>
+                        <td>@game.Description</td>
+                        <td>@game.Price</td>
+                        <td>@game.GenreName</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(1)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(1)">Save As PDF</button>
+        </div>
+    }
+    else if (wishlistReport != null)
+    {
+        <h3>Wishlist Report</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount Wishlisted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var game in wishlistReport)
+                {
+                    <tr>
+                        <td scope="row">@game.Name</td>
+                        <td>@game.Price</td>
+                        <td>@game.GenreName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(2)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(2)">Save As PDF</button>
+        </div>
+    }
+    else if (ordersData != null)
+    {
+        <h3>Today's Orders</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">OrderId</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Game</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var order in ordersData)
+                {
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr>
+                            <td scope="row">@order.OrderId</td>
+                            <td>@order.User.UserName</td>
+                            <td>@item.Game.Name</td>
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(3)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(3)">Save As PDF</button>
+        </div>
+    }
+    else if (usersReport != null)
+    {
+        <h3>Customer Info</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Province</th>
+                    <th scope="col">Postal Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in usersReport)
+                {
+                    <tr>
+                        <td scope="row">@user.FirstName @user.LastName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.MailingAddress.Address1 @user.MailingAddress.Address2</td>
+                        <td>@user.MailingAddress.City</td>
+                        <td>@user.MailingAddress.Province</td>
+                        <td>@user.MailingAddress.PostalCode</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(4)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(4)">Save As PDF</button>
+        </div>
+    }
+    else if (preferenceReport != null)
+    {
+        <h3>Prefered Platforms</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Platform</th>
+                    <th scope="col"># of Users</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var preferece in preferenceReport)
+                {
+                    <tr>
+                        <td scope="row">@preferece.Key</td>
+                        <td>@preferece.Value</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="btn-group">
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(5)">Back</button>
+            <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(5)">Save As PDF</button>
+        </div>
+    }
+
+}
+
+@code{
+    bool showReport = false;
+    List<Order> ordersData = null;
+    List<Game> gamesReport = null;
+    List<Game> wishlistReport = null;
+    List<ApplicationUser> usersReport = null;
+    Dictionary<string, int> preferenceReport = null;
+    DateTime reportDate = DateTime.Today;
+
+
+    public async Task GenerateReport(int reportId)
+    {
+
+        switch (reportId)
+        {
+            case 1:
+                gamesReport = await reportService.GamesAndWishlistReport();
+                break;
+            case 2:
+                wishlistReport = await reportService.GamesAndWishlistReport();
+                break;
+            case 3:
+                ordersData = await reportService.OrdersReport(reportDate);
+                break;
+            case 4:
+                usersReport = await reportService.CustomerInfoReport();
+                break;
+            case 5:
+                preferenceReport = await reportService.PlatformReport();
+                break;
+            default:
+                break;
+        }
+        ChangeShowReport();
+        StateHasChanged();
+    }
+
+    void ExportToPdf(int reportId)
+    {
+        int paragraphAfterSpacing = 8;
+        int cellMargin = 8;
+        PdfDocument pdfDocument = new PdfDocument();
+        //Add Page to the PDF document.
+        PdfPage page = pdfDocument.Pages.Add();
+
+        //Create a new font.
+        PdfStandardFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 16);
+        PdfStandardFont sideFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 10);
+
+        //Create a text element to draw a text in PDF page.
+        PdfTextElement company = new PdfTextElement("Conestoga Insiders Club", sideFont, PdfBrushes.Black);
+        PdfTextElement title = new PdfTextElement();
+        switch (reportId)
+        {
+            case 1:
+                title = new PdfTextElement("Games Report",font,PdfBrushes.Black);
+                break;
+            case 2:
+                title = new PdfTextElement("Wishlist Report", font, PdfBrushes.Black);
+                break;
+            case 3:
+                title = new PdfTextElement("Todays Orders", font, PdfBrushes.Black);
+                break;
+            case 4:
+                title = new PdfTextElement("Customer Info Report", font, PdfBrushes.Black);
+                break;
+            case 5:
+                title = new PdfTextElement("Platform Report", font, PdfBrushes.Black);
+                break;
+            default:
+                break;
+        }
+        PdfTextElement date = new PdfTextElement(DateTime.Now.Date.ToShortDateString(), sideFont, PdfBrushes.Black);
+        PdfLayoutResult result = company.Draw(page, new PointF(0, 0));
+        result = title.Draw(page, new PointF(230, 0));
+        result = date.Draw(page, new PointF(460, 0));
+
+
+        PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+        PdfLayoutFormat format = new PdfLayoutFormat();
+        format.Layout = PdfLayoutType.Paginate;
+
+        //Create a PdfGrid.
+        PdfGrid pdfGrid = new PdfGrid();
+        pdfGrid.Style.CellPadding.Left = cellMargin;
+        pdfGrid.Style.CellPadding.Right = cellMargin;
+
+        //Applying built-in style to the PDF grid
+        pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+
+        List<object> data = new List<object>();
+        if (reportId == 1)
+        {
+            foreach (var game in gamesReport)
+            {
+                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price, Genre = game.GenreName };
+                data.Add(row);
+            }
+        }
+        else if (reportId == 2)
+        {
+            foreach (var game in wishlistReport)
+            {
+                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price };
+                data.Add(row);
+            }
+        }
+        else if (reportId == 3)
+        {
+            foreach (var order in ordersData)
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    Object row = new { OrderId = item.OrderId, Username = order.User.UserName, Game = item.Game.Name };
+                    data.Add(row);
+                }
+            }
+        }
+        else if (reportId == 4)
+        {
+            foreach (var user in usersReport)
+            {
+                Object row = new { Name = user.FirstName + " " + user.LastName, Username = user.UserName, Email = user.Email,
+                    Address = user.MailingAddress.Address1 + " " + user.MailingAddress.Address2, City = user.MailingAddress.City,
+                    Province = user.MailingAddress.Province, PostalCode = user.MailingAddress.PostalCode};
+                data.Add(row);
+            }
+        }
+        else if (reportId == 5)
+        {
+            foreach (var preference in preferenceReport)
+            {
+                Object row = new { Platform = preference.Key, AmountOfUsers = preference.Value };
+                data.Add(row);
+            }
+        }
+
+
+        IEnumerable<object> table = data;
+
+        pdfGrid.DataSource = table;
+
+        pdfGrid.Style.Font = contentFont;
+
+        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, result.Bounds.Bottom + paragraphAfterSpacing));
+
+        RectangleF bounds = new RectangleF(0, 0, pdfDocument.Pages[0].GetClientSize().Width, 50);
+
+        PdfPageTemplateElement footer = new PdfPageTemplateElement(bounds);
+
+        PdfFont font2 = new PdfStandardFont(PdfFontFamily.Helvetica, 7);
+
+        PdfBrush brush = new PdfSolidBrush(Color.Black);
+
+        PdfPageNumberField pageNumber = new PdfPageNumberField(font, brush);
+
+        PdfPageCountField count = new PdfPageCountField(font, brush);
+
+        PdfCompositeField compositeField = new PdfCompositeField(font2, brush, "Page {0} of {1}", pageNumber, count);
+
+        compositeField.Bounds = footer.Bounds;
+
+        compositeField.Draw(footer.Graphics, new PointF(470, 40));
+
+        pdfDocument.Template.Bottom = footer;
+
+        MemoryStream memoryStream = new MemoryStream();
+        pdfDocument.Save(memoryStream);
+        switch (reportId)
+        {
+            case 1:
+                JS.SaveAs("GameReport.pdf", memoryStream.ToArray());
+                break;
+            case 2:
+                JS.SaveAs("WishlistReport.pdf", memoryStream.ToArray());
+                break;
+            case 3:
+                JS.SaveAs("OrdersReport.pdf", memoryStream.ToArray());
+                break;
+            case 4:
+                JS.SaveAs("UsersReport.pdf", memoryStream.ToArray());
+                break;
+            case 5:
+                JS.SaveAs("PlatformReport.pdf", memoryStream.ToArray());
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void ClearReport(int reportId)
+    {
+        switch (reportId)
+        {
+            case 1:
+                gamesReport = null;
+                break;
+            case 2:
+                wishlistReport = null;
+                break;
+            case 3:
+                ordersData = null;
+                break;
+            case 4:
+                usersReport = null;
+                break;
+            case 5:
+                preferenceReport = null;
+                break;
+            default:
+                break;
+        }
+        ChangeShowReport();
+        StateHasChanged();
+    }
+
+    private void ChangeShowReport()
+    {
+        showReport = !showReport;
+    }
+}
