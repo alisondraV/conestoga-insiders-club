@@ -3,6 +3,7 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 
 @inject IUserService userService;
+@inject NavigationManager NavigationManager;
 
 <h1>Friends</h1>
 
@@ -28,9 +29,11 @@ else
             <div class="d-inline-flex flex-wrap">
                 @foreach (var friend in friends)
                 {
-                    <UserCard OnClick="() => RemoveFriend(friend.Id)"
+                    <UserCard ButtonText="View Wishlist"
+                              OnClick="() => GoToFriendsWishlist(friend.UserName)"
                               User="friend"
-                              ButtonText="Remove Friend" />
+                              SecondButtonText="Remove Friend"
+                              OnSecondButtonClick="() => RemoveFriend(friend.Id)" />
                 }
             </div>
         }
@@ -112,5 +115,10 @@ else
                 .FindAll(pf => pf.UserName.ToLower().Contains(searchQuery.ToLower()));
         }
         StateHasChanged();
+    }
+
+    private void GoToFriendsWishlist(string userName)
+    {
+        NavigationManager.NavigateTo("/wishlist/" + userName);
     }
 }

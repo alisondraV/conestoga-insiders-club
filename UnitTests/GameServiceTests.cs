@@ -241,5 +241,46 @@ namespace ServiceTests
             Assert.IsEmpty(wishedItems);
             Assert.IsEmpty(cartItems);
         }
+
+        [Test, Order(9)]
+        public async Task IsOwnedBy_ShouldCheckWetherTheGameIsOwnedByAUser()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+            var orderedGame = new Game
+            {
+                GenreName = genre.Name,
+                Name = "Other"
+            };
+            var user = new ApplicationUser
+            {
+                UserName = "Foo"
+            };
+            await SeedEntities(new Order
+            {
+                User = user,
+                OrderItems = new List<OrderItem> {
+                    new OrderItem
+                    {
+                       Game = orderedGame
+                    }
+                }
+            });
+            var otherGame = await SeedEntities(new Game
+            {
+                GenreName = genre.Name,
+                Name = "Other"
+            });
+
+
+            //Act
+            var orderedGameIsOwned = service.IsOwnedBy(orderedGame, user.Id);
+            var otherGameIsOwned = service.IsOwnedBy(otherGame, user.Id);
+
+            //Assert
+            Assert.IsTrue(orderedGameIsOwned);
+            Assert.IsFalse(otherGameIsOwned);
+        }
     }
 }

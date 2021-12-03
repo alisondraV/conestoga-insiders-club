@@ -2,6 +2,7 @@ using ConestogaInsidersClub.Areas.Identity;
 using ConestogaInsidersClub.Data;
 using ConestogaInsidersClub.Data.DataAccess;
 using ConestogaInsidersClub.Data.Models;
+using ConestogaInsidersClub.OutsideServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,13 +38,20 @@ namespace ConestogaInsidersClub
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IPreferenceService, PreferenceService>();
@@ -51,6 +60,7 @@ namespace ConestogaInsidersClub
             services.AddTransient<IWishedItemService, WishedItemService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IEventService, EventService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,14 +4,16 @@ using ConestogaInsidersClub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConestogaInsidersClub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211120014643_AddOrderStatusAndOrderType")]
+    partial class AddOrderStatusAndOrderType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,21 +21,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ApplicationUserEvent", b =>
-                {
-                    b.Property<string>("AttendeesId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("EventsEventId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AttendeesId", "EventsEventId");
-
-                    b.HasIndex("EventsEventId");
-
-                    b.ToTable("EventAttendees");
-                });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Address", b =>
                 {
@@ -202,30 +189,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("CartItems");
-                });
-
-            modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Event", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EventName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EventId");
-
-                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.Friendship", b =>
@@ -542,21 +505,6 @@ namespace ConestogaInsidersClub.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ApplicationUserEvent", b =>
-                {
-                    b.HasOne("ConestogaInsidersClub.Data.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("AttendeesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ConestogaInsidersClub.Data.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ConestogaInsidersClub.Data.Models.ApplicationUser", b =>

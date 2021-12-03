@@ -17,6 +17,7 @@ namespace ConestogaInsidersClub.Data.Models
             Reviews = new HashSet<Review>();
             WishedItems = new HashSet<WishedItem>();
             Cards = new HashSet<Card>();
+            Events = new HashSet<Event>();
         }
 
         public string FirstName { get; set; }
@@ -34,5 +35,6 @@ namespace ConestogaInsidersClub.Data.Models
         public ICollection<Review> Reviews { get; set; }
         public ICollection<WishedItem> WishedItems { get; set; }
         public ICollection<Card> Cards { get; set; }
+        public ICollection<Event> Events { get; set; }
     }
 }

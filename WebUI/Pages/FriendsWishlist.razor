@@ -1,0 +1,51 @@
+﻿@page "/wishlist/{UserName}"
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IGameService gameService;
+@inject IUserService userService;
+@inject IWishedItemService wishedItemService;
+@inject NavigationManager NavigationManager;
+
+@if (friend == null)
+{
+    <h4>Loading...</h4>
+}
+else if (wishlistGames != null && wishlistGames.Count != 0)
+{
+    <h3>@friend.FirstName's Wishlist</h3>
+    <p>Below is a list of all the games from your friend's wishlist.</p>
+    <hr />
+    <div class="row p-1 mt-2">
+        @foreach (var game in wishlistGames)
+        {
+            <GameCard Game="game"
+                      ButtonText="View Details"
+                      ButtonClass="btn-primary"
+                      OnClick="() => GoToDetails(game)" />
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No games in wishlist... =(</h3>
+}
+
+@code {
+    [Parameter]
+    public string UserName { get; set; }
+    private List<Game> wishlistGames;
+    protected ApplicationUser friend;
+
+    protected override async Task OnInitializedAsync()
+    {
+        friend = await userService.GetUser(UserName);
+        wishlistGames = await wishedItemService.GetWishedGamesForUser(friend.Id);
+    }
+
+    private void GoToDetails(Game game)
+    {
+        NavigationManager.NavigateTo("/game/" + game.GameId);
+    }
+}

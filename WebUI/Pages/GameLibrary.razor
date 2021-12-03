@@ -1,0 +1,48 @@
+﻿@page "/game-library"
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+
+@inject IOrderService orderService;
+@inject NavigationManager NavigationManager;
+
+<h3>My Game Library</h3>
+<p>Find the games you've purchased here</p>
+<hr />
+
+@if (userOrders == null)
+{
+    <h3>Loading...</h3>
+}
+else if (userOrders.Count() == 0)
+{
+    <h4>You don't have any purchased games yet. Go to the <a href="/">home page</a> to discover the games we have to offer!</h4>
+}
+else
+{
+    @foreach (var order in userOrders)
+    {
+        foreach (var item in order.OrderItems)
+        {
+            <GameCard Game="item.Game"
+                        ButtonText="View Details"
+                        ButtonClass="btn-primary"
+                        OnClick="() => GoToDetails(item.Game)" />
+        }
+    }
+}
+
+@code {
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser currentUser { get; set; }
+    List<Order> userOrders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userOrders = await orderService.GetOrders(currentUser.Id);
+    }
+
+    private void GoToDetails(Game game)
+    {
+        NavigationManager.NavigateTo("/game/" + game.GameId);
+    }
+}

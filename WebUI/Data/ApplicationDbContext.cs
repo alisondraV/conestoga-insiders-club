@@ -32,6 +32,7 @@ namespace ConestogaInsidersClub.Data
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<WishedItem> WishedItems { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

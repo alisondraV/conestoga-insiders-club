@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
 {
-    interface IGameService
+    public interface IGameService
     {
         Task<List<Game>> GetGames();
         Task<Game> GetGame(int gameId);
@@ -12,5 +12,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task AddGame(Game game);
         Task UpdateGame(Game game);
         Task DeleteGame(Game game);
+        bool IsOwnedBy(Game game, string userId);
     }
 }

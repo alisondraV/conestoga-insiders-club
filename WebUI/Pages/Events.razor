@@ -1,6 +1,92 @@
 ﻿@page "/events"
+@layout AuthorizedPagesLayout
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
 
-<h1>Events</h1>
+@inject IEventService eventService;
+@inject NavigationManager NavigationManager;
+
+<h1>Upcoming Events</h1>
+<p>Below is a list of all upcoming events</p>
+<hr />
+
+@if (eventsList != null && eventsList.Count != 0)
+{
+    <input id="Search" @onchange="@LookForEvent" placeholder="Enter the event you want to search for..." />
+    <div class="row p-1">
+        @foreach (var _event in eventsList)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text float-right">Capacity: @_event.Attendees.Count/@_event.Capacity</p>
+                        <h5 class="card-title font-weight-bold">@_event.EventName</h5>
+                        <p class="card-text">Description: @_event.Description</p>
+                        <p class="card-text">Location: @_event.Location</p>
+                        @if (_event.Attendees.Count == _event.Capacity)
+                        {
+                            <p class="card-text bg-warning">Event Is Fully Booked.</p>
+                        }
+                        else if (!IsUserAttendee(_event))
+                        {
+                            <button class="btn btn-primary" @onclick="@(() => JoinEvent(_event))">Join Event</button>
+                        }
+                        if (IsUserAttendee(_event))
+                        {
+                            <p class="card-text text-success">You are in this event.</p>
+                            <button class="btn btn-primary" @onclick="@(() => LeaveEvent(_event))">Leave Event</button>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No events available... ( ◔ ʖ̯ ◔ )</h3>
+}
 
 @code {
+    private List<Event> eventsList;
+    [CascadingParameter(Name = "user")]
+    protected ApplicationUser user { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        eventsList = await eventService.GetEvents();
+    }
+
+    private async void JoinEvent(Event _event)
+    {
+        await eventService.JoinEvent(_event, user);
+        StateHasChanged();
+    }
+
+    private async void LeaveEvent(Event _event)
+    {
+        await eventService.LeaveEvent(_event, user);
+        StateHasChanged();
+    }
+
+    private async void LookForEvent(ChangeEventArgs args)
+    {
+        string searchQuery = (string)args.Value;
+
+        eventsList = await eventService.GetEvents();
+        if (searchQuery != "")
+        {
+            eventsList = eventsList
+                .FindAll(pf => pf.EventName.ToLower().Contains(searchQuery.ToLower()));
+        }
+        StateHasChanged();
+    }
+
+    private bool IsUserAttendee(Event _event)
+    {
+        return _event.Attendees.Any(ci => ci.UserName == user.UserName);
+    }
 }

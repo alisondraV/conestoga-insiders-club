@@ -12,4 +12,16 @@ namespace ConestogaInsidersClub.Data
         Female,
         Other
     }
+
+    public enum OrderStatus
+    {
+        Pending,
+        Processed
+    }
+
+    public enum OrderType
+    {
+        Online,
+        Physical
+    }
 }

@@ -71,6 +71,10 @@ else
                 Ending in @card.CardNumber.Substring(12)
             </label>
         }
+        <label class="d-block mt-5">
+            <input type="checkbox" @bind-value="recievePhysicalCopy" />
+            Recieve a physical copy
+        </label>
         <button class="rounded btn-primary mt-5 mr-2" @onclick="CreateOrder">Confirm order</button>
         <button class="rounded btn-secondary mt-5" @onclick="ToggleCheckOut">Back to the Cart</button>
     }
@@ -85,6 +89,7 @@ else
     private string message;
     private string title = "Cart";
     private bool checkOutState = false;
+    private bool recievePhysicalCopy = false;
     private double cartTotal = 0.0;
 
     protected override async Task OnInitializedAsync()
@@ -106,6 +111,8 @@ else
     private async void CreateOrder()
     {
         Order order = await orderService.CreateOrderFromCartItems(cartItems);
+        order.OrderType = recievePhysicalCopy == false ? Data.OrderType.Online : Data.OrderType.Physical;
+
         // TODO: set selected credit card for the order
         foreach (var ci in cartItems)
         {

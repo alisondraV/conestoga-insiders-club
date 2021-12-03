@@ -4,7 +4,6 @@
 @using ConestogaInsidersClub.Data.DataAccess;
 @using ConestogaInsidersClub.Pages.ViewModels;
 
-
 @inject IGameService gameService;
 @inject ICartService cartService;
 @inject IWishedItemService wishedItemService;
@@ -37,12 +36,20 @@ else
         </tr>
     </table>
     <br />
-    @if (!IsGameInCart(game.GameId))
+    @if (!IsGameInCart(game.GameId) && !gameService.IsOwnedBy(game, user.Id))
     {
         <button class="btn btn-primary mr-1" @onclick="@(() => AddToCart(game.GameId))">Add To Cart</button>
+        <button class="btn btn-secondary" @onclick="@(() => UpdateWishlist(game.GameId))">
+            @(isGameInWishlist ? "Remove from Wishlist" : "Add to Wishlist")
+        </button>
     }
-    <button class="btn btn-primary" @onclick="@(() => AddToWishlist(game.GameId))">Add To Wishlist</button>
-    <button class="btn btn-primary">Leave Review</button>
+    else if (gameService.IsOwnedBy(game, user.Id))
+    {
+        <a class="btn btn-success rounded mr-1" href="@downloadLink" target="_blank">
+            <span class="oi oi-data-transfer-download mr-1" aria-hidden="true" /> Download
+        </a>
+        <button class="btn btn-primary">Leave Review</button>
+    }
 }
 
 @code {
@@ -51,10 +58,14 @@ else
     [CascadingParameter(Name = "user")]
     protected ApplicationUser user { get; set; }
     private Game game;
+    private string downloadLink;
+    private bool isGameInWishlist;
 
     protected override async Task OnInitializedAsync()
     {
         game = await gameService.GetGame(GameId);
+        downloadLink = $"/download?gameId={GameId}";
+        await CheckIfGameInWishlist();
     }
 
     private bool IsGameInCart(int gameId)
@@ -71,8 +82,16 @@ else
         StateHasChanged();
     }
 
-    private async void AddToWishlist(int gameId)
+    private async void UpdateWishlist(int gameId)
     {
-        await wishedItemService.AddToWishlist(game, user.Id);
+        await wishedItemService.AddOrRemoveFromWishlist(game, user.Id);
+        await CheckIfGameInWishlist();
+        StateHasChanged();
+    }
+
+    private async Task CheckIfGameInWishlist()
+    {
+        var userWishedItems = await wishedItemService.GetWishedGamesForUser(user.Id);
+        isGameInWishlist = userWishedItems.Contains(game);
     }
 }
