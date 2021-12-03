@@ -1,5 +1,137 @@
 ﻿@page "/manage-events"
 @layout DashboardLayout
 
+@using ConestogaInsidersClub.Data.Models;
+@using ConestogaInsidersClub.Data.DataAccess;
+@using ConestogaInsidersClub.Pages.ViewModels;
+
+@inject IEventService eventService;
+
 <h1>Manage Events</h1>
 <p>CRUD tools for event creation and management.</p>
+
+<button class="btn-info rounded mb-2" @onclick="@InitAdd">Add Event</button>
+
+@if (showForm)
+{
+    <EditForm Model="@adminEventViewModel" OnValidSubmit="@HandleFormSubmit">
+        <br />
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <br />
+        <h3>Event Details:</h3>
+        <br />
+        <table>
+            <tr>
+                <td>Event Name:</td>
+                <td><InputText id="Event_Name_Edit" @bind-Value="adminEventViewModel.EventName" /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><InputText id="Event_Description_Edit" @bind-Value="adminEventViewModel.Description" /></td>
+            </tr>
+            <tr>
+                <td>Location:</td>
+                <td><InputText id="Event_Location_Edit" @bind-Value="adminEventViewModel.Location" /></td>
+            </tr>
+            <tr>
+                <td>Capacity:</td>
+                <td><InputNumber id="Event_Capacity_Edit" @bind-Value="adminEventViewModel.Capacity" /></td>
+            </tr>
+        </table>
+        <br />
+        <button class="btn btn-primary" type="submit">Save</button>
+    </EditForm>
+    <button class="btn btn-secondary mt-1" @onclick="ToggleEventFormVisibility">Cancel</button>
+}
+else if (eventsList != null && eventsList.Count != 0)
+{
+    <div class="row" style="padding-top: 10px">
+        @foreach (var _event in eventsList)
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@_event.EventName</h5>
+                        <p class="card-text">Description: @_event.Description</p>
+                        <p class="card-text">Location: @_event.Location</p>
+                        <p class="card-text">Capacity: @_event.Capacity</p>
+                        <button @onclick="() => InitEdit(_event)" class="btn btn-primary">Edit Event</button>
+                        <button @onclick="() => HandleDelete(_event)" class="btn btn-danger">Delete Event</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <br />
+    <h3>No events available... create a new event!! (╯°□°)╯︵ ┻━┻</h3>
+}
+
+@code {
+    #region Declarations
+    private Event selectedEvent = new Event();
+    private EventVM adminEventViewModel;
+    private List<Event> eventsList;
+    private bool showForm = false;
+    private bool isAdd = true;
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        eventsList = await eventService.GetEvents();
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        await (isAdd ? AddEventValidSubmit() : EditEventValidSubmit());
+    }
+
+    private async Task AddEventValidSubmit()
+    {
+        Event createEvent = adminEventViewModel.ToModel(selectedEvent);
+        await eventService.AddEvent(createEvent);
+        eventsList = await eventService.GetEvents();
+        ToggleEventFormVisibility();
+        StateHasChanged();
+    }
+
+    private async Task EditEventValidSubmit()
+    {
+        Event updateEvent = adminEventViewModel.ToModel(selectedEvent);
+        await eventService.UpdateEvent(updateEvent);
+        eventsList = await eventService.GetEvents();
+        ToggleEventFormVisibility();
+        StateHasChanged();
+    }
+
+    private async Task HandleDelete(Event _event)
+    {
+        await eventService.DeleteEvent(_event);
+        eventsList = await eventService.GetEvents();
+        StateHasChanged();
+    }
+
+    private void InitEdit(Event _event)
+    {
+        isAdd = false;
+        selectedEvent = _event;
+        adminEventViewModel = new EventVM(_event);
+        ToggleEventFormVisibility();
+    }
+
+    private void InitAdd()
+    {
+        isAdd = true;
+        selectedEvent = new Event();
+        adminEventViewModel = new EventVM(selectedEvent);
+        ToggleEventFormVisibility();
+    }
+
+    private void ToggleEventFormVisibility()
+    {
+        showForm = !showForm;
+    }
+}
