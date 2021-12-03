@@ -41,6 +41,12 @@ Run linter
 
 `dotnet format`
 
+### SendGrid
+
+In order to enable sending real emails, you'll need to add a SendGrid API key:
+
+`dotnet user-secrets set SendGridKey <key>`
+
 
 ### Tests
 
