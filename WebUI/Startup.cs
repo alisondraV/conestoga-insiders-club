@@ -60,6 +60,7 @@ namespace ConestogaInsidersClub
             services.AddTransient<IWishedItemService, WishedItemService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IEventService, EventService>();
         }
 
