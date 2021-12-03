@@ -17,43 +17,42 @@
 
 @if (!showReport)
 {
-    <div class="card">
+    <div class="card my-3">
         <div class="card-body">
             <h5 class="card-title">Games Report</h5>
-            <button class="btn-info rounded mb-2" style="width: 178px " @onclick="() => GenerateReport(1)">View Games Report</button>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(1)">View Games Report</button>
         </div>
     </div>
-    <div class="card">
+    <div class="card my-3">
         <div class="card-body">
             <h5 class="card-title">Wishlist Report</h5>
-            <button class="btn-info rounded mb-2" style="width: 178px " @onclick="() => GenerateReport(2)">View Wishlist Report</button>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(2)">View Wishlist Report</button>
         </div>
         
     </div>
-    <div class="card">
+    <div class="card my-3">
         <div class="card-body">
             <h5 class="card-title">Todays Orders Report</h5>
             <div>
                 <p class="card-text" style="display:inline-block">Enter Date:</p>
                 <input style="width:150px; display:inline-block" @bind="reportDate" type="date" /><br />
             </div>
-            <button class="btn-info rounded mb-2" style="width: 178px " @onclick="() => GenerateReport(3)">View Todays Orders Report</button>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(3)">View Orders Report</button>
         </div>
         
     </div>
-    <div class="card">
+    <div class="card my-3">
         <div class="card-body">
             <h5 class="card-title">Customer Info Report</h5>
-            <button class="btn-info rounded mb-2" style="width: 178px " @onclick="() => GenerateReport(4)">View Customer Info Report</button>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(4)">View Customer Info Report</button>
         </div>
         
     </div>
-    <div class="card">
+    <div class="card my-3">
         <div class="card-body">
             <h5 class="card-title">Platform Report</h5>
-            <button class="btn-info rounded mb-2" style="width: 178px " @onclick="() => GenerateReport(5)">View Platform Report</button>
+            <button class="btn-info rounded mb-2 view-button" @onclick="() => GenerateReport(5)">View Platform Report</button>
         </div>
-        
     </div>
     
 }
@@ -86,10 +85,9 @@ else
             </tbody>
         </table>
         <div class="btn-group">
-            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(1)">Back</button>
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(1)">Back</button>
             <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(1)">Save As PDF</button>
         </div>
-
     }
     else if (wishlistReport != null)
     {
@@ -107,18 +105,15 @@ else
                 @foreach (var game in wishlistReport)
                 {
                     <tr>
-
                         <td scope="row">@game.Name</td>
                         <td>@game.Price</td>
                         <td>@game.GenreName</td>
-                        <td>@game.WishedItems.Count</td>
-
                     </tr>
                 }
             </tbody>
         </table>
         <div class="btn-group">
-            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(2)">Back</button>
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(2)">Back</button>
             <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(2)">Save As PDF</button>
         </div>
     }
@@ -151,13 +146,13 @@ else
             </tbody>
         </table>
         <div class="btn-group">
-            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(3)">Back</button>
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(3)">Back</button>
             <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(3)">Save As PDF</button>
         </div>
     }
     else if (usersReport != null)
     {
-        <h3>Today's Orders</h3>
+        <h3>Customer Info</h3>
         <table class="table">
             <thead class="thead-light">
                 <tr>
@@ -187,7 +182,7 @@ else
             </tbody>
         </table>
         <div class="btn-group">
-            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(4)">Back</button>
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(4)">Back</button>
             <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(4)">Save As PDF</button>
         </div>
     }
@@ -214,7 +209,7 @@ else
             </tbody>
         </table>
         <div class="btn-group">
-            <button class="btn-info rounded mb-2" @onclick="() => ClearReport(5)">Back</button>
+            <button class="btn-info rounded mb-2 mr-2" @onclick="() => ClearReport(5)">Back</button>
             <button class="btn-info rounded mb-2" @onclick="() => ExportToPdf(5)">Save As PDF</button>
         </div>
     }
@@ -324,7 +319,7 @@ else
         {
             foreach (var game in wishlistReport)
             {
-                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price, AmountWishlisted = game.WishedItems.Count };
+                Object row = new { Name = game.Name, Description = game.Description, Price = game.Price };
                 data.Add(row);
             }
         }
@@ -409,8 +404,6 @@ else
             default:
                 break;
         }
-
-
     }
 
     public void ClearReport(int reportId)
