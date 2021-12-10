@@ -1,4 +1,6 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +15,6 @@ namespace ConestogaInsidersClub.Data.DataAccess
         Task UpdateGame(Game game);
         Task DeleteGame(Game game);
         bool IsOwnedBy(Game game, string userId);
+        FileContentResult CreateDownloadFileOnPage(PageModel page, Game game);
     }
 }

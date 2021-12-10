@@ -1,9 +1,7 @@
 using ConestogaInsidersClub.Data.DataAccess;
-using ConestogaInsidersClub.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Pages.Shared
@@ -34,19 +32,12 @@ namespace ConestogaInsidersClub.Pages.Shared
                 {
                     return Unauthorized();
                 }
-                return CreateFile(game);
+                return gameService.CreateDownloadFileOnPage(this, game);
             }
             catch (Exception)
             {
                 return NotFound();
             }
-        }
-
-        private IActionResult CreateFile(Game game)
-        {
-            var content = $"{game.Name}\n{game.Description}";
-            var bytes = Encoding.ASCII.GetBytes(content);
-            return File(bytes, "application/octet-stream", $"{game.Name}.txt");
         }
     }
 }

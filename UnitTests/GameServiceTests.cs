@@ -1,11 +1,15 @@
 using ConestogaInsidersClub.Data;
 using ConestogaInsidersClub.Data.DataAccess;
 using ConestogaInsidersClub.Data.Models;
+using ConestogaInsidersClub.Pages.Shared;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ServiceTests
@@ -281,6 +285,26 @@ namespace ServiceTests
             //Assert
             Assert.IsTrue(orderedGameIsOwned);
             Assert.IsFalse(otherGameIsOwned);
+        }
+
+        [Test, Order(10)]
+        public void CreateDownloadFileOnPage_CreatesDownloadableOnProvidedPageModel()
+        {
+            //Arrange
+            using var context = new ApplicationDbContext(ContextOptions);
+            var service = new GameService(context);
+
+            //Act
+            var game = expectedGames.First();
+            FileContentResult fileResult = service.CreateDownloadFileOnPage(
+                new DownloadModel(service, new UserService(context)),
+                game
+            );
+
+            //Assert
+            Assert.NotNull(fileResult);
+            string fileContents = Encoding.ASCII.GetString(fileResult.FileContents);
+            Assert.That(fileContents, Does.Contain(game.Name));
         }
     }
 }
