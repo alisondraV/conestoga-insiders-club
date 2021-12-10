@@ -297,7 +297,7 @@ namespace ServiceTests
             //Act
             var game = expectedGames.First();
             FileContentResult fileResult = service.CreateDownloadFileOnPage(
-                new DownloadModel(service, new UserService(context)), 
+                new DownloadModel(service, new UserService(context)),
                 game
             );
 
