@@ -1,7 +1,10 @@
 ﻿using ConestogaInsidersClub.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ConestogaInsidersClub.Data.DataAccess
@@ -54,6 +57,13 @@ namespace ConestogaInsidersClub.Data.DataAccess
         public bool IsOwnedBy(Game game, string userId)
         {
             return game.OrderItems.Any(oi => oi.Order.UserId == userId);
+        }
+
+        public FileContentResult CreateDownloadFileOnPage(PageModel page, Game game)
+        {
+            var content = $"{game.Name}\n{game.Description}";
+            var bytes = Encoding.ASCII.GetBytes(content);
+            return page.File(bytes, "application/octet-stream", $"{game.Name}.txt");
         }
     }
 }
